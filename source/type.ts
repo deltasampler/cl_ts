@@ -1,0 +1,10 @@
+export type num_t = number;
+export type vec2_t = Float32Array;
+export type vec3_t = Float32Array;
+export type vec4_t = Float32Array;
+export type mat2_t = Float32Array;
+export type mat3_t = Float32Array;
+export type mat4_t = Float32Array;
+export type line2_t = Float32Array;
+export type line3_t = Float32Array;
+export const TYPE = Float32Array;
