@@ -76,7 +76,7 @@ export function polgon_line_intersections(points: vec2_t[], i: vec2_t, angle: nu
     i = cl_vec2(i[0] + Math.cos(angle + Math.PI / 2) * offset, i[1] + Math.sin(angle + Math.PI / 2) * offset)
     let j = cl_vec2(i[0] + Math.cos(angle), i[1] + Math.sin(angle))
 
-    const intersections = []
+    const intersections: intersect_t[] = []
 
     for (let a = 0; a < points.length; ++a) {
         const k = points[a]
