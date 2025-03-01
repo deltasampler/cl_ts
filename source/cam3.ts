@@ -2,74 +2,75 @@ import {num_t, vec3_t, mat4_t} from "./type.ts";
 import {cl_clamp, cl_cos, cl_rad, cl_sin} from "./math.ts";
 import {cl_vec3, cl_vec3_add, cl_vec3_add_mul_s2, cl_vec3_cross, cl_vec3_unit2} from "./vec3.ts";
 import {cl_mat4} from "./mat4.ts";
-import {cl_mat4_look_at, cl_mat4_perspective} from "./mat4_proj.ts";
+import {cl_mat4_perspective} from "./mat4_proj.ts";
+import {cl_mat4_look_at} from "./mat4_cam.ts";
 
-export type cam3_t = {
-    position: vec3_t,
-    forward: vec3_t,
-    right: vec3_t,
-    up: vec3_t,
-    world_up: vec3_t,
-    projection: vec3_t,
-    view: mat4_t,
-    near: num_t,
-    far: num_t,
-    fov: num_t,
-    yaw: num_t,
-    pitch: num_t,
-    roll: num_t,
-    movement_speed: num_t,
-    yaw_speed: num_t,
-    pitch_speed: num_t,
-    roll_speed: num_t,
+export class cam3_t {
+    position: vec3_t;
+    forward: vec3_t;
+    right: vec3_t;
+    up: vec3_t;
+    world_up: vec3_t;
+    projection: vec3_t;
+    view: mat4_t;
+    near: num_t;
+    far: num_t;
+    fov: num_t;
+    yaw: num_t;
+    pitch: num_t;
+    roll: num_t;
+    movement_speed: num_t;
+    yaw_speed: num_t;
+    pitch_speed: num_t;
+    roll_speed: num_t;
 };
 
 export function cl_cam3_new() {
-    const camera: cam3_t = {
-        position: cl_vec3(),
-        forward: cl_vec3(0.0, 0.0, -1.0),
-        right: cl_vec3(1.0, 0.0, 0.0),
-        up: cl_vec3(0.0, 1.0, 0.0),
-        world_up: cl_vec3(0.0, 1.0, 0.0),
-        projection: cl_mat4(1.0),
-        view: cl_mat4(1.0),
-        near: 0.01,
-        far: 1000.0,
-        fov: 80.0,
-        yaw: 0.0,
-        pitch: 0.0,
-        roll: 0.0,
-        movement_speed: 0.1,
-        yaw_speed: 0.1,
-        pitch_speed: 0.1,
-        roll_speed: 0.1
-    };
+    const cam = new cam3_t();
 
-    return camera;
+    cam.position = cl_vec3();
+    cam.forward = cl_vec3(0.0, 0.0, -1.0);
+    cam.right = cl_vec3(1.0, 0.0, 0.0);
+    cam.up = cl_vec3(0.0, 1.0, 0.0);
+    cam.world_up = cl_vec3(0.0, 1.0, 0.0);
+    cam.projection = cl_mat4(1.0);
+    cam.view = cl_mat4(1.0);
+    cam.near = 0.01;
+    cam.far = 1000.0;
+    cam.fov = 80.0;
+    cam.yaw = 0.0;
+    cam.pitch = 0.0;
+    cam.roll = 0.0;
+    cam.movement_speed = 0.1;
+    cam.yaw_speed = 0.1;
+    cam.pitch_speed = 0.1;
+    cam.roll_speed = 0.1;
+
+    return cam;
 }
 
-export function cl_cam3_move_forward(camera: cam3_t, dir: num_t, dt: num_t) {
-    cl_vec3_add_mul_s2(camera.position, camera.forward, camera.movement_speed * dir * dt);
+export function cl_cam3_move_forward(camera: cam3_t, dir: num_t) {
+    cl_vec3_add_mul_s2(camera.position, camera.forward, camera.movement_speed * dir);
 }
 
-export function cl_cam3_move_right(camera: cam3_t, dir: num_t, dt: num_t) {
-    cl_vec3_add_mul_s2(camera.position, camera.right, camera.movement_speed * dir * dt);
+export function cl_cam3_move_right(camera: cam3_t, dir: num_t) {
+    cl_vec3_add_mul_s2(camera.position, camera.right, camera.movement_speed * dir);
 }
 
-export function cl_cam3_move_up(camera: cam3_t, dir: num_t, dt: num_t) {
-    cl_vec3_add_mul_s2(camera.position, camera.up, camera.movement_speed * dir * dt);
+export function cl_cam3_move_up(camera: cam3_t, dir: num_t) {
+    cl_vec3_add_mul_s2(camera.position, camera.up, camera.movement_speed * dir);
 }
 
-export function cl_cam3_pan(camera: cam3_t, dir: num_t, dt: num_t) {
-    camera.yaw += camera.yaw_speed * dir * dt;
+export function cl_cam3_pan(camera: cam3_t, dir: num_t) {
+    camera.yaw += camera.yaw_speed * dir;
 }
 
-export function cl_cam3_tilt(camera: cam3_t, dir: num_t, dt: num_t) {
-    camera.pitch = cl_clamp(camera.pitch - camera.pitch_speed * dir * dt, -89.0, 89.0);
+export function cl_cam3_tilt(camera: cam3_t, dir: num_t) {
+    camera.pitch = cl_clamp(camera.pitch - camera.pitch_speed * dir, -89.0, 89.0);
 }
 
-export function cl_cam3_roll(camera: cam3_t, dir: num_t, dt: num_t) {
-    camera.roll += camera.roll_speed * dir * dt;
+export function cl_cam3_roll(camera: cam3_t, dir: num_t) {
+    camera.roll += camera.roll_speed * dir;
 }
 
 export function cl_cam3_update(camera: cam3_t) {
