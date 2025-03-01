@@ -46,10 +46,6 @@ export function cl_cam2_roll(camera: cam2_t, dir: num_t) {
     camera.roll += camera.roll_speed * dir;
 }
 
-export function cl_cam2_update(camera: cam2_t) {
-
-}
-
 export function cl_cam2_compute_proj(camera: cam2_t, viewport_x: num_t, viewport_y: num_t): mat4_t {
     cl_mat4_ident(camera.projection);
     cl_mat4_scale(camera.projection, cl_vec3(camera.scale / viewport_x, camera.scale / viewport_y, 1.0));
