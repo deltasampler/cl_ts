@@ -7,4 +7,6 @@ export type mat3_t = Float32Array;
 export type mat4_t = Float32Array;
 export type line2_t = Float32Array;
 export type line3_t = Float32Array;
+export type trian2_t = Float32Array;
+export type trian3_t = Float32Array;
 export const TYPE = Float32Array;
