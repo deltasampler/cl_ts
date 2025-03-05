@@ -270,6 +270,22 @@ export function cl_vec2_unit2(v: vec2_t): vec2_t {
     return v;
 }
 
+export function cl_vec2_dir(a: vec2_t, b: vec2_t): vec2_t {
+    const x = a[0] - b[0];
+    const y = a[1] - b[1];
+    let l = x * x + y * y;
+
+    if (l > 0) {
+        l = 1.0 / Math.sqrt(l);
+    }
+
+    const out = new TYPE(2);
+    out[0] = x * l;
+    out[1] = y * l;
+
+    return out;
+}
+
 export function cl_vec2_dot(a: vec2_t, b: vec2_t): num_t {
     return a[0] * b[0] + a[1] * b[1];
 }
