@@ -219,7 +219,6 @@ export function mat4_rotate(m: mat4_t, rad: number, axis: vec3_t): mat4_t|null {
     return m;
 }
 
-
 export function mat4_rotate_x(m: mat4_t, rad: number): mat4_t {
     let s = Math.sin(rad);
     let c = Math.cos(rad);

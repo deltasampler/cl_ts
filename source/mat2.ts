@@ -1,5 +1,6 @@
-import {vec2_t, mat2_t, TYPE} from "./type.ts";
+import {TYPE, mat2_t, vec2_t} from "./type.ts";
 
+// constructor
 export function mat2(e00: number = 1.0, e01: number = 0.0, e10: number = 0.0, e11?: number): mat2_t {
     const out = new TYPE(4);
 
@@ -55,6 +56,16 @@ export function mat2_clone(m: mat2_t): mat2_t {
     return out;
 }
 
+// setter
+export function mat2_ident(m: mat2_t): mat2_t {
+    m[0] = 1.0;
+    m[1] = 0.0;
+    m[2] = 0.0;
+    m[3] = 1.0;
+
+    return m;
+}
+
 export function mat2_set(m: mat2_t, e00: number, e01: number, e10: number, e11: number): mat2_t {
     m[0] = e00;
     m[1] = e01;
@@ -73,15 +84,30 @@ export function mat2_copy(a: mat2_t, b: mat2_t): mat2_t {
     return a;
 }
 
-export function mat2_ident(m: mat2_t): mat2_t {
-    m[0] = 1.0;
-    m[1] = 0.0;
-    m[2] = 0.0;
-    m[3] = 1.0;
+// arithmetic matrix x matrix
+export function mat2_add(a: mat2_t, b: mat2_t): mat2_t {
+    const out = new TYPE(4);
 
-    return m;
+    out[0] = a[0] + b[0];
+    out[1] = a[1] + b[1];
+    out[2] = a[2] + b[2];
+    out[3] = a[3] + b[3];
+
+    return out;
 }
 
+export function mat2_sub(a: mat2_t, b: mat2_t): mat2_t {
+    const out = new TYPE(4);
+
+    out[0] = a[0] - b[0];
+    out[1] = a[1] - b[1];
+    out[2] = a[2] - b[2];
+    out[3] = a[3] - b[3];
+
+    return out;
+}
+
+// product matrix x matrix
 export function mat2_mul(a: mat2_t, b: mat2_t): mat2_t {
     const out = new TYPE(4);
     const a00 = a[0], a01 = a[1],
@@ -111,6 +137,7 @@ export function mat2_mul2(a: mat2_t, b: mat2_t): mat2_t {
     return a;
 }
 
+// product matrix x scalar
 export function mat2_mul_s(m: mat2_t, s: number): mat2_t {
     const out = new TYPE(4);
 
@@ -131,6 +158,28 @@ export function mat2_mul_s2(m: mat2_t, s: number): mat2_t {
     return m;
 }
 
+// product matrix x matrix x scalar
+export function mat2_add_mul_s(a: mat2_t, b: mat2_t, s: number): mat2_t {
+    const out = new TYPE(4);
+
+    out[0] = a[0] + b[0] * s;
+    out[1] = a[1] + b[1] * s;
+    out[2] = a[2] + b[2] * s;
+    out[3] = a[3] + b[3] * s;
+
+    return out;
+}
+
+export function mat2_add_mul_s2(a: mat2_t, b: mat2_t, s: number): mat2_t {
+    a[0] += b[0] * s;
+    a[1] += b[1] * s;
+    a[2] += b[2] * s;
+    a[3] += b[3] * s;
+
+    return a;
+}
+
+// product matrix x vector
 export function mat2_mul_mv(m: mat2_t, v: vec2_t): vec2_t {
     const out = new TYPE(2);
     const x = v[0], y = v[1];
@@ -151,6 +200,58 @@ export function mat2_mul_vm(v: vec2_t, m: mat2_t): vec2_t {
     return out;
 }
 
+// determinant
+export function mat2_determinant(m: mat2_t): number {
+    return m[0] * m[3] - m[2] * m[1];
+}
+
+// norm
+export function mat2_frob(m: mat2_t): number {
+    return Math.sqrt(m[0] * m[0] + m[1] * m[1] + m[2] * m[2] + m[3] * m[3]);
+}
+
+// special
+export function mat2_transpose(m: mat2_t) {
+    const out = new TYPE(4);
+    out[0] = m[0];
+    out[1] = m[2];
+    out[2] = m[1];
+    out[3] = m[3];
+
+    return out;
+}
+
+export function mat2_adjoint(m: mat2_t): mat2_t {
+    const out = new TYPE(4);
+
+    out[0] = m[3];
+    out[1] = -m[1];
+    out[2] = -m[2];
+    out[3] = m[0];
+
+    return out;
+}
+
+export function mat2_invert(m: mat2_t): mat2_t|null {
+    const out = new TYPE(4);
+    const a0 = m[0], a1 = m[1], a2 = m[2], a3 = m[3];
+    let det = a0 * a3 - a2 * a1;
+
+    if (!det) {
+        return null;
+    }
+
+    det = 1.0 / det;
+
+    out[0] = a3 * det;
+    out[1] = -a1 * det;
+    out[2] = -a2 * det;
+    out[3] = a0 * det;
+
+    return out;
+}
+
+// string
 export function mat2_str(m: mat2_t): string {
     return "mat2(\n" +
         `\t${m[0]}, ${m[2]},\n` +

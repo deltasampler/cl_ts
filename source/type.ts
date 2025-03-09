@@ -2,6 +2,7 @@ export type vec2_t = Float32Array;
 export type vec3_t = Float32Array;
 export type vec4_t = Float32Array;
 export type mat2_t = Float32Array;
+export type mat2x3_t = Float32Array;
 export type mat3_t = Float32Array;
 export type mat4_t = Float32Array;
 export type line2_t = Float32Array;

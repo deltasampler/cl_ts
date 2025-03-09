@@ -1,11 +1,11 @@
-import {vec2, vec2_print} from "./vec2";
-import {vec3, vec3_print} from "./vec3";
-import {vec4, vec4_print} from "./vec4";
-import {mat2, mat2_mul, mat2_mul_mv, mat2_mul_vm, mat2_print} from "./mat2";
-import {mat3, mat3_mul, mat3_mul_mv, mat3_mul_vm, mat3_print} from "./mat3";
-import {mat4, mat4_mul, mat4_mul_mv, mat4_mul_vm, mat4_print} from "./mat4";
+import {vec2, vec2_print} from "./vec2.ts";
+import {vec3, vec3_print} from "./vec3.ts";
+import {vec4, vec4_print} from "./vec4.ts";
+import {mat2, mat2_mul, mat2_mul_mv, mat2_mul_vm, mat2_print} from "./mat2.ts";
+import {mat3, mat3_mul, mat3_mul_mv, mat3_mul_vm, mat3_print} from "./mat3.ts";
+import {mat4, mat4_mul, mat4_mul_mv, mat4_mul_vm, mat4_print} from "./mat4.ts";
 
-export function mat2_mul() {
+export function test_mat2_mul() {
     const a = mat2(1, 2, 3, 4);
     const b = mat2(4, 3, 2, 1);
 
@@ -19,7 +19,7 @@ export function mat2_mul() {
     mat2_print(mat2_mul(b, a));
 }
 
-export function mat2_mul_mv() {
+export function test_mat2_mul_mv() {
     const m = mat2(1, 2, 3, 4);
     const v = vec2(2, 1);
 
@@ -33,7 +33,7 @@ export function mat2_mul_mv() {
     vec2_print(mat2_mul_vm(v, m));
 }
 
-export function mat3_mul() {
+export function test_mat3_mul() {
     const a = mat3(1, 2, 3, 4, 5, 6, 7, 8, 9);
     const b = mat3(9, 8, 7, 6, 5, 4, 3, 2, 1);
 
@@ -47,7 +47,7 @@ export function mat3_mul() {
     mat3_print(mat3_mul(b, a));
 }
 
-export function mat3_mul_mv() {
+export function test_mat3_mul_mv() {
     const m = mat3(1, 2, 3, 4, 5, 6, 7, 8, 9);
     const v = vec3(3, 2, 1);
 
@@ -61,7 +61,7 @@ export function mat3_mul_mv() {
     vec3_print(mat3_mul_vm(v, m));
 }
 
-export function mat4_mul() {
+export function test_mat4_mul() {
     const a = mat4(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
     const b = mat4(16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
 
@@ -75,7 +75,7 @@ export function mat4_mul() {
     mat4_print(mat4_mul(b, a));
 }
 
-export function mat4_mul_mv() {
+export function test_mat4_mul_mv() {
     const m = mat4(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
     const v = vec4(4, 3, 2, 1);
 
