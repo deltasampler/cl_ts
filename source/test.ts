@@ -1,90 +1,90 @@
-import {cl_vec2, cl_vec2_print} from "./vec2";
-import {cl_vec3, cl_vec3_print} from "./vec3";
-import {cl_vec4, cl_vec4_print} from "./vec4";
-import {cl_mat2, cl_mat2_mul, cl_mat2_mul_mv, cl_mat2_mul_vm, cl_mat2_print} from "./mat2";
-import {cl_mat3, cl_mat3_mul, cl_mat3_mul_mv, cl_mat3_mul_vm, cl_mat3_print} from "./mat3";
-import {cl_mat4, cl_mat4_mul, cl_mat4_mul_mv, cl_mat4_mul_vm, cl_mat4_print} from "./mat4";
+import {vec2, vec2_print} from "./vec2";
+import {vec3, vec3_print} from "./vec3";
+import {vec4, vec4_print} from "./vec4";
+import {mat2, mat2_mul, mat2_mul_mv, mat2_mul_vm, mat2_print} from "./mat2";
+import {mat3, mat3_mul, mat3_mul_mv, mat3_mul_vm, mat3_print} from "./mat3";
+import {mat4, mat4_mul, mat4_mul_mv, mat4_mul_vm, mat4_print} from "./mat4";
 
 export function mat2_mul() {
-    const a = cl_mat2(1, 2, 3, 4);
-    const b = cl_mat2(4, 3, 2, 1);
+    const a = mat2(1, 2, 3, 4);
+    const b = mat2(4, 3, 2, 1);
 
     console.log("a:");
-    cl_mat2_print(a);
+    mat2_print(a);
     console.log("b:");
-    cl_mat2_print(b);
+    mat2_print(b);
     console.log("a * b:");
-    cl_mat2_print(cl_mat2_mul(a, b));
+    mat2_print(mat2_mul(a, b));
     console.log("b * a:");
-    cl_mat2_print(cl_mat2_mul(b, a));
+    mat2_print(mat2_mul(b, a));
 }
 
 export function mat2_mul_mv() {
-    const m = cl_mat2(1, 2, 3, 4);
-    const v = cl_vec2(2, 1);
+    const m = mat2(1, 2, 3, 4);
+    const v = vec2(2, 1);
 
     console.log("m:");
-    cl_mat2_print(m);
+    mat2_print(m);
     console.log("v:");
-    cl_vec2_print(v);
+    vec2_print(v);
     console.log("m * v:");
-    cl_vec2_print(cl_mat2_mul_mv(m, v));
+    vec2_print(mat2_mul_mv(m, v));
     console.log("v * m:");
-    cl_vec2_print(cl_mat2_mul_vm(v, m));
+    vec2_print(mat2_mul_vm(v, m));
 }
 
 export function mat3_mul() {
-    const a = cl_mat3(1, 2, 3, 4, 5, 6, 7, 8, 9);
-    const b = cl_mat3(9, 8, 7, 6, 5, 4, 3, 2, 1);
+    const a = mat3(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    const b = mat3(9, 8, 7, 6, 5, 4, 3, 2, 1);
 
     console.log("a:");
-    cl_mat3_print(a);
+    mat3_print(a);
     console.log("b:");
-    cl_mat3_print(b);
+    mat3_print(b);
     console.log("a * b:");
-    cl_mat3_print(cl_mat3_mul(a, b));
+    mat3_print(mat3_mul(a, b));
     console.log("b * a:");
-    cl_mat3_print(cl_mat3_mul(b, a));
+    mat3_print(mat3_mul(b, a));
 }
 
 export function mat3_mul_mv() {
-    const m = cl_mat3(1, 2, 3, 4, 5, 6, 7, 8, 9);
-    const v = cl_vec3(3, 2, 1);
+    const m = mat3(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    const v = vec3(3, 2, 1);
 
     console.log("m:");
-    cl_mat3_print(m);
+    mat3_print(m);
     console.log("v:");
-    cl_vec3_print(v);
+    vec3_print(v);
     console.log("m * v:");
-    cl_vec3_print(cl_mat3_mul_mv(m, v));
+    vec3_print(mat3_mul_mv(m, v));
     console.log("v * m:");
-    cl_vec3_print(cl_mat3_mul_vm(v, m));
+    vec3_print(mat3_mul_vm(v, m));
 }
 
 export function mat4_mul() {
-    const a = cl_mat4(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
-    const b = cl_mat4(16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
+    const a = mat4(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
+    const b = mat4(16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
 
     console.log("a:");
-    cl_mat4_print(a);
+    mat4_print(a);
     console.log("b:");
-    cl_mat4_print(b);
+    mat4_print(b);
     console.log("a * b:");
-    cl_mat4_print(cl_mat4_mul(a, b));
+    mat4_print(mat4_mul(a, b));
     console.log("b * a:");
-    cl_mat4_print(cl_mat4_mul(b, a));
+    mat4_print(mat4_mul(b, a));
 }
 
 export function mat4_mul_mv() {
-    const m = cl_mat4(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
-    const v = cl_vec4(4, 3, 2, 1);
+    const m = mat4(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
+    const v = vec4(4, 3, 2, 1);
 
     console.log("m:");
-    cl_mat4_print(m);
+    mat4_print(m);
     console.log("v:");
-    cl_vec4_print(v);
+    vec4_print(v);
     console.log("m * v:");
-    cl_vec4_print(cl_mat4_mul_mv(m, v));
+    vec4_print(mat4_mul_mv(m, v));
     console.log("v * m:");
-    cl_vec4_print(cl_mat4_mul_vm(v, m));
+    vec4_print(mat4_mul_vm(v, m));
 }

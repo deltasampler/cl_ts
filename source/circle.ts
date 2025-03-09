@@ -13,7 +13,7 @@ export class circle_t {
     }
 };
 
-export function cl_circle(position: vec2_t, diameter: number): circle_t {
+export function circle(position: vec2_t, diameter: number): circle_t {
     const out = new circle_t();
     out.position = position;
     out.diameter = diameter;
@@ -21,7 +21,7 @@ export function cl_circle(position: vec2_t, diameter: number): circle_t {
     return out;
 }
 
-export function cl_circle_r(position: vec2_t, radius: number): circle_t {
+export function circle_r(position: vec2_t, radius: number): circle_t {
     const out = new circle_t();
     out.position = position;
     out.diameter = radius * 2.0;

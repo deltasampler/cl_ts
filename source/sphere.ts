@@ -13,7 +13,7 @@ export class sphere_t {
     }
 };
 
-export function cl_sphere(position: vec3_t, diameter: number): sphere_t {
+export function sphere(position: vec3_t, diameter: number): sphere_t {
     const out = new sphere_t();
     out.position = position;
     out.diameter = diameter;
@@ -21,7 +21,7 @@ export function cl_sphere(position: vec3_t, diameter: number): sphere_t {
     return out;
 }
 
-export function cl_sphere_r(position: vec3_t, radius: number): sphere_t {
+export function sphere_r(position: vec3_t, radius: number): sphere_t {
     const out = new sphere_t();
     out.position = position;
     out.diameter = radius * 2.0;

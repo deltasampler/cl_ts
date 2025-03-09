@@ -1,8 +1,8 @@
 import {vec3_t, mat4_t} from "./type.ts";
 import {EPSILON} from "./math.ts";
-import {cl_mat4_ident} from "./mat4.ts";
+import {mat4_ident} from "./mat4.ts";
 
-export function cl_mat4_look_at(out: mat4_t, eye: vec3_t, center: vec3_t, up: vec3_t): mat4_t {
+export function mat4_look_at(out: mat4_t, eye: vec3_t, center: vec3_t, up: vec3_t): mat4_t {
     let x0, x1, x2, y0, y1, y2, z0, z1, z2, len;
     const eyex = eye[0];
     const eyey = eye[1];
@@ -19,7 +19,7 @@ export function cl_mat4_look_at(out: mat4_t, eye: vec3_t, center: vec3_t, up: ve
         Math.abs(eyey - centery) < EPSILON &&
         Math.abs(eyez - centerz) < EPSILON
     ) {
-        return cl_mat4_ident(out);
+        return mat4_ident(out);
     }
 
     z0 = eyex - centerx;

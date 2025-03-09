@@ -1,7 +1,7 @@
 import {vec3_t, mat4_t, TYPE} from "./type.ts";
 import {EPSILON} from "./math.ts";
 
-export function cl_mat4_translation(v: vec3_t): mat4_t {
+export function mat4_translation(v: vec3_t): mat4_t {
     const out = new TYPE(16);
 
     out[0] = 1.0;
@@ -24,7 +24,7 @@ export function cl_mat4_translation(v: vec3_t): mat4_t {
     return out;
 }
 
-export function cl_mat4_scaling(v: vec3_t): mat4_t {
+export function mat4_scaling(v: vec3_t): mat4_t {
     const out = new TYPE(16);
 
     out[0] = v[0];
@@ -47,7 +47,7 @@ export function cl_mat4_scaling(v: vec3_t): mat4_t {
     return out;
 }
 
-export function cl_mat4_rotation_x(rad: number): mat4_t {
+export function mat4_rotation_x(rad: number): mat4_t {
     const out = new TYPE(16);
     const s = Math.sin(rad);
     const c = Math.cos(rad);
@@ -72,7 +72,7 @@ export function cl_mat4_rotation_x(rad: number): mat4_t {
     return out;
 }
 
-export function cl_mat4_rotation_y(rad: number): mat4_t {
+export function mat4_rotation_y(rad: number): mat4_t {
     const out = new TYPE(16);
     const s = Math.sin(rad);
     const c = Math.cos(rad);
@@ -97,7 +97,7 @@ export function cl_mat4_rotation_y(rad: number): mat4_t {
     return out;
 }
 
-export function cl_mat4_rotation_z(rad: number): mat4_t {
+export function mat4_rotation_z(rad: number): mat4_t {
     const out = new TYPE(16);
     const s = Math.sin(rad);
     const c = Math.cos(rad);
@@ -122,7 +122,7 @@ export function cl_mat4_rotation_z(rad: number): mat4_t {
     return out;
 }
 
-export function cl_mat4_translate(m: mat4_t, v: vec3_t): mat4_t {
+export function mat4_translate(m: mat4_t, v: vec3_t): mat4_t {
     const x = v[0], y = v[1], z = v[2];
 
     m[12] = m[0] * x + m[4] * y + m[8] * z + m[12];
@@ -133,7 +133,7 @@ export function cl_mat4_translate(m: mat4_t, v: vec3_t): mat4_t {
     return m;
 }
 
-export function cl_mat4_scale(m: mat4_t, v: vec3_t): mat4_t {
+export function mat4_scale(m: mat4_t, v: vec3_t): mat4_t {
     const x = v[0], y = v[1], z = v[2];
 
     m[0] = m[0] * x;
@@ -156,7 +156,7 @@ export function cl_mat4_scale(m: mat4_t, v: vec3_t): mat4_t {
     return m;
 }
 
-export function cl_mat4_rotate(m: mat4_t, rad: number, axis: vec3_t): mat4_t|null {
+export function mat4_rotate(m: mat4_t, rad: number, axis: vec3_t): mat4_t|null {
     let x = axis[0], y = axis[1], z = axis[2];
     let len = Math.sqrt(x * x + y * y + z * z);
     let s, c, t;
@@ -220,7 +220,7 @@ export function cl_mat4_rotate(m: mat4_t, rad: number, axis: vec3_t): mat4_t|nul
 }
 
 
-export function cl_mat4_rotate_x(m: mat4_t, rad: number): mat4_t {
+export function mat4_rotate_x(m: mat4_t, rad: number): mat4_t {
     let s = Math.sin(rad);
     let c = Math.cos(rad);
     let a10 = m[4];
@@ -244,7 +244,7 @@ export function cl_mat4_rotate_x(m: mat4_t, rad: number): mat4_t {
     return m;
 }
 
-export function cl_mat4_rotate_y(m: mat4_t, rad: number): mat4_t {
+export function mat4_rotate_y(m: mat4_t, rad: number): mat4_t {
     let s = Math.sin(rad);
     let c = Math.cos(rad);
     let a00 = m[0];
@@ -268,7 +268,7 @@ export function cl_mat4_rotate_y(m: mat4_t, rad: number): mat4_t {
     return m;
 }
 
-export function cl_mat4_rotate_z(m: mat4_t, rad: number): mat4_t {
+export function mat4_rotate_z(m: mat4_t, rad: number): mat4_t {
     let s = Math.sin(rad);
     let c = Math.cos(rad);
     let a00 = m[0];

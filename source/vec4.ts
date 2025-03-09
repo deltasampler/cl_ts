@@ -1,6 +1,6 @@
 import {vec4_t, TYPE} from "./type.ts";
 
-export function cl_vec4(x: number = 0.0, y?: number, z?: number, w?: number): vec4_t {
+export function vec4(x: number = 0.0, y?: number, z?: number, w?: number): vec4_t {
     const out = new TYPE(4);
 
     out[0] = x;
@@ -11,7 +11,7 @@ export function cl_vec4(x: number = 0.0, y?: number, z?: number, w?: number): ve
     return out;
 }
 
-export function cl_vec4_new(): vec4_t {
+export function vec4_new(): vec4_t {
     const out = new TYPE(4);
 
     out[0] = 0.0;
@@ -22,7 +22,7 @@ export function cl_vec4_new(): vec4_t {
     return out;
 }
 
-export function cl_vec4_x(x: number): vec4_t {
+export function vec4_x(x: number): vec4_t {
     const out = new TYPE(4);
 
     out[0] = x;
@@ -33,7 +33,7 @@ export function cl_vec4_x(x: number): vec4_t {
     return out;
 }
 
-export function cl_vec4_xyzw(x: number, y: number, z: number, w: number): vec4_t {
+export function vec4_xyzw(x: number, y: number, z: number, w: number): vec4_t {
     const out = new TYPE(4);
 
     out[0] = x;
@@ -44,7 +44,7 @@ export function cl_vec4_xyzw(x: number, y: number, z: number, w: number): vec4_t
     return out;
 }
 
-export function cl_vec4_clone(v: vec4_t): vec4_t {
+export function vec4_clone(v: vec4_t): vec4_t {
     const out = new TYPE(4);
 
     out[0] = v[0];
@@ -55,7 +55,7 @@ export function cl_vec4_clone(v: vec4_t): vec4_t {
     return out;
 }
 
-export function cl_vec4_set(v: vec4_t, x: number, y: number, z: number, w: number): vec4_t {
+export function vec4_set(v: vec4_t, x: number, y: number, z: number, w: number): vec4_t {
     v[0] = x;
     v[1] = y;
     v[2] = z;
@@ -64,7 +64,7 @@ export function cl_vec4_set(v: vec4_t, x: number, y: number, z: number, w: numbe
     return v;
 }
 
-export function cl_vec4_copy(a: vec4_t, b: vec4_t): vec4_t {
+export function vec4_copy(a: vec4_t, b: vec4_t): vec4_t {
     a[0] = b[0];
     a[1] = b[1];
     a[2] = b[2];
@@ -73,7 +73,7 @@ export function cl_vec4_copy(a: vec4_t, b: vec4_t): vec4_t {
     return a;
 }
 
-export function cl_rgba(r: number = 0.0, g: number = 0.0, b: number = 0.0, a: number = 0.0): vec4_t {
+export function rgba(r: number = 0.0, g: number = 0.0, b: number = 0.0, a: number = 0.0): vec4_t {
     const out = new TYPE(4);
 
     out[0] = r / 255.0;
@@ -84,7 +84,7 @@ export function cl_rgba(r: number = 0.0, g: number = 0.0, b: number = 0.0, a: nu
     return out;
 }
 
-export function cl_hexa(h: number): vec4_t {
+export function hexa(h: number): vec4_t {
     const out = new TYPE(4);
 
     out[0] = ((h >> 24) & 0xFF) / 255.0;
@@ -95,7 +95,7 @@ export function cl_hexa(h: number): vec4_t {
     return out;
 }
 
-export function cl_vec4_zero(v: vec4_t): vec4_t {
+export function vec4_zero(v: vec4_t): vec4_t {
     v[0] = 0.0;
     v[1] = 0.0;
     v[2] = 0.0;
@@ -104,7 +104,7 @@ export function cl_vec4_zero(v: vec4_t): vec4_t {
     return v;
 }
 
-export function cl_vec4_abs(v: vec4_t): vec4_t {
+export function vec4_abs(v: vec4_t): vec4_t {
     v[0] = Math.abs(v[0]);
     v[1] = Math.abs(v[1]);
     v[2] = Math.abs(v[2]);
@@ -113,7 +113,7 @@ export function cl_vec4_abs(v: vec4_t): vec4_t {
     return v;
 }
 
-export function cl_vec4_neg(v: vec4_t): vec4_t {
+export function vec4_neg(v: vec4_t): vec4_t {
     v[0] = -v[0];
     v[1] = -v[1];
     v[2] = -v[2];
@@ -122,7 +122,7 @@ export function cl_vec4_neg(v: vec4_t): vec4_t {
     return v;
 }
 
-export function cl_vec4_inv(v: vec4_t): vec4_t {
+export function vec4_inv(v: vec4_t): vec4_t {
     v[0] = 1.0 / v[0];
     v[1] = 1.0 / v[1];
     v[2] = 1.0 / v[2];
@@ -131,7 +131,7 @@ export function cl_vec4_inv(v: vec4_t): vec4_t {
     return v;
 }
 
-export function cl_vec4_add(a: vec4_t, b: vec4_t): vec4_t {
+export function vec4_add(a: vec4_t, b: vec4_t): vec4_t {
     const out = new TYPE(4);
 
     out[0] = a[0] + b[0];
@@ -142,7 +142,7 @@ export function cl_vec4_add(a: vec4_t, b: vec4_t): vec4_t {
     return out;
 }
 
-export function cl_vec4_add2(a: vec4_t, b: vec4_t): vec4_t {
+export function vec4_add2(a: vec4_t, b: vec4_t): vec4_t {
     a[0] += b[0];
     a[1] += b[1];
     a[2] += b[2];
@@ -151,7 +151,7 @@ export function cl_vec4_add2(a: vec4_t, b: vec4_t): vec4_t {
     return a;
 }
 
-export function cl_vec4_sub(a: vec4_t, b: vec4_t): vec4_t {
+export function vec4_sub(a: vec4_t, b: vec4_t): vec4_t {
     const out = new TYPE(4);
 
     out[0] = a[0] - b[0];
@@ -162,7 +162,7 @@ export function cl_vec4_sub(a: vec4_t, b: vec4_t): vec4_t {
     return out;
 }
 
-export function cl_vec4_sub2(a: vec4_t, b: vec4_t): vec4_t {
+export function vec4_sub2(a: vec4_t, b: vec4_t): vec4_t {
     a[0] -= b[0];
     a[1] -= b[1];
     a[2] -= b[2];
@@ -171,7 +171,7 @@ export function cl_vec4_sub2(a: vec4_t, b: vec4_t): vec4_t {
     return a;
 }
 
-export function cl_vec4_mul(a: vec4_t, b: vec4_t): vec4_t {
+export function vec4_mul(a: vec4_t, b: vec4_t): vec4_t {
     const out = new TYPE(4);
 
     out[0] = a[0] * b[0];
@@ -182,7 +182,7 @@ export function cl_vec4_mul(a: vec4_t, b: vec4_t): vec4_t {
     return out;
 }
 
-export function cl_vec4_mul2(a: vec4_t, b: vec4_t): vec4_t {
+export function vec4_mul2(a: vec4_t, b: vec4_t): vec4_t {
     a[0] *= b[0];
     a[1] *= b[1];
     a[2] *= b[2];
@@ -191,7 +191,7 @@ export function cl_vec4_mul2(a: vec4_t, b: vec4_t): vec4_t {
     return a;
 }
 
-export function cl_vec4_div(a: vec4_t, b: vec4_t): vec4_t {
+export function vec4_div(a: vec4_t, b: vec4_t): vec4_t {
     const out = new TYPE(4);
 
     out[0] = a[0] / b[0];
@@ -202,7 +202,7 @@ export function cl_vec4_div(a: vec4_t, b: vec4_t): vec4_t {
     return out;
 }
 
-export function cl_vec4_div2(a: vec4_t, b: vec4_t): vec4_t {
+export function vec4_div2(a: vec4_t, b: vec4_t): vec4_t {
     a[0] /= b[0];
     a[1] /= b[1];
     a[2] /= b[2];
@@ -211,7 +211,7 @@ export function cl_vec4_div2(a: vec4_t, b: vec4_t): vec4_t {
     return a;
 }
 
-export function cl_vec4_add_mul_s(a: vec4_t, b: vec4_t, s: number): vec4_t {
+export function vec4_add_mul_s(a: vec4_t, b: vec4_t, s: number): vec4_t {
     const out = new TYPE(4);
 
     out[0] = a[0] + b[0] * s;
@@ -222,7 +222,7 @@ export function cl_vec4_add_mul_s(a: vec4_t, b: vec4_t, s: number): vec4_t {
     return out;
 }
 
-export function cl_vec4_add_mul_s2(a: vec4_t, b: vec4_t, s: number): vec4_t {
+export function vec4_add_mul_s2(a: vec4_t, b: vec4_t, s: number): vec4_t {
     a[0] += b[0] * s;
     a[1] += b[1] * s;
     a[2] += b[2] * s;
@@ -231,7 +231,7 @@ export function cl_vec4_add_mul_s2(a: vec4_t, b: vec4_t, s: number): vec4_t {
     return a;
 }
 
-export function cl_vec4_add_s(v: vec4_t, s: number): vec4_t {
+export function vec4_add_s(v: vec4_t, s: number): vec4_t {
     const out = new TYPE(4);
 
     out[0] = v[0] + s;
@@ -242,7 +242,7 @@ export function cl_vec4_add_s(v: vec4_t, s: number): vec4_t {
     return out;
 }
 
-export function cl_vec4_add_s2(v: vec4_t, s: number): vec4_t {
+export function vec4_add_s2(v: vec4_t, s: number): vec4_t {
     v[0] += s;
     v[1] += s;
     v[2] += s;
@@ -251,7 +251,7 @@ export function cl_vec4_add_s2(v: vec4_t, s: number): vec4_t {
     return v;
 }
 
-export function cl_vec4_sub_s(v: vec4_t, s: number): vec4_t {
+export function vec4_sub_s(v: vec4_t, s: number): vec4_t {
     const out = new TYPE(4);
 
     out[0] = v[0] - s;
@@ -262,7 +262,7 @@ export function cl_vec4_sub_s(v: vec4_t, s: number): vec4_t {
     return out;
 }
 
-export function cl_vec4_sub_s2(v: vec4_t, s: number): vec4_t {
+export function vec4_sub_s2(v: vec4_t, s: number): vec4_t {
     v[0] -= s;
     v[1] -= s;
     v[2] -= s;
@@ -271,7 +271,7 @@ export function cl_vec4_sub_s2(v: vec4_t, s: number): vec4_t {
     return v;
 }
 
-export function cl_vec4_mul_s(v: vec4_t, s: number): vec4_t {
+export function vec4_mul_s(v: vec4_t, s: number): vec4_t {
     const out = new TYPE(4);
 
     out[0] = v[0] * s;
@@ -282,7 +282,7 @@ export function cl_vec4_mul_s(v: vec4_t, s: number): vec4_t {
     return out;
 }
 
-export function cl_vec4_mul_s2(v: vec4_t, s: number): vec4_t {
+export function vec4_mul_s2(v: vec4_t, s: number): vec4_t {
     v[0] *= s;
     v[1] *= s;
     v[2] *= s;
@@ -291,7 +291,7 @@ export function cl_vec4_mul_s2(v: vec4_t, s: number): vec4_t {
     return v;
 }
 
-export function cl_vec4_div_s(v: vec4_t, s: number): vec4_t {
+export function vec4_div_s(v: vec4_t, s: number): vec4_t {
     const out = new TYPE(4);
 
     out[0] = v[0] / s;
@@ -302,7 +302,7 @@ export function cl_vec4_div_s(v: vec4_t, s: number): vec4_t {
     return out;
 }
 
-export function cl_vec4_div_s2(v: vec4_t, s: number): vec4_t {
+export function vec4_div_s2(v: vec4_t, s: number): vec4_t {
     v[0] /= s;
     v[1] /= s;
     v[2] /= s;
@@ -311,17 +311,17 @@ export function cl_vec4_div_s2(v: vec4_t, s: number): vec4_t {
     return v;
 }
 
-export function cl_vec4_len(v: vec4_t): number {
+export function vec4_len(v: vec4_t): number {
     return Math.hypot(v[0], v[1], v[2], v[3]);
 }
 
-export function cl_vec4_len_sq(v: vec4_t): number {
+export function vec4_len_sq(v: vec4_t): number {
     const x = v[0], y = v[1], z = v[2], w = v[3];
 
     return x * x + y * y + z * z + w * w;
 }
 
-export function cl_vec4_unit(v: vec4_t): vec4_t {
+export function vec4_unit(v: vec4_t): vec4_t {
     const out = new TYPE(4);
     const x = v[0], y = v[1], z = v[2], w = v[3];
     let l = x * x + y * y + z * z + w * w;
@@ -338,7 +338,7 @@ export function cl_vec4_unit(v: vec4_t): vec4_t {
     return out;
 }
 
-export function cl_vec4_unit2(v: vec4_t): vec4_t {
+export function vec4_unit2(v: vec4_t): vec4_t {
     const x = v[0], y = v[1], z = v[2], w = v[3];
     let l = x * x + y * y + z * z + w * w;
 
@@ -354,15 +354,15 @@ export function cl_vec4_unit2(v: vec4_t): vec4_t {
     return v;
 }
 
-export function cl_vec4_dot(a: vec4_t, b: vec4_t): number {
+export function vec4_dot(a: vec4_t, b: vec4_t): number {
     return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
 }
 
-export function cl_vec4_dist(a: vec4_t, b: vec4_t): number {
+export function vec4_dist(a: vec4_t, b: vec4_t): number {
     return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2], a[3] - b[3]);
 }
 
-export function cl_vec4_dist_sq(a: vec4_t, b: vec4_t): number {
+export function vec4_dist_sq(a: vec4_t, b: vec4_t): number {
     const x = a[0] - b[0];
     const y = a[1] - b[1];
     const z = a[2] - b[2];
@@ -371,9 +371,9 @@ export function cl_vec4_dist_sq(a: vec4_t, b: vec4_t): number {
     return x * x + y * y + z * z + w * w;
 }
 
-export function cl_vec4_refl(v: vec4_t, n: vec4_t): vec4_t {
+export function vec4_refl(v: vec4_t, n: vec4_t): vec4_t {
     const out = new TYPE(4);
-    const l = cl_vec4_dot(n, v) * 2.0;
+    const l = vec4_dot(n, v) * 2.0;
 
     out[0] = v[0] - n[0] * l;
     out[1] = v[1] - n[1] * l;
@@ -383,7 +383,7 @@ export function cl_vec4_refl(v: vec4_t, n: vec4_t): vec4_t {
     return out;
 }
 
-export function cl_vec4_floor(v: vec4_t): vec4_t {
+export function vec4_floor(v: vec4_t): vec4_t {
     const out = new TYPE(4);
 
     out[0] = Math.floor(v[0]);
@@ -394,7 +394,7 @@ export function cl_vec4_floor(v: vec4_t): vec4_t {
     return out;
 }
 
-export function cl_vec4_floor2(v: vec4_t): vec4_t {
+export function vec4_floor2(v: vec4_t): vec4_t {
     v[0] = Math.floor(v[0]);
     v[1] = Math.floor(v[1]);
     v[2] = Math.floor(v[2]);
@@ -403,7 +403,7 @@ export function cl_vec4_floor2(v: vec4_t): vec4_t {
     return v;
 }
 
-export function cl_vec4_ceil(v: vec4_t): vec4_t {
+export function vec4_ceil(v: vec4_t): vec4_t {
     const out = new TYPE(4);
 
     out[0] = Math.ceil(v[0]);
@@ -414,7 +414,7 @@ export function cl_vec4_ceil(v: vec4_t): vec4_t {
     return out;
 }
 
-export function cl_vec4_ceil2(v: vec4_t): vec4_t {
+export function vec4_ceil2(v: vec4_t): vec4_t {
     v[0] = Math.ceil(v[0]);
     v[1] = Math.ceil(v[1]);
     v[2] = Math.ceil(v[2]);
@@ -423,7 +423,7 @@ export function cl_vec4_ceil2(v: vec4_t): vec4_t {
     return v;
 }
 
-export function cl_vec4_round(v: vec4_t): vec4_t {
+export function vec4_round(v: vec4_t): vec4_t {
     const out = new TYPE(4);
 
     out[0] = Math.round(v[0]);
@@ -434,7 +434,7 @@ export function cl_vec4_round(v: vec4_t): vec4_t {
     return out;
 }
 
-export function cl_vec4_round2(v: vec4_t): vec4_t {
+export function vec4_round2(v: vec4_t): vec4_t {
     v[0] = Math.round(v[0]);
     v[1] = Math.round(v[1]);
     v[2] = Math.round(v[2]);
@@ -443,7 +443,7 @@ export function cl_vec4_round2(v: vec4_t): vec4_t {
     return v;
 }
 
-export function cl_vec4_trunc(v: vec4_t): vec4_t {
+export function vec4_trunc(v: vec4_t): vec4_t {
     const out = new TYPE(4);
 
     out[0] = Math.trunc(v[0]);
@@ -454,7 +454,7 @@ export function cl_vec4_trunc(v: vec4_t): vec4_t {
     return out;
 }
 
-export function cl_vec4_trunc2(v: vec4_t): vec4_t {
+export function vec4_trunc2(v: vec4_t): vec4_t {
     v[0] = Math.trunc(v[0]);
     v[1] = Math.trunc(v[1]);
     v[2] = Math.trunc(v[2]);
@@ -463,7 +463,7 @@ export function cl_vec4_trunc2(v: vec4_t): vec4_t {
     return v;
 }
 
-export function cl_vec4_min(a: vec4_t, b: vec4_t): vec4_t {
+export function vec4_min(a: vec4_t, b: vec4_t): vec4_t {
     const out = new TYPE(4);
 
     out[0] = Math.min(a[0], b[0]);
@@ -474,7 +474,7 @@ export function cl_vec4_min(a: vec4_t, b: vec4_t): vec4_t {
     return out;
 }
 
-export function cl_vec4_min2(a: vec4_t, b: vec4_t): vec4_t {
+export function vec4_min2(a: vec4_t, b: vec4_t): vec4_t {
     a[0] = Math.min(a[0], b[0]);
     a[1] = Math.min(a[1], b[1]);
     a[2] = Math.min(a[2], b[2]);
@@ -483,7 +483,7 @@ export function cl_vec4_min2(a: vec4_t, b: vec4_t): vec4_t {
     return a;
 }
 
-export function cl_vec4_max(a: vec4_t, b: vec4_t): vec4_t {
+export function vec4_max(a: vec4_t, b: vec4_t): vec4_t {
     const out = new TYPE(4);
 
     out[0] = Math.max(a[0], b[0]);
@@ -494,7 +494,7 @@ export function cl_vec4_max(a: vec4_t, b: vec4_t): vec4_t {
     return out;
 }
 
-export function cl_vec4_max2(a: vec4_t, b: vec4_t): vec4_t {
+export function vec4_max2(a: vec4_t, b: vec4_t): vec4_t {
     a[0] = Math.max(a[0], b[0]);
     a[1] = Math.max(a[1], b[1]);
     a[2] = Math.max(a[2], b[2]);
@@ -503,7 +503,7 @@ export function cl_vec4_max2(a: vec4_t, b: vec4_t): vec4_t {
     return a;
 }
 
-export function cl_vec4_clamp(v: vec4_t, min: vec4_t, max: vec4_t): vec4_t {
+export function vec4_clamp(v: vec4_t, min: vec4_t, max: vec4_t): vec4_t {
     const out = new TYPE(4);
 
     out[0] = Math.min(Math.max(v[0], min[0]), max[0]);
@@ -514,7 +514,7 @@ export function cl_vec4_clamp(v: vec4_t, min: vec4_t, max: vec4_t): vec4_t {
     return out;
 }
 
-export function cl_vec4_clamp2(v: vec4_t, min: vec4_t, max: vec4_t): vec4_t {
+export function vec4_clamp2(v: vec4_t, min: vec4_t, max: vec4_t): vec4_t {
     v[0] = Math.min(Math.max(v[0], min[0]), max[0]);
     v[1] = Math.min(Math.max(v[1], min[1]), max[1]);
     v[2] = Math.min(Math.max(v[2], min[2]), max[2]);
@@ -523,7 +523,7 @@ export function cl_vec4_clamp2(v: vec4_t, min: vec4_t, max: vec4_t): vec4_t {
     return v;
 }
 
-export function cl_vec4_loop(v: vec4_t, min: vec4_t, max: vec4_t): vec4_t {
+export function vec4_loop(v: vec4_t, min: vec4_t, max: vec4_t): vec4_t {
     const out = new TYPE(4);
     const mn0 = min[0], mn1 = min[1], mn2 = min[2], mn3 = min[3];
     const r0 = max[0] - mn0, r1 = max[1] - mn1, r2 = max[2] - mn2, r3 = max[3] - mn3;
@@ -536,7 +536,7 @@ export function cl_vec4_loop(v: vec4_t, min: vec4_t, max: vec4_t): vec4_t {
     return out;
 }
 
-export function cl_vec4_loop2(v: vec4_t, min: vec4_t, max: vec4_t): vec4_t {
+export function vec4_loop2(v: vec4_t, min: vec4_t, max: vec4_t): vec4_t {
     const mn0 = min[0], mn1 = min[1], mn2 = min[2], mn3 = min[3];
     const r0 = max[0] - mn0, r1 = max[1] - mn1, r2 = max[2] - mn2, r3 = max[3] - mn3;
 
@@ -548,7 +548,7 @@ export function cl_vec4_loop2(v: vec4_t, min: vec4_t, max: vec4_t): vec4_t {
     return v;
 }
 
-export function cl_vec4_lerp(a: vec4_t, b: vec4_t, t: number): vec4_t {
+export function vec4_lerp(a: vec4_t, b: vec4_t, t: number): vec4_t {
     const out = new TYPE(4);
     const x = a[0];
     const y = a[1];
@@ -563,7 +563,7 @@ export function cl_vec4_lerp(a: vec4_t, b: vec4_t, t: number): vec4_t {
     return out;
 }
 
-export function cl_vec4_lerp2(a: vec4_t, b: vec4_t, t: number): vec4_t {
+export function vec4_lerp2(a: vec4_t, b: vec4_t, t: number): vec4_t {
     const x = a[0];
     const y = a[1];
     const z = a[2];
@@ -577,10 +577,10 @@ export function cl_vec4_lerp2(a: vec4_t, b: vec4_t, t: number): vec4_t {
     return a;
 }
 
-export function cl_vec4_str(v: vec4_t): string {
+export function vec4_str(v: vec4_t): string {
     return `vec4(${v[0]}, ${v[1]}, ${v[2]}, ${v[3]})`;
 }
 
-export function cl_vec4_print(v: vec4_t): void {
-    console.log(cl_vec4_str(v));
+export function vec4_print(v: vec4_t): void {
+    console.log(vec4_str(v));
 }

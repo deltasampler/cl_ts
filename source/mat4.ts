@@ -1,6 +1,6 @@
 import {vec4_t, mat4_t, TYPE} from "./type.ts";
 
-export function cl_mat4(e00: number = 1.0, e01: number = 0.0, e02: number = 0.0, e03: number = 0.0, e10: number = 0.0, e11?: number, e12: number = 0.0, e13: number = 0.0, e20: number = 0.0, e21: number = 0.0, e22?: number, e23: number = 0.0, e30: number = 0.0, e31: number = 0.0, e32: number = 0.0, e33?: number): mat4_t {
+export function mat4(e00: number = 1.0, e01: number = 0.0, e02: number = 0.0, e03: number = 0.0, e10: number = 0.0, e11?: number, e12: number = 0.0, e13: number = 0.0, e20: number = 0.0, e21: number = 0.0, e22?: number, e23: number = 0.0, e30: number = 0.0, e31: number = 0.0, e32: number = 0.0, e33?: number): mat4_t {
     const out = new TYPE(16);
 
     out[0] = e00;
@@ -23,7 +23,7 @@ export function cl_mat4(e00: number = 1.0, e01: number = 0.0, e02: number = 0.0,
     return out;
 }
 
-export function cl_mat4_new(): mat4_t {
+export function mat4_new(): mat4_t {
     const out = new TYPE(16);
 
     out[0] = 0.0;
@@ -45,7 +45,7 @@ export function cl_mat4_new(): mat4_t {
     return out;
 }
 
-export function cl_mat4_x(x: number): mat4_t {
+export function mat4_x(x: number): mat4_t {
     const out = new TYPE(16);
 
     out[0] = x;
@@ -67,7 +67,7 @@ export function cl_mat4_x(x: number): mat4_t {
     return out;
 }
 
-export function cl_mat4_all(e00: number, e01: number, e02: number, e03: number, e10: number, e11: number, e12: number, e13: number, e20: number, e21: number, e22: number, e23: number, e30: number, e31: number, e32: number, e33: number): mat4_t {
+export function mat4_all(e00: number, e01: number, e02: number, e03: number, e10: number, e11: number, e12: number, e13: number, e20: number, e21: number, e22: number, e23: number, e30: number, e31: number, e32: number, e33: number): mat4_t {
     const out = new TYPE(16);
 
     out[0] = e00;
@@ -90,7 +90,7 @@ export function cl_mat4_all(e00: number, e01: number, e02: number, e03: number, 
     return out;
 }
 
-export function cl_mat4_clone(m: mat4_t): mat4_t {
+export function mat4_clone(m: mat4_t): mat4_t {
     const out = new TYPE(16);
 
     out[0] = m[0];
@@ -113,7 +113,7 @@ export function cl_mat4_clone(m: mat4_t): mat4_t {
     return out;
 }
 
-export function cl_mat4_set(m: mat4_t, e00: number, e01: number, e02: number, e03: number, e10: number, e11: number, e12: number, e13: number, e20: number, e21: number, e22: number, e23: number, e30: number, e31: number, e32: number, e33: number): mat4_t {
+export function mat4_set(m: mat4_t, e00: number, e01: number, e02: number, e03: number, e10: number, e11: number, e12: number, e13: number, e20: number, e21: number, e22: number, e23: number, e30: number, e31: number, e32: number, e33: number): mat4_t {
     m[0] = e00;
     m[1] = e01;
     m[2] = e02;
@@ -134,7 +134,7 @@ export function cl_mat4_set(m: mat4_t, e00: number, e01: number, e02: number, e0
     return m;
 }
 
-export function cl_mat4_copy(a: mat4_t, b: mat4_t): mat4_t {
+export function mat4_copy(a: mat4_t, b: mat4_t): mat4_t {
     a[0] = b[0];
     a[1] = b[1];
     a[2] = b[2];
@@ -155,7 +155,7 @@ export function cl_mat4_copy(a: mat4_t, b: mat4_t): mat4_t {
     return a;
 }
 
-export function cl_mat4_ident(m: mat4_t): mat4_t {
+export function mat4_ident(m: mat4_t): mat4_t {
     m[0] = 1.0;
     m[1] = 0.0;
     m[2] = 0.0;
@@ -176,7 +176,7 @@ export function cl_mat4_ident(m: mat4_t): mat4_t {
     return m;
 }
 
-export function cl_mat4_mul(a: mat4_t, b: mat4_t): mat4_t {
+export function mat4_mul(a: mat4_t, b: mat4_t): mat4_t {
     const out = new TYPE(16);
     const a00 = a[0],  a01 = a[1],  a02 = a[2],  a03 = a[3],
           a10 = a[4],  a11 = a[5],  a12 = a[6],  a13 = a[7],
@@ -207,7 +207,7 @@ export function cl_mat4_mul(a: mat4_t, b: mat4_t): mat4_t {
     return out;
 }
 
-export function cl_mat4_mul2(a: mat4_t, b: mat4_t): mat4_t {
+export function mat4_mul2(a: mat4_t, b: mat4_t): mat4_t {
     const a00 = a[0],  a01 = a[1],  a02 = a[2],  a03 = a[3],
           a10 = a[4],  a11 = a[5],  a12 = a[6],  a13 = a[7],
           a20 = a[8],  a21 = a[9],  a22 = a[10], a23 = a[11],
@@ -237,7 +237,7 @@ export function cl_mat4_mul2(a: mat4_t, b: mat4_t): mat4_t {
     return a;
 }
 
-export function cl_mat4_mul_s(m: mat4_t, s: number): mat4_t {
+export function mat4_mul_s(m: mat4_t, s: number): mat4_t {
     const out = new TYPE(16);
 
     out[0] = m[0] * s;
@@ -261,7 +261,7 @@ export function cl_mat4_mul_s(m: mat4_t, s: number): mat4_t {
     return out;
 }
 
-export function cl_mat4_mul_s2(m: mat4_t, s: number): mat4_t {
+export function mat4_mul_s2(m: mat4_t, s: number): mat4_t {
     m[0] *= s;
     m[1] *= s;
     m[2] *= s;
@@ -282,7 +282,7 @@ export function cl_mat4_mul_s2(m: mat4_t, s: number): mat4_t {
     return m;
 }
 
-export function cl_mat4_mul_mv(m: mat4_t, v: vec4_t): vec4_t {
+export function mat4_mul_mv(m: mat4_t, v: vec4_t): vec4_t {
     const out = new TYPE(4);
     const x = v[0], y = v[1], z = v[2], w = v[3];
 
@@ -294,7 +294,7 @@ export function cl_mat4_mul_mv(m: mat4_t, v: vec4_t): vec4_t {
     return out;
 }
 
-export function cl_mat4_mul_vm(v: vec4_t, m: mat4_t): vec4_t {
+export function mat4_mul_vm(v: vec4_t, m: mat4_t): vec4_t {
     const out = new TYPE(4);
     const x = v[0], y = v[1], z = v[2], w = v[3];
 
@@ -306,7 +306,7 @@ export function cl_mat4_mul_vm(v: vec4_t, m: mat4_t): vec4_t {
     return out;
 }
 
-export function cl_mat4_str(m: mat4_t): string {
+export function mat4_str(m: mat4_t): string {
     return "mat4(\n" +
         `\t${m[0]}, ${m[4]}, ${m[8]}, ${m[12]},\n` +
         `\t${m[1]}, ${m[5]}, ${m[9]}, ${m[13]},\n` +
@@ -315,6 +315,6 @@ export function cl_mat4_str(m: mat4_t): string {
         ")"
 }
 
-export function cl_mat4_print(m: mat4_t): void {
-    console.log(cl_mat4_str(m));
+export function mat4_print(m: mat4_t): void {
+    console.log(mat4_str(m));
 }

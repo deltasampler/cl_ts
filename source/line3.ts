@@ -2,7 +2,7 @@
 
 import {line3_t, TYPE, vec3_t} from "./type.ts";
 
-export function cl_line3(x0: number, y0: number, z0: number, x1: number, y1: number, z1: number): line3_t {
+export function line3(x0: number, y0: number, z0: number, x1: number, y1: number, z1: number): line3_t {
     const out = new TYPE(6);
 
     out[0] = x0;
@@ -15,7 +15,7 @@ export function cl_line3(x0: number, y0: number, z0: number, x1: number, y1: num
     return out;
 }
 
-export function cl_line3_new(): vec3_t {
+export function line3_new(): vec3_t {
     const out = new TYPE(6);
 
     out[0] = 0.0;
@@ -28,7 +28,7 @@ export function cl_line3_new(): vec3_t {
     return out;
 }
 
-export function cl_line3_clone(ln: line3_t): vec3_t {
+export function line3_clone(ln: line3_t): vec3_t {
     const out = new TYPE(6);
 
     out[0] = ln[0];
@@ -41,7 +41,7 @@ export function cl_line3_clone(ln: line3_t): vec3_t {
     return out;
 }
 
-export function cl_line3_ab(a: vec3_t, b: vec3_t): line3_t {
+export function line3_ab(a: vec3_t, b: vec3_t): line3_t {
     const out = new TYPE(6);
 
     out[0] = a[0];
@@ -54,7 +54,7 @@ export function cl_line3_ab(a: vec3_t, b: vec3_t): line3_t {
     return out;
 }
 
-export function cl_line3_set(ln: line3_t, x0: number, y0: number, z0: number, x1: number, y1: number, z1: number): line3_t {
+export function line3_set(ln: line3_t, x0: number, y0: number, z0: number, x1: number, y1: number, z1: number): line3_t {
     ln[0] = x0;
     ln[1] = y0;
     ln[2] = z0;
@@ -65,7 +65,7 @@ export function cl_line3_set(ln: line3_t, x0: number, y0: number, z0: number, x1
     return ln;
 }
 
-export function cl_line3_copy(a: line3_t, b: line3_t): line3_t {
+export function line3_copy(a: line3_t, b: line3_t): line3_t {
     a[0] = b[0];
     a[1] = b[1];
     a[2] = b[2];
@@ -76,10 +76,10 @@ export function cl_line3_copy(a: line3_t, b: line3_t): line3_t {
     return a;
 }
 
-export function cl_line3_a(ln: line3_t): vec3_t {
+export function line3_a(ln: line3_t): vec3_t {
     return ln.subarray(0, 3);
 }
 
-export function cl_line3_b(ln: line3_t): vec3_t {
+export function line3_b(ln: line3_t): vec3_t {
     return ln.subarray(3, 6);
 }

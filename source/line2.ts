@@ -1,7 +1,7 @@
 
 import {line2_t, TYPE, vec2_t} from "./type.ts";
 
-export function cl_line2(x0: number, y0: number, x1: number, y1: number): line2_t {
+export function line2(x0: number, y0: number, x1: number, y1: number): line2_t {
     const out = new TYPE(4);
 
     out[0] = x0;
@@ -12,7 +12,7 @@ export function cl_line2(x0: number, y0: number, x1: number, y1: number): line2_
     return out;
 }
 
-export function cl_line2_new(): vec2_t {
+export function line2_new(): vec2_t {
     const out = new TYPE(4);
 
     out[0] = 0.0;
@@ -23,7 +23,7 @@ export function cl_line2_new(): vec2_t {
     return out;
 }
 
-export function cl_line2_clone(ln: line2_t): vec2_t {
+export function line2_clone(ln: line2_t): vec2_t {
     const out = new TYPE(4);
 
     out[0] = ln[0];
@@ -34,7 +34,7 @@ export function cl_line2_clone(ln: line2_t): vec2_t {
     return out;
 }
 
-export function cl_line2_ab(a: vec2_t, b: vec2_t): line2_t {
+export function line2_ab(a: vec2_t, b: vec2_t): line2_t {
     const out = new TYPE(4);
 
     out[0] = a[0];
@@ -45,7 +45,7 @@ export function cl_line2_ab(a: vec2_t, b: vec2_t): line2_t {
     return out;
 }
 
-export function cl_line2_set(ln: line2_t, x0: number, y0: number, x1: number, y1: number): line2_t {
+export function line2_set(ln: line2_t, x0: number, y0: number, x1: number, y1: number): line2_t {
     ln[0] = x0;
     ln[1] = y0;
     ln[2] = x1;
@@ -54,7 +54,7 @@ export function cl_line2_set(ln: line2_t, x0: number, y0: number, x1: number, y1
     return ln;
 }
 
-export function cl_line2_copy(a: line2_t, b: line2_t): line2_t {
+export function line2_copy(a: line2_t, b: line2_t): line2_t {
     a[0] = b[0];
     a[1] = b[1];
     a[2] = b[2];
@@ -63,15 +63,15 @@ export function cl_line2_copy(a: line2_t, b: line2_t): line2_t {
     return a;
 }
 
-export function cl_line2_a(ln: line2_t): vec2_t {
+export function line2_a(ln: line2_t): vec2_t {
     return ln.subarray(0, 2);
 }
 
-export function cl_line2_b(ln: line2_t): vec2_t {
+export function line2_b(ln: line2_t): vec2_t {
     return ln.subarray(2, 4);
 }
 
-export function cl_point_on_line(ln: line2_t, v: vec2_t): vec2_t {
+export function point_on_line(ln: line2_t, v: vec2_t): vec2_t {
     const out = new TYPE(2);
     const x = ln[0], y = ln[1];
     const bax = ln[2] - x, bay = ln[3] - y, pax = v[0] - x, pay = v[1] - y;
@@ -83,7 +83,7 @@ export function cl_point_on_line(ln: line2_t, v: vec2_t): vec2_t {
     return out;
 }
 
-export function cl_side_of_line(ln: line2_t, v: vec2_t): number {
+export function side_of_line(ln: line2_t, v: vec2_t): number {
     const x = ln[0], y = ln[1];
     const bax = ln[2] - x, bay = ln[3] - y, pax = v[0] - x, pay = v[1] - y;
     const t = (bax * pax + bay * pay) / (bax * bax + bay * bay);

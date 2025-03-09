@@ -5,7 +5,7 @@ export class ray2_t {
     direction: vec2_t;
 };
 
-export function cl_ray2(position: vec2_t, direction: vec2_t): ray2_t {
+export function ray2(position: vec2_t, direction: vec2_t): ray2_t {
     const out = new ray2_t();
     out.position = position;
     out.direction = direction;

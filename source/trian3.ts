@@ -1,7 +1,7 @@
 
 import {trian3_t, TYPE, vec3_t} from "./type.ts";
 
-export function cl_trian3(ax: number, ay: number, az: number, bx: number, by: number, bz: number, cx: number, cy: number, cz: number): trian3_t {
+export function trian3(ax: number, ay: number, az: number, bx: number, by: number, bz: number, cx: number, cy: number, cz: number): trian3_t {
     const out = new TYPE(9);
 
     out[0] = ax;
@@ -17,7 +17,7 @@ export function cl_trian3(ax: number, ay: number, az: number, bx: number, by: nu
     return out;
 }
 
-export function cl_trian3_new(): vec3_t {
+export function trian3_new(): vec3_t {
     const out = new TYPE(9);
 
     out[0] = 0.0;
@@ -33,7 +33,7 @@ export function cl_trian3_new(): vec3_t {
     return out;
 }
 
-export function cl_trian3_clone(t: trian3_t): vec3_t {
+export function trian3_clone(t: trian3_t): vec3_t {
     const out = new TYPE(9);
 
     out[0] = t[0];
@@ -49,7 +49,7 @@ export function cl_trian3_clone(t: trian3_t): vec3_t {
     return out;
 }
 
-export function cl_trian3_ab(a: vec3_t, b: vec3_t, c: vec3_t): trian3_t {
+export function trian3_ab(a: vec3_t, b: vec3_t, c: vec3_t): trian3_t {
     const out = new TYPE(9);
 
     out[0] = a[0];
@@ -65,7 +65,7 @@ export function cl_trian3_ab(a: vec3_t, b: vec3_t, c: vec3_t): trian3_t {
     return out;
 }
 
-export function cl_trian3_set(t: trian3_t, ax: number, ay: number, az: number, bx: number, by: number, bz: number, cx: number, cy: number, cz: number): trian3_t {
+export function trian3_set(t: trian3_t, ax: number, ay: number, az: number, bx: number, by: number, bz: number, cx: number, cy: number, cz: number): trian3_t {
     t[0] = ax;
     t[1] = ay;
     t[2] = az;
@@ -79,7 +79,7 @@ export function cl_trian3_set(t: trian3_t, ax: number, ay: number, az: number, b
     return t;
 }
 
-export function cl_trian3_copy(a: trian3_t, b: trian3_t): trian3_t {
+export function trian3_copy(a: trian3_t, b: trian3_t): trian3_t {
     a[0] = b[0];
     a[1] = b[1];
     a[2] = b[2];
@@ -93,14 +93,14 @@ export function cl_trian3_copy(a: trian3_t, b: trian3_t): trian3_t {
     return a;
 }
 
-export function cl_trian3_a(t: trian3_t): vec3_t {
+export function trian3_a(t: trian3_t): vec3_t {
     return t.subarray(0, 3);
 }
 
-export function cl_trian3_b(t: trian3_t): vec3_t {
+export function trian3_b(t: trian3_t): vec3_t {
     return t.subarray(3, 6);
 }
 
-export function cl_trian3_c(t: trian3_t): vec3_t {
+export function trian3_c(t: trian3_t): vec3_t {
     return t.subarray(6, 9);
 }

@@ -1,12 +1,12 @@
 import { vec2_t } from "@cl/type";
-import {cl_vec2, } from "@cl/vec2.ts";
+import {vec2, } from "@cl/vec2.ts";
 
 export function polygon_from_aabb(min: vec2_t, max: vec2_t): vec2_t[] {
     return [
-        cl_vec2(min[0], min[1]),
-        cl_vec2(max[0], min[1]),
-        cl_vec2(max[0], max[1]),
-        cl_vec2(min[0], max[1])
+        vec2(min[0], min[1]),
+        vec2(max[0], min[1]),
+        vec2(max[0], max[1]),
+        vec2(min[0], max[1])
     ]
 }
 
@@ -41,7 +41,7 @@ export function polygon_center(points: vec2_t[]): vec2_t {
     const meanX = sumX / points.length;
     const meanY = sumY / points.length;
 
-    return cl_vec2(meanX, meanY);
+    return vec2(meanX, meanY);
 }
 
 export function polygon_min_max(points: vec2_t[]): {min: vec2_t, max: vec2_t} {
@@ -62,8 +62,8 @@ export function polygon_min_max(points: vec2_t[]): {min: vec2_t, max: vec2_t} {
     }
 
     return {
-        min: cl_vec2(minX, minY),
-        max: cl_vec2(maxX, maxY)
+        min: vec2(minX, minY),
+        max: vec2(maxX, maxY)
     };
 }
 
@@ -73,8 +73,8 @@ export type intersect_t = {
 };
 
 export function polgon_line_intersections(points: vec2_t[], i: vec2_t, angle: number, offset: number): intersect_t[] {
-    i = cl_vec2(i[0] + Math.cos(angle + Math.PI / 2) * offset, i[1] + Math.sin(angle + Math.PI / 2) * offset)
-    let j = cl_vec2(i[0] + Math.cos(angle), i[1] + Math.sin(angle))
+    i = vec2(i[0] + Math.cos(angle + Math.PI / 2) * offset, i[1] + Math.sin(angle + Math.PI / 2) * offset)
+    let j = vec2(i[0] + Math.cos(angle), i[1] + Math.sin(angle))
 
     const intersections: intersect_t[] = []
 
@@ -96,7 +96,7 @@ export function polgon_line_intersections(points: vec2_t[], i: vec2_t, angle: nu
         if (t2 > 0 && t2 < 1) {
             const px = i[0] + (t1 * (j[0] - i[0]))
             const py = i[1] + (t1 * (j[1] - i[1]))
-            const vec = cl_vec2(px, py)
+            const vec = vec2(px, py)
             intersections.push({point: vec, index: a})
         }
 
