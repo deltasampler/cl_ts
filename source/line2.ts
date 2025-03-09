@@ -1,7 +1,7 @@
 
-import {num_t, line2_t, TYPE, vec2_t} from "./type.ts";
+import {line2_t, TYPE, vec2_t} from "./type.ts";
 
-export function cl_line2(x0: num_t, y0: num_t, x1: num_t, y1: num_t): line2_t {
+export function cl_line2(x0: number, y0: number, x1: number, y1: number): line2_t {
     const out = new TYPE(4);
 
     out[0] = x0;
@@ -45,7 +45,7 @@ export function cl_line2_ab(a: vec2_t, b: vec2_t): line2_t {
     return out;
 }
 
-export function cl_line2_set(ln: line2_t, x0: num_t, y0: num_t, x1: num_t, y1: num_t): line2_t {
+export function cl_line2_set(ln: line2_t, x0: number, y0: number, x1: number, y1: number): line2_t {
     ln[0] = x0;
     ln[1] = y0;
     ln[2] = x1;
@@ -83,7 +83,7 @@ export function cl_point_on_line(ln: line2_t, v: vec2_t): vec2_t {
     return out;
 }
 
-export function cl_side_of_line(ln: line2_t, v: vec2_t): num_t {
+export function cl_side_of_line(ln: line2_t, v: vec2_t): number {
     const x = ln[0], y = ln[1];
     const bax = ln[2] - x, bay = ln[3] - y, pax = v[0] - x, pay = v[1] - y;
     const t = (bax * pax + bay * pay) / (bax * bax + bay * bay);

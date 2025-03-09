@@ -1,6 +1,6 @@
-import {num_t, vec2_t, mat2_t, TYPE} from "./type.ts";
+import {vec2_t, mat2_t, TYPE} from "./type.ts";
 
-export function cl_mat2(e00: num_t = 1.0, e01: num_t = 0.0, e10: num_t = 0.0, e11?: num_t): mat2_t {
+export function cl_mat2(e00: number = 1.0, e01: number = 0.0, e10: number = 0.0, e11?: number): mat2_t {
     const out = new TYPE(4);
 
     out[0] = e00;
@@ -22,7 +22,7 @@ export function cl_mat2_new(): mat2_t {
     return out;
 }
 
-export function cl_mat2_x(x: num_t): mat2_t {
+export function cl_mat2_x(x: number): mat2_t {
     const out = new TYPE(4);
 
     out[0] = x;
@@ -33,7 +33,7 @@ export function cl_mat2_x(x: num_t): mat2_t {
     return out;
 }
 
-export function cl_mat2_all(e00: num_t, e01: num_t, e10: num_t, e11: num_t): mat2_t {
+export function cl_mat2_all(e00: number, e01: number, e10: number, e11: number): mat2_t {
     const out = new TYPE(4);
 
     out[0] = e00;
@@ -55,7 +55,7 @@ export function cl_mat2_clone(m: mat2_t): mat2_t {
     return out;
 }
 
-export function cl_mat2_set(m: mat2_t, e00: num_t, e01: num_t, e10: num_t, e11: num_t): mat2_t {
+export function cl_mat2_set(m: mat2_t, e00: number, e01: number, e10: number, e11: number): mat2_t {
     m[0] = e00;
     m[1] = e01;
     m[2] = e10;
@@ -111,7 +111,7 @@ export function cl_mat2_mul2(a: mat2_t, b: mat2_t): mat2_t {
     return a;
 }
 
-export function cl_mat2_mul_s(m: mat2_t, s: num_t): mat2_t {
+export function cl_mat2_mul_s(m: mat2_t, s: number): mat2_t {
     const out = new TYPE(4);
 
     out[0] = m[0] * s;
@@ -122,7 +122,7 @@ export function cl_mat2_mul_s(m: mat2_t, s: num_t): mat2_t {
     return out;
 }
 
-export function cl_mat2_mul_s2(m: mat2_t, s: num_t): mat2_t {
+export function cl_mat2_mul_s2(m: mat2_t, s: number): mat2_t {
     m[0] *= s;
     m[1] *= s;
     m[2] *= s;

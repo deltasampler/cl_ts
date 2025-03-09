@@ -1,4 +1,3 @@
-export type num_t = number;
 export type vec2_t = Float32Array;
 export type vec3_t = Float32Array;
 export type vec4_t = Float32Array;

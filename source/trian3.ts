@@ -1,7 +1,7 @@
 
-import {num_t, trian3_t, TYPE, vec3_t} from "./type.ts";
+import {trian3_t, TYPE, vec3_t} from "./type.ts";
 
-export function cl_trian3(ax: num_t, ay: num_t, az: num_t, bx: num_t, by: num_t, bz: num_t, cx: num_t, cy: num_t, cz: num_t): trian3_t {
+export function cl_trian3(ax: number, ay: number, az: number, bx: number, by: number, bz: number, cx: number, cy: number, cz: number): trian3_t {
     const out = new TYPE(9);
 
     out[0] = ax;
@@ -65,7 +65,7 @@ export function cl_trian3_ab(a: vec3_t, b: vec3_t, c: vec3_t): trian3_t {
     return out;
 }
 
-export function cl_trian3_set(t: trian3_t, ax: num_t, ay: num_t, az: num_t, bx: num_t, by: num_t, bz: num_t, cx: num_t, cy: num_t, cz: num_t): trian3_t {
+export function cl_trian3_set(t: trian3_t, ax: number, ay: number, az: number, bx: number, by: number, bz: number, cx: number, cy: number, cz: number): trian3_t {
     t[0] = ax;
     t[1] = ay;
     t[2] = az;

@@ -1,8 +1,8 @@
 
 
-import {num_t, line3_t, TYPE, vec3_t} from "./type.ts";
+import {line3_t, TYPE, vec3_t} from "./type.ts";
 
-export function cl_line3(x0: num_t, y0: num_t, z0: num_t, x1: num_t, y1: num_t, z1: num_t): line3_t {
+export function cl_line3(x0: number, y0: number, z0: number, x1: number, y1: number, z1: number): line3_t {
     const out = new TYPE(6);
 
     out[0] = x0;
@@ -54,7 +54,7 @@ export function cl_line3_ab(a: vec3_t, b: vec3_t): line3_t {
     return out;
 }
 
-export function cl_line3_set(ln: line3_t, x0: num_t, y0: num_t, z0: num_t, x1: num_t, y1: num_t, z1: num_t): line3_t {
+export function cl_line3_set(ln: line3_t, x0: number, y0: number, z0: number, x1: number, y1: number, z1: number): line3_t {
     ln[0] = x0;
     ln[1] = y0;
     ln[2] = z0;

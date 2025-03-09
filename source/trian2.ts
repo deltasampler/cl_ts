@@ -1,7 +1,7 @@
 
-import {num_t, trian2_t, TYPE, vec2_t} from "./type.ts";
+import {trian2_t, TYPE, vec2_t} from "./type.ts";
 
-export function cl_trian2(ax: num_t, ay: num_t, bx: num_t, by: num_t, cx: num_t, cy: num_t): trian2_t {
+export function cl_trian2(ax: number, ay: number, bx: number, by: number, cx: number, cy: number): trian2_t {
     const out = new TYPE(6);
 
     out[0] = ax;
@@ -53,7 +53,7 @@ export function cl_trian2_ab(a: vec2_t, b: vec2_t, c: vec2_t): trian2_t {
     return out;
 }
 
-export function cl_trian2_set(t: trian2_t, ax: num_t, ay: num_t, bx: num_t, by: num_t, cx: num_t, cy: num_t): trian2_t {
+export function cl_trian2_set(t: trian2_t, ax: number, ay: number, bx: number, by: number, cx: number, cy: number): trian2_t {
     t[0] = ax;
     t[1] = ay;
     t[2] = bx;

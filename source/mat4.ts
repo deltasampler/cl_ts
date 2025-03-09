@@ -1,6 +1,6 @@
-import {num_t, vec4_t, mat4_t, TYPE} from "./type.ts";
+import {vec4_t, mat4_t, TYPE} from "./type.ts";
 
-export function cl_mat4(e00: num_t = 1.0, e01: num_t = 0.0, e02: num_t = 0.0, e03: num_t = 0.0, e10: num_t = 0.0, e11?: num_t, e12: num_t = 0.0, e13: num_t = 0.0, e20: num_t = 0.0, e21: num_t = 0.0, e22?: num_t, e23: num_t = 0.0, e30: num_t = 0.0, e31: num_t = 0.0, e32: num_t = 0.0, e33?: num_t): mat4_t {
+export function cl_mat4(e00: number = 1.0, e01: number = 0.0, e02: number = 0.0, e03: number = 0.0, e10: number = 0.0, e11?: number, e12: number = 0.0, e13: number = 0.0, e20: number = 0.0, e21: number = 0.0, e22?: number, e23: number = 0.0, e30: number = 0.0, e31: number = 0.0, e32: number = 0.0, e33?: number): mat4_t {
     const out = new TYPE(16);
 
     out[0] = e00;
@@ -45,7 +45,7 @@ export function cl_mat4_new(): mat4_t {
     return out;
 }
 
-export function cl_mat4_x(x: num_t): mat4_t {
+export function cl_mat4_x(x: number): mat4_t {
     const out = new TYPE(16);
 
     out[0] = x;
@@ -67,7 +67,7 @@ export function cl_mat4_x(x: num_t): mat4_t {
     return out;
 }
 
-export function cl_mat4_all(e00: num_t, e01: num_t, e02: num_t, e03: num_t, e10: num_t, e11: num_t, e12: num_t, e13: num_t, e20: num_t, e21: num_t, e22: num_t, e23: num_t, e30: num_t, e31: num_t, e32: num_t, e33: num_t): mat4_t {
+export function cl_mat4_all(e00: number, e01: number, e02: number, e03: number, e10: number, e11: number, e12: number, e13: number, e20: number, e21: number, e22: number, e23: number, e30: number, e31: number, e32: number, e33: number): mat4_t {
     const out = new TYPE(16);
 
     out[0] = e00;
@@ -113,7 +113,7 @@ export function cl_mat4_clone(m: mat4_t): mat4_t {
     return out;
 }
 
-export function cl_mat4_set(m: mat4_t, e00: num_t, e01: num_t, e02: num_t, e03: num_t, e10: num_t, e11: num_t, e12: num_t, e13: num_t, e20: num_t, e21: num_t, e22: num_t, e23: num_t, e30: num_t, e31: num_t, e32: num_t, e33: num_t): mat4_t {
+export function cl_mat4_set(m: mat4_t, e00: number, e01: number, e02: number, e03: number, e10: number, e11: number, e12: number, e13: number, e20: number, e21: number, e22: number, e23: number, e30: number, e31: number, e32: number, e33: number): mat4_t {
     m[0] = e00;
     m[1] = e01;
     m[2] = e02;
@@ -237,7 +237,7 @@ export function cl_mat4_mul2(a: mat4_t, b: mat4_t): mat4_t {
     return a;
 }
 
-export function cl_mat4_mul_s(m: mat4_t, s: num_t): mat4_t {
+export function cl_mat4_mul_s(m: mat4_t, s: number): mat4_t {
     const out = new TYPE(16);
 
     out[0] = m[0] * s;
@@ -261,7 +261,7 @@ export function cl_mat4_mul_s(m: mat4_t, s: num_t): mat4_t {
     return out;
 }
 
-export function cl_mat4_mul_s2(m: mat4_t, s: num_t): mat4_t {
+export function cl_mat4_mul_s2(m: mat4_t, s: number): mat4_t {
     m[0] *= s;
     m[1] *= s;
     m[2] *= s;

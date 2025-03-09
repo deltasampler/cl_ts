@@ -1,6 +1,6 @@
-import {num_t, vec3_t, TYPE} from "./type.ts";
+import {vec3_t, TYPE} from "./type.ts";
 
-export function cl_vec3(x: num_t = 0.0, y?: num_t, z?: num_t): vec3_t {
+export function cl_vec3(x: number = 0.0, y?: number, z?: number): vec3_t {
     const out = new TYPE(3);
 
     out[0] = x;
@@ -20,7 +20,7 @@ export function cl_vec3_new(): vec3_t {
     return out;
 }
 
-export function cl_vec3_x(x: num_t): vec3_t {
+export function cl_vec3_x(x: number): vec3_t {
     const out = new TYPE(3);
 
     out[0] = x;
@@ -30,7 +30,7 @@ export function cl_vec3_x(x: num_t): vec3_t {
     return out;
 }
 
-export function cl_vec3_xyz(x: num_t, y: num_t, z: num_t): vec3_t {
+export function cl_vec3_xyz(x: number, y: number, z: number): vec3_t {
     const out = new TYPE(3);
 
     out[0] = x;
@@ -50,7 +50,7 @@ export function cl_vec3_clone(v: vec3_t): vec3_t {
     return out;
 }
 
-export function cl_vec3_set(v: vec3_t, x: num_t, y: num_t, z: num_t): vec3_t {
+export function cl_vec3_set(v: vec3_t, x: number, y: number, z: number): vec3_t {
     v[0] = x;
     v[1] = y;
     v[2] = z;
@@ -66,7 +66,7 @@ export function cl_vec3_copy(a: vec3_t, b: vec3_t): vec3_t {
     return a;
 }
 
-export function cl_rgb(r: num_t = 0.0, g: num_t = 0.0, b: num_t = 0.0): vec3_t {
+export function cl_rgb(r: number = 0.0, g: number = 0.0, b: number = 0.0): vec3_t {
     const out = new TYPE(3);
 
     out[0] = r / 255.0;
@@ -76,7 +76,7 @@ export function cl_rgb(r: num_t = 0.0, g: num_t = 0.0, b: num_t = 0.0): vec3_t {
     return out;
 }
 
-export function cl_hex(h: num_t): vec3_t {
+export function cl_hex(h: number): vec3_t {
     const out = new TYPE(3);
 
     out[0] = ((h >> 16) & 0xFF) / 255.0;
@@ -190,7 +190,7 @@ export function cl_vec3_div2(a: vec3_t, b: vec3_t): vec3_t {
     return a;
 }
 
-export function cl_vec3_add_mul_s(a: vec3_t, b: vec3_t, s: num_t): vec3_t {
+export function cl_vec3_add_mul_s(a: vec3_t, b: vec3_t, s: number): vec3_t {
     const out = new TYPE(3);
 
     out[0] = a[0] + b[0] * s;
@@ -200,7 +200,7 @@ export function cl_vec3_add_mul_s(a: vec3_t, b: vec3_t, s: num_t): vec3_t {
     return out;
 }
 
-export function cl_vec3_add_mul_s2(a: vec3_t, b: vec3_t, s: num_t): vec3_t {
+export function cl_vec3_add_mul_s2(a: vec3_t, b: vec3_t, s: number): vec3_t {
     a[0] += b[0] * s;
     a[1] += b[1] * s;
     a[2] += b[2] * s;
@@ -208,7 +208,7 @@ export function cl_vec3_add_mul_s2(a: vec3_t, b: vec3_t, s: num_t): vec3_t {
     return a;
 }
 
-export function cl_vec3_add_s(v: vec3_t, s: num_t): vec3_t {
+export function cl_vec3_add_s(v: vec3_t, s: number): vec3_t {
     const out = new TYPE(3);
 
     out[0] = v[0] + s;
@@ -218,7 +218,7 @@ export function cl_vec3_add_s(v: vec3_t, s: num_t): vec3_t {
     return out;
 }
 
-export function cl_vec3_add_s2(v: vec3_t, s: num_t): vec3_t {
+export function cl_vec3_add_s2(v: vec3_t, s: number): vec3_t {
     v[0] += s;
     v[1] += s;
     v[2] += s;
@@ -226,7 +226,7 @@ export function cl_vec3_add_s2(v: vec3_t, s: num_t): vec3_t {
     return v;
 }
 
-export function cl_vec3_sub_s(v: vec3_t, s: num_t): vec3_t {
+export function cl_vec3_sub_s(v: vec3_t, s: number): vec3_t {
     const out = new TYPE(3);
 
     out[0] = v[0] - s;
@@ -236,7 +236,7 @@ export function cl_vec3_sub_s(v: vec3_t, s: num_t): vec3_t {
     return out;
 }
 
-export function cl_vec3_sub_s2(v: vec3_t, s: num_t): vec3_t {
+export function cl_vec3_sub_s2(v: vec3_t, s: number): vec3_t {
     v[0] -= s;
     v[1] -= s;
     v[2] -= s;
@@ -244,7 +244,7 @@ export function cl_vec3_sub_s2(v: vec3_t, s: num_t): vec3_t {
     return v;
 }
 
-export function cl_vec3_mul_s(v: vec3_t, s: num_t): vec3_t {
+export function cl_vec3_mul_s(v: vec3_t, s: number): vec3_t {
     const out = new TYPE(3);
 
     out[0] = v[0] * s;
@@ -254,7 +254,7 @@ export function cl_vec3_mul_s(v: vec3_t, s: num_t): vec3_t {
     return out;
 }
 
-export function cl_vec3_mul_s2(v: vec3_t, s: num_t): vec3_t {
+export function cl_vec3_mul_s2(v: vec3_t, s: number): vec3_t {
     v[0] *= s;
     v[1] *= s;
     v[2] *= s;
@@ -262,7 +262,7 @@ export function cl_vec3_mul_s2(v: vec3_t, s: num_t): vec3_t {
     return v;
 }
 
-export function cl_vec3_div_s(v: vec3_t, s: num_t): vec3_t {
+export function cl_vec3_div_s(v: vec3_t, s: number): vec3_t {
     const out = new TYPE(3);
 
     out[0] = v[0] / s;
@@ -272,7 +272,7 @@ export function cl_vec3_div_s(v: vec3_t, s: num_t): vec3_t {
     return out;
 }
 
-export function cl_vec3_div_s2(v: vec3_t, s: num_t): vec3_t {
+export function cl_vec3_div_s2(v: vec3_t, s: number): vec3_t {
     v[0] /= s;
     v[1] /= s;
     v[2] /= s;
@@ -280,11 +280,11 @@ export function cl_vec3_div_s2(v: vec3_t, s: num_t): vec3_t {
     return v;
 }
 
-export function cl_vec3_len(v: vec3_t): num_t {
+export function cl_vec3_len(v: vec3_t): number {
     return Math.hypot(v[0], v[1], v[2]);
 }
 
-export function cl_vec3_len_sq(v: vec3_t): num_t {
+export function cl_vec3_len_sq(v: vec3_t): number {
     const x = v[0], y = v[1], z = v[2];
 
     return x * x + y * y + z * z;
@@ -321,7 +321,7 @@ export function cl_vec3_unit2(v: vec3_t): vec3_t {
     return v;
 }
 
-export function cl_vec3_dot(a: vec3_t, b: vec3_t): num_t {
+export function cl_vec3_dot(a: vec3_t, b: vec3_t): number {
     return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 }
 
@@ -337,11 +337,11 @@ export function cl_vec3_cross(a: vec3_t, b: vec3_t): vec3_t {
     return out;
 }
 
-export function cl_vec3_dist(a: vec3_t, b: vec3_t): num_t {
+export function cl_vec3_dist(a: vec3_t, b: vec3_t): number {
     return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
 }
 
-export function cl_vec3_dist_sq(a: vec3_t, b: vec3_t): num_t {
+export function cl_vec3_dist_sq(a: vec3_t, b: vec3_t): number {
     const x = a[0] - b[0];
     const y = a[1] - b[1];
     const z = a[2] - b[2];
@@ -509,7 +509,7 @@ export function cl_vec3_loop2(v: vec3_t, min: vec3_t, max: vec3_t): vec3_t {
     return v;
 }
 
-export function cl_vec3_lerp(a: vec3_t, b: vec3_t, t: num_t): vec3_t {
+export function cl_vec3_lerp(a: vec3_t, b: vec3_t, t: number): vec3_t {
     const out = new TYPE(3);
     const x = a[0];
     const y = a[1];
@@ -522,7 +522,7 @@ export function cl_vec3_lerp(a: vec3_t, b: vec3_t, t: num_t): vec3_t {
     return out;
 }
 
-export function cl_vec3_lerp2(a: vec3_t, b: vec3_t, t: num_t): vec3_t {
+export function cl_vec3_lerp2(a: vec3_t, b: vec3_t, t: number): vec3_t {
     const x = a[0];
     const y = a[1];
     const z = a[2];

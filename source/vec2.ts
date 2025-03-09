@@ -1,6 +1,6 @@
-import {num_t, vec2_t, TYPE} from "./type.ts";
+import {vec2_t, TYPE} from "./type.ts";
 
-export function cl_vec2(x: num_t = 0.0, y?: num_t): vec2_t {
+export function cl_vec2(x: number = 0.0, y?: number): vec2_t {
     const out = new TYPE(2);
 
     out[0] = x;
@@ -18,7 +18,7 @@ export function cl_vec2_new(): vec2_t {
     return out;
 }
 
-export function cl_vec2_x(x: num_t): vec2_t {
+export function cl_vec2_x(x: number): vec2_t {
     const out = new TYPE(2);
 
     out[0] = x;
@@ -27,7 +27,7 @@ export function cl_vec2_x(x: num_t): vec2_t {
     return out;
 }
 
-export function cl_vec2_xy(x: num_t, y: num_t): vec2_t {
+export function cl_vec2_xy(x: number, y: number): vec2_t {
     const out = new TYPE(2);
 
     out[0] = x;
@@ -45,7 +45,7 @@ export function cl_vec2_clone(v: vec2_t): vec2_t {
     return out;
 }
 
-export function cl_vec2_set(v: vec2_t, x: num_t ,y: num_t): vec2_t {
+export function cl_vec2_set(v: vec2_t, x: number ,y: number): vec2_t {
     v[0] = x;
     v[1] = y;
 
@@ -151,7 +151,7 @@ export function cl_vec2_div2(a: vec2_t, b: vec2_t): vec2_t {
     return a;
 }
 
-export function cl_vec2_add_mul_s(a: vec2_t, b: vec2_t, s: num_t): vec2_t {
+export function cl_vec2_add_mul_s(a: vec2_t, b: vec2_t, s: number): vec2_t {
     const out = new TYPE(2);
 
     out[0] = a[0] + b[0] * s;
@@ -160,14 +160,14 @@ export function cl_vec2_add_mul_s(a: vec2_t, b: vec2_t, s: num_t): vec2_t {
     return out;
 }
 
-export function cl_vec2_add_mul_s2(a: vec2_t, b: vec2_t, s: num_t): vec2_t {
+export function cl_vec2_add_mul_s2(a: vec2_t, b: vec2_t, s: number): vec2_t {
     a[0] += b[0] * s;
     a[1] += b[1] * s;
 
     return a;
 }
 
-export function cl_vec2_add_s(v: vec2_t, s: num_t): vec2_t {
+export function cl_vec2_add_s(v: vec2_t, s: number): vec2_t {
     const out = new TYPE(2);
 
     out[0] = v[0] + s;
@@ -176,14 +176,14 @@ export function cl_vec2_add_s(v: vec2_t, s: num_t): vec2_t {
     return out;
 }
 
-export function cl_vec2_add_s2(v: vec2_t, s: num_t): vec2_t {
+export function cl_vec2_add_s2(v: vec2_t, s: number): vec2_t {
     v[0] += s;
     v[1] += s;
 
     return v;
 }
 
-export function cl_vec2_sub_s(v: vec2_t, s: num_t): vec2_t {
+export function cl_vec2_sub_s(v: vec2_t, s: number): vec2_t {
     const out = new TYPE(2);
 
     out[0] = v[0] - s;
@@ -192,14 +192,14 @@ export function cl_vec2_sub_s(v: vec2_t, s: num_t): vec2_t {
     return out;
 }
 
-export function cl_vec2_sub_s2(v: vec2_t, s: num_t): vec2_t {
+export function cl_vec2_sub_s2(v: vec2_t, s: number): vec2_t {
     v[0] -= s;
     v[1] -= s;
 
     return v;
 }
 
-export function cl_vec2_mul_s(v: vec2_t, s: num_t): vec2_t {
+export function cl_vec2_mul_s(v: vec2_t, s: number): vec2_t {
     const out = new TYPE(2);
 
     out[0] = v[0] * s;
@@ -208,14 +208,14 @@ export function cl_vec2_mul_s(v: vec2_t, s: num_t): vec2_t {
     return out;
 }
 
-export function cl_vec2_mul_s2(v: vec2_t, s: num_t): vec2_t {
+export function cl_vec2_mul_s2(v: vec2_t, s: number): vec2_t {
     v[0] *= s;
     v[1] *= s;
 
     return v;
 }
 
-export function cl_vec2_div_s(v: vec2_t, s: num_t): vec2_t {
+export function cl_vec2_div_s(v: vec2_t, s: number): vec2_t {
     const out = new TYPE(2);
 
     out[0] = v[0] / s;
@@ -224,21 +224,49 @@ export function cl_vec2_div_s(v: vec2_t, s: num_t): vec2_t {
     return out;
 }
 
-export function cl_vec2_div_s2(v: vec2_t, s: num_t): vec2_t {
+export function cl_vec2_div_s2(v: vec2_t, s: number): vec2_t {
     v[0] /= s;
     v[1] /= s;
 
     return v;
 }
 
-export function cl_vec2_len(v: vec2_t): num_t {
+export function cl_vec2_len(v: vec2_t): number {
     return Math.hypot(v[0], v[1]);
 }
 
-export function cl_vec2_len_sq(v: vec2_t): num_t {
+export function cl_vec2_len_sq(v: vec2_t): number {
     const x = v[0], y = v[1];
 
     return x * x + y * y;
+}
+
+export function cl_vec2_rotate_ccw(v: vec2_t, c: vec2_t, a: number) {
+    const out = new TYPE(2);
+    const cx = c[0], cy = c[1];
+    const x = v[0] - cx;
+    const y = v[1] - cy;
+    const cos = Math.cos(a);
+    const sin = Math.sin(a);
+
+    out[0] = x * cos - y * sin + cx;
+    out[1] = x * sin + y * cos + cy;
+
+    return out;
+}
+
+export function cl_vec2_to_local(v: vec2_t, c: vec2_t, a: number) {
+    const out = new TYPE(2);
+    const cx = c[0], cy = c[1];
+    const x = v[0] - cx;
+    const y = v[1] - cy;
+    const cos = Math.cos(a);
+    const sin = Math.sin(a);
+
+    out[0] = x * cos - y * sin;
+    out[1] = x * sin + y * cos;
+
+    return out;
 }
 
 export function cl_vec2_unit(v: vec2_t): vec2_t {
@@ -286,15 +314,19 @@ export function cl_vec2_dir(a: vec2_t, b: vec2_t): vec2_t {
     return out;
 }
 
-export function cl_vec2_dot(a: vec2_t, b: vec2_t): num_t {
+export function cl_vec2_dot(a: vec2_t, b: vec2_t): number {
     return a[0] * b[0] + a[1] * b[1];
 }
 
-export function cl_vec2_dist(a: vec2_t, b: vec2_t): num_t {
+export function cl_vec2_cross(a: vec2_t, b: vec2_t): number {
+    return a[0] * b[1] - a[1] * b[0];
+}
+
+export function cl_vec2_dist(a: vec2_t, b: vec2_t): number {
     return Math.hypot(a[0] - b[0], a[1] - b[1]);
 }
 
-export function cl_vec2_dist_sq(a: vec2_t, b: vec2_t): num_t {
+export function cl_vec2_dist_sq(a: vec2_t, b: vec2_t): number {
     const x = a[0] - b[0];
     const y = a[1] - b[1];
 
@@ -444,7 +476,7 @@ export function cl_vec2_loop2(v: vec2_t, min: vec2_t, max: vec2_t): vec2_t {
     return v;
 }
 
-export function cl_vec2_lerp(a: vec2_t, b: vec2_t, t: num_t): vec2_t {
+export function cl_vec2_lerp(a: vec2_t, b: vec2_t, t: number): vec2_t {
     const out = new TYPE(2);
     const x = a[0];
     const y = a[1];
@@ -455,7 +487,7 @@ export function cl_vec2_lerp(a: vec2_t, b: vec2_t, t: num_t): vec2_t {
     return out;
 }
 
-export function cl_vec2_lerp2(a: vec2_t, b: vec2_t, t: num_t): vec2_t {
+export function cl_vec2_lerp2(a: vec2_t, b: vec2_t, t: number): vec2_t {
     const x = a[0];
     const y = a[1];
 

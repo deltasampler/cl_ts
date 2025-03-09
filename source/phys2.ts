@@ -1,6 +1,8 @@
 import {vec2_t} from "./type.ts";
-import {cl_vec2, cl_vec2_add_mul_s, cl_vec2_dir, cl_vec2_dist, cl_vec2_dist_sq} from "./vec2.ts";
+import {cl_vec2, cl_vec2_add, cl_vec2_add2, cl_vec2_add_mul_s, cl_vec2_copy, cl_vec2_dir, cl_vec2_dist, cl_vec2_dist_sq, cl_vec2_div_s2, cl_vec2_mul_s} from "./vec2.ts";
 import {cl_abs, cl_clamp} from "./math.ts";
+import {cl_vec2_add_mul_s2, cl_vec2_div_s, cl_vec2_len_sq} from "@cl/vec2.ts";
+import {cl_hypot, cl_sqrt} from "@cl/math.ts";
 
 export function point_inside_circle(cp: vec2_t, cr: number, p: vec2_t): boolean {
     return cl_vec2_dist_sq(cp, p) <= cr * cr;
@@ -73,12 +75,6 @@ export function point_inside_convex_cent(points: vec2_t[], pos: vec2_t, a: numbe
     return point_inside_convex(points, cl_vec2(lx, ly));
 }
 
-export function point_closest_circle(cp: vec2_t, cr: number, p: vec2_t): vec2_t {
-    const d = cl_vec2_dir(p, cp);
-
-    return cl_vec2_add_mul_s(cp, d, cr);
-}
-
 export function point_closest_line(a: vec2_t, b: vec2_t, p: vec2_t): vec2_t {
     const bax = b[0] - a[0], bay = b[1] - a[1];
     const pax = p[0] - a[0], pay = p[1] - a[1];
@@ -86,6 +82,12 @@ export function point_closest_line(a: vec2_t, b: vec2_t, p: vec2_t): vec2_t {
     const tc = cl_clamp(t, 0.0, 1.0);
 
     return cl_vec2(a[0] + bax * tc, a[1] + bay * tc);
+}
+
+export function point_closest_circle(cp: vec2_t, cr: number, p: vec2_t): vec2_t {
+    const d = cl_vec2_dir(p, cp);
+
+    return cl_vec2_add_mul_s(cp, d, cr);
 }
 
 export function point_closest_capsule(a: vec2_t, b: vec2_t, cr: number, p: vec2_t): vec2_t {
@@ -169,6 +171,27 @@ export function point_closest_convex_cent(points: vec2_t[], pos: vec2_t, a: numb
     return cl_vec2(lx2, ly2);
 }
 
+export function line_intersect_line(a0: vec2_t, b0: vec2_t, a1: vec2_t, b1: vec2_t): vec2_t[] {
+    const x1 = a0[0], y1 = a0[1], x2 = b0[0], y2 = b0[1];
+    const x3 = a1[0], y3 = a1[1], x4 = b1[0], y4 = b1[1];
+    const denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+
+    if (denom === 0) {
+        return [];
+    }
+
+    const px = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / denom;
+    const py = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / denom;
+    const t = ((px - x1) * (x2 - x1) + (py - y1) * (y2 - y1)) / ((x2 - x1) ** 2 + (y2 - y1) ** 2);
+    const u = ((px - x3) * (x4 - x3) + (py - y3) * (y4 - y3)) / ((x4 - x3) ** 2 + (y4 - y3) ** 2);
+
+    if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
+        return [cl_vec2(px, py)];
+    }
+
+    return [];
+}
+
 export function line_intersect_circle(cp: vec2_t, cr: number, a: vec2_t, b: vec2_t): vec2_t[] {
     const dx = b[0] - a[0];
     const dy = b[1] - a[1];
@@ -199,6 +222,34 @@ export function line_intersect_circle(cp: vec2_t, cr: number, a: vec2_t, b: vec2
     return points;
 }
 
+export function line_intersect_capsule(a0: vec2_t, b0: vec2_t, cr: number, a1: vec2_t, b1: vec2_t): vec2_t[] {
+    const d = cl_vec2_dir(a0, b0);
+    const dp = cl_vec2(-d[1], d[0]);
+    const start0 = cl_vec2_add_mul_s(a0, dp, -cr);
+    const start1 = cl_vec2_add_mul_s(a0, dp, cr);
+    const end0 = cl_vec2_add_mul_s(b0, dp, -cr);
+    const end1 = cl_vec2_add_mul_s(b0, dp, cr);
+
+    const out: vec2_t[] = [];
+
+    for (const point of line_intersect_circle(a0, cr, a1, b1)) {
+        if (cl_vec2_dist(point, point_closest_capsule(a0, b0, cr, point)) <= 0.001) {
+            out.push(point);
+        }
+    }
+
+    for (const point of line_intersect_circle(b0, cr, a1, b1)) {
+        if (cl_vec2_dist(point, point_closest_capsule(a0, b0, cr, point)) <= 0.001) {
+            out.push(point);
+        }
+    }
+
+    out.push(...line_intersect_line(start0, end0, a1, b1));
+    out.push(...line_intersect_line(start1, end1, a1, b1));
+
+    return out;
+}
+
 export function line_intersect_aabb(bp: vec2_t, bs: vec2_t, a: vec2_t, b: vec2_t): vec2_t[] {
     const min_x = bp[0] - bs[0] / 2;
     const max_x = bp[0] + bs[0] / 2;
@@ -212,6 +263,7 @@ export function line_intersect_aabb(bp: vec2_t, bs: vec2_t, a: vec2_t, b: vec2_t
     if (dx !== 0) {
         let t1 = (min_x - a[0]) / dx;
         let t2 = (max_x - a[0]) / dx;
+
         if (t1 > t2) [t1, t2] = [t2, t1];
         t_min = Math.max(t_min, t1);
         t_max = Math.min(t_max, t2);
@@ -222,6 +274,7 @@ export function line_intersect_aabb(bp: vec2_t, bs: vec2_t, a: vec2_t, b: vec2_t
     if (dy !== 0) {
         let t1 = (min_y - a[1]) / dy;
         let t2 = (max_y - a[1]) / dy;
+
         if (t1 > t2) [t1, t2] = [t2, t1];
         t_min = Math.max(t_min, t1);
         t_max = Math.min(t_max, t2);
@@ -270,52 +323,19 @@ export function line_intersect_obb(bp: vec2_t, bs: vec2_t, br: number, a: vec2_t
     const local_b = rotate_point(b);
     const local_bp: vec2_t = cl_vec2(0, 0);
     const local_bs = cl_vec2(bs[0], bs[1]);
-
     const intersections = line_intersect_aabb(local_bp, local_bs, local_a, local_b);
 
     return intersections.map(rotate_back);
 }
 
-export function line_intersect_line(a0: vec2_t, b0: vec2_t, a1: vec2_t, b1: vec2_t): vec2_t[] {
-    const x1 = a0[0], y1 = a0[1], x2 = b0[0], y2 = b0[1];
-    const x3 = a1[0], y3 = a1[1], x4 = b1[0], y4 = b1[1];
-
-    // Denominators for the system of equations
-    const denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
-    
-    // If denom is zero, the lines are parallel, so no intersection
-    if (denom === 0) {
-        return [];
-    }
-
-    // Calculate the intersection point (px, py)
-    const px = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / denom;
-    const py = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / denom;
-
-    // Check if the intersection is within both line segments
-    const t = ((px - x1) * (x2 - x1) + (py - y1) * (y2 - y1)) / ((x2 - x1) ** 2 + (y2 - y1) ** 2);
-    const u = ((px - x3) * (x4 - x3) + (py - y3) * (y4 - y3)) / ((x4 - x3) ** 2 + (y4 - y3) ** 2);
-
-    // If t and u are both between 0 and 1, the intersection is within the line segments
-    if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
-        return [cl_vec2(px, py)];
-    }
-
-    return [];
-}
-
 export function line_intersect_convex(points: vec2_t[], a: vec2_t, b: vec2_t): vec2_t[] {
     const intersections: vec2_t[] = [];
 
-    // Iterate over each edge of the convex polygon
     for (let i = 0; i < points.length; i++) {
         const p1 = points[i];
-        const p2 = points[(i + 1) % points.length]; // Next point (wrap around to first point)
+        const p2 = points[(i + 1) % points.length];0.
         
-        // Get intersections between line segment (a, b) and polygon edge (p1, p2)
         const edge_intersections = line_intersect_line(p1, p2, a, b);
-        
-        // Collect the intersection points
         intersections.push(...edge_intersections);
     }
 
@@ -346,40 +366,404 @@ export function line_intersect_convex_cent(points: vec2_t[], bp: vec2_t, br: num
 
     const local_a = rotate_point(a);
     const local_b = rotate_point(b);
-
     const intersections = line_intersect_convex(points, local_a, local_b);
 
     return intersections.map(rotate_back);
 }
 
-export function line_intersect_capsule(a0: vec2_t, b0: vec2_t, cr: number, a1: vec2_t, b1: vec2_t): vec2_t[] {
-    const d = cl_vec2_dir(a0, b0);
-    const dp = cl_vec2(-d[1], d[0]);
-    const start0 = cl_vec2_add_mul_s(a0, dp, -cr);
-    const start1 = cl_vec2_add_mul_s(a0, dp, cr);
-    const end0 = cl_vec2_add_mul_s(b0, dp, -cr);
-    const end1 = cl_vec2_add_mul_s(b0, dp, cr);
+export function rotate_point(point: vec2_t, angle: number): vec2_t {
+    const cos_theta = Math.cos(angle);
+    const sin_theta = Math.sin(angle);
+    return cl_vec2(
+        point[0] * cos_theta - point[1] * sin_theta,
+        point[0] * sin_theta + point[1] * cos_theta
+    );
+}
 
-    const out = [];
+export type sat_return = {
+    collision: boolean;
+    mtv: vec2_t;
+    overlap: number;
+};
 
-    for (const point of line_intersect_circle(a0, cr, a1, b1)) {
-        if (cl_vec2_dist(point, point_closest_capsule(a0, b0, cr, point)) <= 0.001) {
-            out.push(point);
+export function sat(points_0: vec2_t[], pos_0: vec2_t, angle_0: number, points_1: vec2_t[], pos_1: vec2_t, angle_1: number): sat_return {
+    let min_overlap = Infinity;
+    let smallest_axis: vec2_t | null = null;
+
+    function transform_polygon(points: vec2_t[], position: vec2_t, angle: number): vec2_t[] {
+        return points.map(p => {
+            const rotated = rotate_point(p, angle);
+            return cl_vec2(rotated[0] + position[0], rotated[1] + position[1]);
+        });
+    }
+
+    const transformed_0 = transform_polygon(points_0, pos_0, angle_0);
+    const transformed_1 = transform_polygon(points_1, pos_1, angle_1);
+
+    function get_perpendicular_axis(p1: vec2_t, p2: vec2_t): vec2_t {
+        const edge = cl_vec2(p2[0] - p1[0], p2[1] - p1[1]);
+        return cl_vec2(-edge[1], edge[0]);
+    }
+
+    function project_points(points: vec2_t[], axis: vec2_t): { min: number; max: number } {
+        let min = Infinity, max = -Infinity;
+        for (const p of points) {
+            const projection = p[0] * axis[0] + p[1] * axis[1];
+            min = Math.min(min, projection);
+            max = Math.max(max, projection);
+        }
+        return { min, max };
+    }
+
+    function check_axes(points_a: vec2_t[]): boolean {
+        for (let i = 0; i < points_a.length; i++) {
+            const axis = get_perpendicular_axis(points_a[i], points_a[(i + 1) % points_a.length]);
+            const length = Math.hypot(axis[0], axis[1]);
+            const normalized_axis = cl_vec2(axis[0] / length, axis[1] / length);
+
+            const proj_0 = project_points(transformed_0, normalized_axis);
+            const proj_1 = project_points(transformed_1, normalized_axis);
+
+            const overlap = Math.min(proj_0.max, proj_1.max) - Math.max(proj_0.min, proj_1.min);
+            if (overlap <= 0) return false;
+
+            if (overlap < min_overlap) {
+                min_overlap = overlap;
+                smallest_axis = normalized_axis;
+            }
+        }
+        return true;
+    }
+
+    if (!check_axes(transformed_0) || !check_axes(transformed_1)) {
+        return {
+            collision: false,
+            mtv: cl_vec2(),
+            overlap: 0.0
+        };
+    }
+
+    if (smallest_axis) {
+        const center_0 = pos_0;
+        const center_1 = pos_1;
+
+        const direction = cl_vec2(center_1[0] - center_0[0], center_1[1] - center_0[1]);
+        if (direction[0] * smallest_axis[0] + direction[1] * smallest_axis[1] < 0) {
+            smallest_axis = cl_vec2(-smallest_axis[0], -smallest_axis[1]);
+        }
+
+        return { collision: true, mtv: cl_vec2(smallest_axis[0], smallest_axis[1]), overlap: min_overlap };
+    }
+
+    return {
+        collision: false,
+        mtv: cl_vec2(),
+        overlap: 0.0
+    };
+}
+
+export function center_vertices(vertices: vec2_t[]): vec2_t[] {
+    let cx = 0.0, cy = 0.0, area = 0.0;
+
+    for (let i = 0; i < vertices.length; i++) {
+        const curr = vertices[i];
+        const next = vertices[(i + 1) % vertices.length];
+        const x0 = curr[0], y0 = curr[1];
+        const x1 = next[0], y1 = next[1];
+        const cross = x0 * y1 - x1 * y0;
+
+        cx += (x0 + x1) * cross;
+        cy += (y0 + y1) * cross;
+        area += cross;
+    }
+
+    area *= 0.5;
+    cx /= (6 * area);
+    cy /= (6 * area);
+
+    for (let i = 0; i < vertices.length; i++) {
+        const point = vertices[i];
+        point[0] -= cx;
+        point[1] -= cy;
+    }
+
+    return vertices;
+}
+
+export function polygon_radius(vertices: vec2_t[]): number {
+    let longest = 0.0;
+
+    for (let i = 0; i < vertices.length; i++) {
+        const point = vertices[i];
+        const l = cl_vec2_len_sq(point);
+
+        if (!longest || l > longest) {
+            longest = l;
         }
     }
 
-    for (const point of line_intersect_circle(b0, cr, a1, b1)) {
-        if (cl_vec2_dist(point, point_closest_capsule(a0, b0, cr, point)) <= 0.001) {
-            out.push(point);
+    return cl_sqrt(longest);
+}
+
+export function polygon_size(vertices: vec2_t[]): vec2_t[] {
+    let min_x = vertices[0][0], max_x = vertices[0][0];
+    let min_y = vertices[0][1], max_y = vertices[0][1];
+
+    for (const v of vertices) {
+        if (v[0] < min_x) min_x = v[0];
+        if (v[0] > max_x) max_x = v[0];
+        if (v[1] < min_y) min_y = v[1];
+        if (v[1] > max_y) max_y = v[1];
+    }
+
+    return [cl_vec2(min_x, min_y), cl_vec2(max_x, max_y)];
+}
+
+export enum BODY_TYPE {
+    CIRCLE,
+    BOX,
+    POLYGON
+};
+
+export class body_t {
+    position: vec2_t;
+    rotation: number;
+    radius: number;
+    min: vec2_t;
+    max: vec2_t;
+    vertices: vec2_t[];
+    type: BODY_TYPE;
+
+    mass: number;
+    acceleration: vec2_t;
+    acceleration_last: vec2_t;
+    accelaration_average: vec2_t;
+    velocity: vec2_t;
+    intertia_moment: number;
+    angular_acceleration: number;
+    angular_acceleration_last: number;
+    angular_acceleration_average: number;
+    angular_velocity: number;
+    is_static: boolean;
+
+    constructor() {
+        this.mass = 1.0;
+        this.acceleration = cl_vec2();
+        this.acceleration_last = cl_vec2();
+        this.accelaration_average = cl_vec2();
+        this.velocity = cl_vec2();
+        this.intertia_moment = 1.0;
+        this.angular_acceleration = 0.0;
+        this.angular_acceleration_last = 0.0;
+        this.angular_acceleration_average = 0.0;
+        this.angular_velocity = 0.0;
+        this.is_static = false;
+    }
+
+    update(force: vec2_t, time_step: number): void {
+        if (this.is_static) {
+            return;
+        }
+
+        cl_vec2_copy(this.acceleration_last, this.acceleration);
+
+        cl_vec2_add2(this.position, cl_vec2_mul_s(this.velocity, time_step));
+        cl_vec2_add2(this.position, cl_vec2_mul_s(this.acceleration_last, time_step * time_step * 0.5));
+
+        cl_vec2_copy(this.acceleration, cl_vec2_div_s(force, this.mass));
+
+        cl_vec2_copy(this.accelaration_average, cl_vec2_div_s2(cl_vec2_add(this.acceleration_last, this.acceleration), 2.0));
+
+        cl_vec2_add2(this.velocity, cl_vec2_mul_s(this.accelaration_average, time_step));
+    }
+
+    update_angular(torque: number, time_step: number): void {
+        this.angular_acceleration_last = this.angular_acceleration;
+
+        this.rotation += this.angular_velocity * time_step + this.angular_acceleration_last * (time_step * time_step * 0.5);
+
+        this.angular_acceleration = torque / this.intertia_moment;
+
+        this.angular_acceleration_average = (this.angular_acceleration_last + this.angular_acceleration) / 2.0;
+
+        this.angular_velocity += this.angular_acceleration_average * time_step;
+    }
+
+
+    get size(): vec2_t {
+        return cl_vec2(Math.abs(this.max[0] - this.min[0]), Math.abs(this.max[1] - this.min[1]));
+    }
+};
+
+export function body_circle(position: vec2_t, rotation: number, radius: number) {
+    const body = new body_t();
+    body.position = position;
+    body.rotation = rotation;
+    body.radius = radius;
+    body.min = cl_vec2(-radius);
+    body.max = cl_vec2(radius);
+    body.vertices = [];
+    body.type = BODY_TYPE.CIRCLE;
+
+    return body;
+}
+
+export function body_box(position: vec2_t, rotation: number, size: vec2_t) {
+    const body = new body_t();
+    body.position = position;
+    body.rotation = rotation;
+    body.radius = cl_hypot(size[0] / 2.0, size[1] / 2.0);
+    body.min = cl_vec2_div_s(size, -2.0);
+    body.max = cl_vec2_div_s(size, 2.0);
+    body.vertices = [];
+    body.type = BODY_TYPE.BOX;
+
+    return body;
+}
+
+export function body_polygon(position: vec2_t, rotation: number, vertices: vec2_t[]) {
+    const body = new body_t();
+    body.position = position;
+    body.rotation = rotation;
+    body.vertices = center_vertices(vertices);
+    body.radius = polygon_radius(body.vertices);
+
+    const size = polygon_size(body.vertices);
+    body.min = size[0];
+    body.max = size[1];
+
+    body.type = BODY_TYPE.POLYGON;
+
+    return body;
+}
+
+class pair_t {
+    body_a: body_t;
+    body_b: body_t;
+};
+
+export function circle_intersect_circle(p0: vec2_t, r0: number, p1: vec2_t, r1: number): boolean {
+    return cl_vec2_dist_sq(p0, p1) <= (r0 + r1) * (r0 + r1);
+}
+
+export function broad_phase_naive(bodies: body_t[]): pair_t[] {
+    const pairs: pair_t[] = [];
+
+    for (const body_a of bodies) {
+        for (const body_b of bodies) {
+            if (body_a !== body_b) {
+                if (circle_intersect_circle(body_a.position, body_a.radius, body_b.position, body_b.radius)) {
+                    const pair = new pair_t();
+                    pair.body_a = body_a;
+                    pair.body_b = body_b;
+                    pairs.push(pair);
+                }
+            }
         }
     }
 
-    out.push(...line_intersect_line(start0, end0, a1, b1));
-    out.push(...line_intersect_line(start1, end1, a1, b1));
+    return pairs;
+}
 
-    if (out.length > 2) {
-        console.log('test');
+export function narrow_phase(pairs: pair_t[]): void {
+    for (const pair of pairs) {
+        const body_a = pair.body_a;
+        const body_b = pair.body_b;
+
+        if (body_a.type === BODY_TYPE.CIRCLE && body_b.type === BODY_TYPE.CIRCLE) {
+            const depth = body_a.radius + body_b.radius - cl_vec2_dist(body_a.position, body_b.position);
+            const dir = cl_vec2_dir(body_a.position, body_b.position);
+
+            if (!body_a.is_static) {
+                cl_vec2_add_mul_s2(body_a.position, dir, depth / 2.0);
+            }
+
+            if (!body_b.is_static) {
+                cl_vec2_add_mul_s2(body_b.position, dir, -depth / 2.0);
+            }
+        }
+
+        if (body_a.type === BODY_TYPE.CIRCLE && body_b.type === BODY_TYPE.BOX) {
+            const cp = point_closest_obb(body_b.position, body_b.size, body_b.rotation, body_a.position);
+            const is_inside = point_inside_obb(body_b.position, body_b.size, body_b.rotation, body_a.position);
+            const sign = is_inside ? -1.0 : 1.0;
+            const distance_to_cp = cl_vec2_dist(body_a.position, cp) * sign;
+            const depth = body_a.radius - distance_to_cp;
+            const dir = cl_vec2_dir(body_a.position, cp);
+
+            if (distance_to_cp < body_a.radius) {
+                if (!body_a.is_static) {
+                    cl_vec2_add_mul_s2(body_a.position, dir, depth / 2.0 * sign);
+                }
+    
+                if (!body_b.is_static) {
+                    cl_vec2_add_mul_s2(body_b.position, dir, -depth / 2.0 * sign);
+                }
+            }
+        }
+
+        if (body_a.type === BODY_TYPE.CIRCLE && body_b.type === BODY_TYPE.POLYGON) {
+            const cp = point_closest_convex_cent(body_b.vertices, body_b.position, body_b.rotation, body_a.position);
+            const is_inside = point_inside_convex_cent(body_b.vertices, body_b.position, body_b.rotation, body_a.position);
+            const sign = is_inside ? -1.0 : 1.0;
+            const distance_to_cp = cl_vec2_dist(body_a.position, cp) * sign;
+            const depth = body_a.radius - distance_to_cp;
+            const dir = cl_vec2_dir(body_a.position, cp);
+
+            if (distance_to_cp < body_a.radius) {
+                if (!body_a.is_static) {
+                    cl_vec2_add_mul_s2(body_a.position, dir, depth / 2.0 * sign);
+                }
+
+                if (!body_b.is_static) {
+                    cl_vec2_add_mul_s2(body_b.position, dir, -depth / 2.0 * sign);
+                }
+            }
+        }
+
+        if (body_a.type === BODY_TYPE.BOX && body_b.type === BODY_TYPE.BOX) {
+            const vertices1 = [cl_vec2(body_a.min[0], body_a.max[1]), body_a.max, cl_vec2(body_a.max[0], body_a.min[1]), body_a.min];
+            const vertices2 = [cl_vec2(body_b.min[0], body_b.max[1]), body_b.max, cl_vec2(body_b.max[0], body_b.min[1]), body_b.min];
+            const result = sat(vertices1, body_a.position, body_a.rotation, vertices2, body_b.position, body_b.rotation);
+
+            if (result.collision && result.mtv) {
+                if (!body_a.is_static) {
+                    cl_vec2_add_mul_s2(body_a.position, result.mtv, -result.overlap / 2.0);
+                }
+
+                if (!body_b.is_static) {
+                    cl_vec2_add_mul_s2(body_b.position, result.mtv, result.overlap / 2.0);
+                }
+            }
+        }
+
+        if (body_a.type === BODY_TYPE.POLYGON && body_b.type === BODY_TYPE.POLYGON) {
+            const result = sat(body_a.vertices, body_a.position, body_a.rotation, body_b.vertices, body_b.position, body_b.rotation);
+
+            if (result.collision && result.mtv) {
+                if (!body_a.is_static) {
+                    cl_vec2_add_mul_s2(body_a.position, result.mtv, -result.overlap / 2.0);
+                }
+
+                if (!body_b.is_static) {
+                    cl_vec2_add_mul_s2(body_b.position, result.mtv, result.overlap / 2.0);
+                }
+            }
+        }
+
+        if (body_a.type === BODY_TYPE.POLYGON && body_b.type === BODY_TYPE.BOX) {
+            const vertices = [cl_vec2(body_b.min[0], body_b.max[1]), body_b.max, cl_vec2(body_b.max[0], body_b.min[1]), body_b.min];
+            const result = sat(body_a.vertices, body_a.position, body_a.rotation, vertices, body_b.position, body_b.rotation);
+
+            if (result.collision && result.mtv) {
+                if (!body_a.is_static) {
+                    cl_vec2_add_mul_s2(body_a.position, result.mtv, -result.overlap / 2.0);
+                }
+
+                if (!body_b.is_static) {
+                    cl_vec2_add_mul_s2(body_b.position, result.mtv, result.overlap / 2.0);
+                }
+            }
+        }
     }
-
-    return out;
 }

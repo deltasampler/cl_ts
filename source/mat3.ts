@@ -1,6 +1,6 @@
-import {num_t, vec3_t, mat3_t, TYPE} from "./type.ts";
+import {vec3_t, mat3_t, TYPE} from "./type.ts";
 
-export function cl_mat3(e00: num_t = 1.0, e01: num_t = 0.0, e02: num_t = 0.0, e10: num_t = 0.0, e11?: num_t, e12: num_t = 0.0, e20: num_t = 0.0, e21: num_t = 0.0, e22?: num_t): mat3_t {
+export function cl_mat3(e00: number = 1.0, e01: number = 0.0, e02: number = 0.0, e10: number = 0.0, e11?: number, e12: number = 0.0, e20: number = 0.0, e21: number = 0.0, e22?: number): mat3_t {
     const out = new TYPE(9);
 
     out[0] = e00;
@@ -31,7 +31,7 @@ export function cl_mat3_new(): mat3_t {
     return out;
 }
 
-export function cl_mat3_x(x: num_t): mat3_t {
+export function cl_mat3_x(x: number): mat3_t {
     const out = new TYPE(9);
 
     out[0] = x;
@@ -47,7 +47,7 @@ export function cl_mat3_x(x: num_t): mat3_t {
     return out;
 }
 
-export function cl_mat3_all(e00: num_t, e01: num_t, e02: num_t, e10: num_t, e11: num_t, e12: num_t, e20: num_t, e21: num_t, e22: num_t): mat3_t {
+export function cl_mat3_all(e00: number, e01: number, e02: number, e10: number, e11: number, e12: number, e20: number, e21: number, e22: number): mat3_t {
     const out = new TYPE(9);
 
     out[0] = e00;
@@ -79,7 +79,7 @@ export function cl_mat3_clone(m: mat3_t): mat3_t {
     return out;
 }
 
-export function cl_mat3_set(m: mat3_t, e00: num_t, e01: num_t, e02: num_t, e10: num_t, e11: num_t, e12: num_t, e20: num_t, e21: num_t, e22: num_t): mat3_t {
+export function cl_mat3_set(m: mat3_t, e00: number, e01: number, e02: number, e10: number, e11: number, e12: number, e20: number, e21: number, e22: number): mat3_t {
     m[0] = e00;
     m[1] = e01;
     m[2] = e02;
@@ -164,7 +164,7 @@ export function cl_mat3_mul2(a: mat3_t, b: mat3_t): mat3_t {
     return a;
 }
 
-export function cl_mat3_mul_s(m: mat3_t, s: num_t): mat3_t {
+export function cl_mat3_mul_s(m: mat3_t, s: number): mat3_t {
     const out = new TYPE(9);
 
     out[0] = m[0] * s;
@@ -180,7 +180,7 @@ export function cl_mat3_mul_s(m: mat3_t, s: num_t): mat3_t {
     return out;
 }
 
-export function cl_mat3_mul_s2(m: mat3_t, s: num_t): mat3_t {
+export function cl_mat3_mul_s2(m: mat3_t, s: number): mat3_t {
     m[0] *= s;
     m[1] *= s;
     m[2] *= s;
