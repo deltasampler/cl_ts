@@ -353,6 +353,19 @@ export function vec2_transf_mat4(v: vec2_t, m: mat4_t): vec2_t {
     return out;
 }
 
+export function vec2_rotate_origin(v: vec2_t, a: number) {
+    const out = new TYPE(2);
+    const x = v[0];
+    const y = v[1] ;
+    const cos = Math.cos(a);
+    const sin = Math.sin(a);
+
+    out[0] = x * cos - y * sin;
+    out[1] = x * sin + y * cos;
+
+    return out;
+}
+
 export function vec2_rotate(v: vec2_t, c: vec2_t, a: number) {
     const out = new TYPE(2);
     const cx = c[0], cy = c[1];

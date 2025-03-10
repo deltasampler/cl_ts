@@ -75,6 +75,40 @@ export function bah_node_insert(node: bah_node_t, body: body_t): void {
     }
 }
 
+export function bah_node_remove(node: bah_node_t): void {
+    const parent = node.parent;
+
+    if (parent) {
+        let sib: bah_node_t;
+
+        if (parent.child0 === node) {
+            sib = parent.child1!;
+        } else {
+            sib = parent.child0!;
+        }
+
+        parent.ba = sib.ba;
+        parent.body = sib.body;
+        parent.child0 = sib.child0;
+        parent.child1 = sib.child1;
+
+        sib.parent = null;
+        sib.body = null;
+        sib.child0 = null;
+        sib.child1 = null;
+
+        bah_node_recalc_ba(parent);
+    }
+
+    if (node.child0) {
+        node.child0.parent = null;
+    }
+
+    if (node.child1) {
+        node.child1.parent = null;
+    }
+}
+
 export function bah_potential_pairs(node: bah_node_t, pairs: pair_t[], limit: number): number {
     if (bah_node_is_leaf(node) || limit === 0) {
         return 0;

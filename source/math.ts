@@ -118,15 +118,17 @@ export function smoothstep(e0: number, e1: number, x: number): number {
     return t * t * (3.0 - 2.0 * t);
 }
 
-export function loop(x: number, max: number): number {
+export function wrap(x: number, max: number): number {
     return (x + max) % max;
 }
 
-export function loop2(x: number, min: number, max: number): number {
+export function wrap2(x: number, min: number, max: number): number {
     const r = max - min;
 
     return ((x - min) % r + r) % r + min;
 }
+
+export const rand = Math.random;
 
 export function rand_ex(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min) + min);
