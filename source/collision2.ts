@@ -1,5 +1,5 @@
 import {vec2_t} from "./type.ts";
-import {vec2, vec2_add2, vec2_add_mul_s, vec2_copy, vec2_dir, vec2_dist, vec2_dist_sq, vec2_rotate_origin, vec2_sub} from "./vec2.ts";
+import {vec2, vec2_add2, vec2_addmuls1, vec2_copy, vec2_dir1, vec2_dist, vec2_dist_sq, vec2_rotate_origin1, vec2_sub1} from "./vec2.ts";
 import {abs, clamp} from "./math.ts";
 
 // point inside
@@ -16,8 +16,8 @@ export function point_inside_aabb(bp: vec2_t, bs: vec2_t, p: vec2_t): boolean {
 }
 
 export function point_inside_obb(bp: vec2_t, bs: vec2_t, ba: number, p: vec2_t): boolean {
-    const dp = vec2_sub(p, bp);
-    const lp = vec2_rotate_origin(dp, -ba);
+    const dp = vec2_sub1(p, bp);
+    const lp = vec2_rotate_origin1(dp, -ba);
     const sx = bs[0] / 2;
     const sy = bs[1] / 2;
 
@@ -50,8 +50,8 @@ export function point_inside_convex(points: vec2_t[], p: vec2_t): boolean {
 }
 
 export function point_inside_convex_cent(points: vec2_t[], pos: vec2_t, a: number, p: vec2_t): boolean {
-    const dp = vec2_sub(p, pos);
-    const lp = vec2_rotate_origin(dp, -a);
+    const dp = vec2_sub1(p, pos);
+    const lp = vec2_rotate_origin1(dp, -a);
 
     return point_inside_convex(points, lp);
 }
@@ -77,9 +77,9 @@ export function point_closest_line(a: vec2_t, b: vec2_t, p: vec2_t): vec2_t {
 }
 
 export function point_closest_circle(cp: vec2_t, cr: number, p: vec2_t): vec2_t {
-    const d = vec2_dir(p, cp);
+    const d = vec2_dir1(p, cp);
 
-    return vec2_add_mul_s(cp, d, cr);
+    return vec2_addmuls1(cp, d, cr);
 }
 
 export function point_closest_aabb(bp: vec2_t, bs: vec2_t, p: vec2_t): vec2_t {
@@ -103,10 +103,10 @@ export function point_closest_aabb(bp: vec2_t, bs: vec2_t, p: vec2_t): vec2_t {
 }
 
 export function point_closest_obb(bp: vec2_t, bs: vec2_t, a: number, p: vec2_t): vec2_t {
-    const dp = vec2_sub(p, bp);
-    const lp = vec2_rotate_origin(dp, -a);
+    const dp = vec2_sub1(p, bp);
+    const lp = vec2_rotate_origin1(dp, -a);
     const cp = point_closest_aabb(vec2(), bs, lp);
-    const cpr = vec2_add2(vec2_rotate_origin(cp, a), bp);
+    const cpr = vec2_add2(vec2_rotate_origin1(cp, a), bp);
 
     return cpr;
 }
@@ -128,10 +128,10 @@ export function point_closest_convex(points: vec2_t[], p: vec2_t): vec2_t {
 }
 
 export function point_closest_convex_cent(points: vec2_t[], pos: vec2_t, a: number, p: vec2_t): vec2_t {
-    const dp = vec2_sub(p, pos);
-    const lp = vec2_rotate_origin(dp, -a);
+    const dp = vec2_sub1(p, pos);
+    const lp = vec2_rotate_origin1(dp, -a);
     const cp = point_closest_convex(points, lp);
-    const cpr = vec2_add2(vec2_rotate_origin(cp, a), pos);
+    const cpr = vec2_add2(vec2_rotate_origin1(cp, a), pos);
 
     return cpr;
 }
@@ -142,9 +142,9 @@ export function point_closest_capsule(a: vec2_t, b: vec2_t, cr: number, p: vec2_
     const t = (bax * pax + bay * pay) / (bax * bax + bay * bay);
     const tc = clamp(t, 0.0, 1.0);
     const tp = vec2(a[0] + bax * tc, a[1] + bay * tc);
-    const d = vec2_dir(p, tp);
+    const d = vec2_dir1(p, tp);
 
-    return vec2_add_mul_s(tp, d, cr);
+    return vec2_addmuls1(tp, d, cr);
 }
 
 // line intersect
@@ -247,14 +247,14 @@ export function line_intersect_aabb(bp: vec2_t, bs: vec2_t, a: vec2_t, b: vec2_t
 }
 
 export function line_intersect_obb(bp: vec2_t, bs: vec2_t, br: number, a: vec2_t, b: vec2_t) {
-    const local_a = vec2_rotate_origin(vec2_sub(a, bp), -br);
-    const local_b = vec2_rotate_origin(vec2_sub(b, bp), -br);
+    const local_a = vec2_rotate_origin1(vec2_sub1(a, bp), -br);
+    const local_b = vec2_rotate_origin1(vec2_sub1(b, bp), -br);
     const local_bp: vec2_t = vec2(0, 0);
     const local_bs = vec2(bs[0], bs[1]);
     const intersections = line_intersect_aabb(local_bp, local_bs, local_a, local_b);
 
     for (const inter of intersections) {
-        vec2_copy(inter, vec2_add2(vec2_rotate_origin(inter, br), bp));
+        vec2_copy(inter, vec2_add2(vec2_rotate_origin1(inter, br), bp));
     }
 
     return intersections;
@@ -275,24 +275,24 @@ export function line_intersect_convex(points: vec2_t[], a: vec2_t, b: vec2_t): v
 }
 
 export function line_intersect_convex_cent(points: vec2_t[], bp: vec2_t, br: number, a: vec2_t, b: vec2_t): vec2_t[] {
-    const local_a = vec2_rotate_origin(vec2_sub(a, bp), -br);
-    const local_b = vec2_rotate_origin(vec2_sub(b, bp), -br);
+    const local_a = vec2_rotate_origin1(vec2_sub1(a, bp), -br);
+    const local_b = vec2_rotate_origin1(vec2_sub1(b, bp), -br);
     const intersections = line_intersect_convex(points, local_a, local_b);
 
     for (const inter of intersections) {
-        vec2_copy(inter, vec2_add2(vec2_rotate_origin(inter, br), bp));
+        vec2_copy(inter, vec2_add2(vec2_rotate_origin1(inter, br), bp));
     }
 
     return intersections;
 }
 
 export function line_intersect_capsule(a0: vec2_t, b0: vec2_t, cr: number, a1: vec2_t, b1: vec2_t): vec2_t[] {
-    const d = vec2_dir(a0, b0);
+    const d = vec2_dir1(a0, b0);
     const dp = vec2(-d[1], d[0]);
-    const start0 = vec2_add_mul_s(a0, dp, -cr);
-    const start1 = vec2_add_mul_s(a0, dp, cr);
-    const end0 = vec2_add_mul_s(b0, dp, -cr);
-    const end1 = vec2_add_mul_s(b0, dp, cr);
+    const start0 = vec2_addmuls1(a0, dp, -cr);
+    const start1 = vec2_addmuls1(a0, dp, cr);
+    const end0 = vec2_addmuls1(b0, dp, -cr);
+    const end1 = vec2_addmuls1(b0, dp, cr);
 
     const out: vec2_t[] = [];
 
@@ -340,7 +340,7 @@ function project_points(points: vec2_t[], axis: vec2_t): { min: number; max: num
 
 function transform_polygon(points: vec2_t[], position: vec2_t, angle: number): vec2_t[] {
     return points.map(p => {
-        const rotated = vec2_rotate_origin(p, angle);
+        const rotated = vec2_rotate_origin1(p, angle);
         return vec2(rotated[0] + position[0], rotated[1] + position[1]);
     });
 }
@@ -382,7 +382,7 @@ export function sat(points_0: vec2_t[], pos_0: vec2_t, angle_0: number, points_1
     }
 
     if (smallest_axis) {
-        const direction = vec2_sub(pos_1, pos_0);
+        const direction = vec2_sub1(pos_1, pos_0);
 
         if (direction[0] * smallest_axis[0] + direction[1] * smallest_axis[1] < 0) {
             smallest_axis = vec2(-smallest_axis[0], -smallest_axis[1]);

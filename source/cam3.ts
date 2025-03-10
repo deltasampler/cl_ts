@@ -1,6 +1,6 @@
 import {vec3_t, mat4_t} from "./type.ts";
 import {clamp, cos, rad, sin} from "./math.ts";
-import {vec3, vec3_add, vec3_add_mul_s2, vec3_cross, vec3_unit2} from "./vec3.ts";
+import {vec3, vec3_add1, vec3_addmuls2, vec3_cross1, vec3_unit2} from "./vec3.ts";
 import {mat4} from "./mat4.ts";
 import {mat4_perspective} from "./mat4_proj.ts";
 import {mat4_look_at} from "./mat4_cam.ts";
@@ -50,15 +50,15 @@ export function cam3_new() {
 }
 
 export function cam3_move_forward(camera: cam3_t, dir: number) {
-    vec3_add_mul_s2(camera.position, camera.forward, camera.movement_speed * dir);
+    vec3_addmuls2(camera.position, camera.forward, camera.movement_speed * dir);
 }
 
 export function cam3_move_right(camera: cam3_t, dir: number) {
-    vec3_add_mul_s2(camera.position, camera.right, camera.movement_speed * dir);
+    vec3_addmuls2(camera.position, camera.right, camera.movement_speed * dir);
 }
 
 export function cam3_move_up(camera: cam3_t, dir: number) {
-    vec3_add_mul_s2(camera.position, camera.up, camera.movement_speed * dir);
+    vec3_addmuls2(camera.position, camera.up, camera.movement_speed * dir);
 }
 
 export function cam3_pan(camera: cam3_t, dir: number) {
@@ -80,9 +80,9 @@ export function cam3_update(camera: cam3_t) {
         -cos(rad(camera.yaw)) * cos(rad(camera.pitch))
     ));
 
-    camera.right = vec3_unit2(vec3_cross(camera.forward, camera.world_up));
+    camera.right = vec3_unit2(vec3_cross1(camera.forward, camera.world_up));
 
-    camera.up = vec3_unit2(vec3_cross(camera.right, camera.forward));
+    camera.up = vec3_unit2(vec3_cross1(camera.right, camera.forward));
 }
 
 export function cam3_compute_proj(camera: cam3_t, viewport_x: number, viewport_y: number) {
@@ -90,5 +90,5 @@ export function cam3_compute_proj(camera: cam3_t, viewport_x: number, viewport_y
 }
 
 export function cam3_compute_view(camera: cam3_t) {
-    mat4_look_at(camera.view, camera.position, vec3_add(camera.position, camera.forward), camera.up);
+    mat4_look_at(camera.view, camera.position, vec3_add1(camera.position, camera.forward), camera.up);
 }

@@ -1,5 +1,5 @@
 import {vec2_t} from "@cl/type.ts";
-import {vec2, vec2_add_mul_s2, vec2_copy, vec2_dist, vec2_dist_sq, vec2_len_sq, vec2_sub} from "@cl/vec2";
+import {vec2, vec2_addmuls2, vec2_copy, vec2_dist, vec2_dist_sq, vec2_len_sq, vec2_sub1} from "@cl/vec2";
 
 export class circle_t {
     position: vec2_t;
@@ -15,7 +15,7 @@ export function circle_new(position: vec2_t, radius: number) {
 }
 
 export function circle_ab(a: circle_t, b: circle_t): circle_t {
-    const offset = vec2_sub(b.position, a.position);
+    const offset = vec2_sub1(b.position, a.position);
     const dist_sq = vec2_len_sq(offset);
     const rad_diff = b.radius - a.radius;
     let position = vec2();
@@ -36,7 +36,7 @@ export function circle_ab(a: circle_t, b: circle_t): circle_t {
         radius = (dist + a.radius + b.radius) * 0.5;
 
         if (dist > 0.0) {
-            vec2_add_mul_s2(position, offset, (radius - a.radius) / dist);
+            vec2_addmuls2(position, offset, (radius - a.radius) / dist);
         }
     }
 

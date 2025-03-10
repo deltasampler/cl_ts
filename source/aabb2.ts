@@ -1,5 +1,5 @@
 import {vec2_t} from "./type.ts";
-import {vec2, vec2_abs, vec2_add, vec2_div_s, vec2_sub} from "./vec2.ts";
+import {vec2, vec2_abs, vec2_add1, vec2_divs1, vec2_sub1} from "./vec2.ts";
 
 export class aabb2_t {
     position: vec2_t;
@@ -17,21 +17,21 @@ export function aabb2(position: vec2_t, size: vec2_t): aabb2_t {
 export function aabb2_half(position: vec2_t, size: vec2_t): aabb2_t {
     const out = new aabb2_t();
     out.position = position;
-    out.size = vec2_div_s(size, 2.0);
+    out.size = vec2_divs1(size, 2.0);
 
     return out;
 }
 
 export function aabb2_minmax(min: vec2_t, max: vec2_t): aabb2_t {
     const out = new aabb2_t();
-    out.position = vec2_div_s(vec2_add(min, max), 2.0);
-    out.size = vec2_abs(vec2_sub(max, min));
+    out.position = vec2_divs1(vec2_add1(min, max), 2.0);
+    out.size = vec2_abs(vec2_sub1(max, min));
 
     return out;
 }
 
 export function aabb2_is_inside(aabb: aabb2_t, point): boolean {
-    const hs1 = vec2_div_s(aabb.size, 2.0);
+    const hs1 = vec2_divs1(aabb.size, 2.0);
 
     const l1 = aabb.position[0] - hs1[0];
     const r1 = aabb.position[0] + hs1[0];
@@ -42,8 +42,8 @@ export function aabb2_is_inside(aabb: aabb2_t, point): boolean {
 }
 
 export function aabb2_is_overlapping_sideways(a: aabb2_t, b: aabb2_t): boolean {
-    const hs1 = vec2_div_s(a.size, 2.0);
-    const hs2 = vec2_div_s(b.size, 2.0);
+    const hs1 = vec2_divs1(a.size, 2.0);
+    const hs2 = vec2_divs1(b.size, 2.0);
 
     const l1 = a.position[0] - hs1[0];
     const r1 = a.position[0] + hs1[0];
@@ -54,8 +54,8 @@ export function aabb2_is_overlapping_sideways(a: aabb2_t, b: aabb2_t): boolean {
 }
 
 export function aabb2_is_overlapping_vertically(a: aabb2_t, b: aabb2_t): boolean {
-    const hs1 = vec2_div_s(a.size, 2.0);
-    const hs2 = vec2_div_s(b.size, 2.0);
+    const hs1 = vec2_divs1(a.size, 2.0);
+    const hs2 = vec2_divs1(b.size, 2.0);
 
     const b1 = a.position[1] - hs1[1];
     const t1 = a.position[1] + hs1[1];
@@ -66,8 +66,8 @@ export function aabb2_is_overlapping_vertically(a: aabb2_t, b: aabb2_t): boolean
 }
 
 export function aabb2_overlap_aabb(a: aabb2_t, b: aabb2_t): vec2_t|null {
-    const hs1 = vec2_div_s(a.size, 2.0);
-    const hs2 = vec2_div_s(b.size, 2.0);
+    const hs1 = vec2_divs1(a.size, 2.0);
+    const hs2 = vec2_divs1(b.size, 2.0);
 
     const l1 = a.position[0] - hs1[0];
     const r1 = a.position[0] + hs1[0];

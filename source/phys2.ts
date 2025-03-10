@@ -1,6 +1,6 @@
 import {vec2_t} from "./type.ts";
-import {vec2, vec2_add, vec2_add2, vec2_copy, vec2_dir, vec2_dist, vec2_dist_sq, vec2_div_s2, vec2_mul_s} from "./vec2.ts";
-import {vec2_add_mul_s2, vec2_div_s, vec2_len_sq} from "@cl/vec2.ts";
+import {vec2, vec2_add1, vec2_add2, vec2_addmuls2, vec2_copy, vec2_dir1, vec2_dist, vec2_dist_sq, vec2_divs1, vec2_divs2, vec2_muls1} from "./vec2.ts";
+import {vec2_len_sq} from "@cl/vec2.ts";
 import {hypot, sqrt} from "@cl/math.ts";
 import {point_closest_convex_cent, point_closest_obb, point_inside_convex_cent, point_inside_obb, sat} from "./collision2.ts";
 
@@ -109,14 +109,14 @@ export class body_t {
 
         vec2_copy(this.acceleration_last, this.acceleration);
 
-        vec2_add2(this.position, vec2_mul_s(this.velocity, time_step));
-        vec2_add2(this.position, vec2_mul_s(this.acceleration_last, time_step * time_step * 0.5));
+        vec2_add2(this.position, vec2_muls1(this.velocity, time_step));
+        vec2_add2(this.position, vec2_muls1(this.acceleration_last, time_step * time_step * 0.5));
 
-        vec2_copy(this.acceleration, vec2_div_s(force, this.mass));
+        vec2_copy(this.acceleration, vec2_divs1(force, this.mass));
 
-        vec2_copy(this.accelaration_average, vec2_div_s2(vec2_add(this.acceleration_last, this.acceleration), 2.0));
+        vec2_copy(this.accelaration_average, vec2_divs2(vec2_add1(this.acceleration_last, this.acceleration), 2.0));
 
-        vec2_add2(this.velocity, vec2_mul_s(this.accelaration_average, time_step));
+        vec2_add2(this.velocity, vec2_muls1(this.accelaration_average, time_step));
     }
 
     update_angular(torque: number, time_step: number): void {
@@ -155,8 +155,8 @@ export function body_box(position: vec2_t, rotation: number, size: vec2_t) {
     body.position = position;
     body.rotation = rotation;
     body.radius = hypot(size[0] / 2.0, size[1] / 2.0);
-    body.min = vec2_div_s(size, -2.0);
-    body.max = vec2_div_s(size, 2.0);
+    body.min = vec2_divs1(size, -2.0);
+    body.max = vec2_divs1(size, 2.0);
     body.vertices = [];
     body.type = BODY_TYPE.BOX;
 
@@ -214,14 +214,14 @@ export function narrow_phase(pairs: pair_t[]): void {
 
         if (body_a.type === BODY_TYPE.CIRCLE && body_b.type === BODY_TYPE.CIRCLE) {
             const depth = body_a.radius + body_b.radius - vec2_dist(body_a.position, body_b.position);
-            const dir = vec2_dir(body_a.position, body_b.position);
+            const dir = vec2_dir1(body_a.position, body_b.position);
 
             if (!body_a.is_static) {
-                vec2_add_mul_s2(body_a.position, dir, depth / 2.0);
+                vec2_addmuls2(body_a.position, dir, depth / 2.0);
             }
 
             if (!body_b.is_static) {
-                vec2_add_mul_s2(body_b.position, dir, -depth / 2.0);
+                vec2_addmuls2(body_b.position, dir, -depth / 2.0);
             }
         }
 
@@ -231,15 +231,15 @@ export function narrow_phase(pairs: pair_t[]): void {
             const sign = is_inside ? -1.0 : 1.0;
             const distance_to_cp = vec2_dist(body_a.position, cp) * sign;
             const depth = body_a.radius - distance_to_cp;
-            const dir = vec2_dir(body_a.position, cp);
+            const dir = vec2_dir1(body_a.position, cp);
 
             if (distance_to_cp < body_a.radius) {
                 if (!body_a.is_static) {
-                    vec2_add_mul_s2(body_a.position, dir, depth / 2.0 * sign);
+                    vec2_addmuls2(body_a.position, dir, depth / 2.0 * sign);
                 }
     
                 if (!body_b.is_static) {
-                    vec2_add_mul_s2(body_b.position, dir, -depth / 2.0 * sign);
+                    vec2_addmuls2(body_b.position, dir, -depth / 2.0 * sign);
                 }
             }
         }
@@ -250,15 +250,15 @@ export function narrow_phase(pairs: pair_t[]): void {
             const sign = is_inside ? -1.0 : 1.0;
             const distance_to_cp = vec2_dist(body_a.position, cp) * sign;
             const depth = body_a.radius - distance_to_cp;
-            const dir = vec2_dir(body_a.position, cp);
+            const dir = vec2_dir1(body_a.position, cp);
 
             if (distance_to_cp < body_a.radius) {
                 if (!body_a.is_static) {
-                    vec2_add_mul_s2(body_a.position, dir, depth / 2.0 * sign);
+                    vec2_addmuls2(body_a.position, dir, depth / 2.0 * sign);
                 }
 
                 if (!body_b.is_static) {
-                    vec2_add_mul_s2(body_b.position, dir, -depth / 2.0 * sign);
+                    vec2_addmuls2(body_b.position, dir, -depth / 2.0 * sign);
                 }
             }
         }
@@ -270,11 +270,11 @@ export function narrow_phase(pairs: pair_t[]): void {
 
             if (result.collision && result.mtv) {
                 if (!body_a.is_static) {
-                    vec2_add_mul_s2(body_a.position, result.mtv, -result.overlap / 2.0);
+                    vec2_addmuls2(body_a.position, result.mtv, -result.overlap / 2.0);
                 }
 
                 if (!body_b.is_static) {
-                    vec2_add_mul_s2(body_b.position, result.mtv, result.overlap / 2.0);
+                    vec2_addmuls2(body_b.position, result.mtv, result.overlap / 2.0);
                 }
             }
         }
@@ -284,11 +284,11 @@ export function narrow_phase(pairs: pair_t[]): void {
 
             if (result.collision && result.mtv) {
                 if (!body_a.is_static) {
-                    vec2_add_mul_s2(body_a.position, result.mtv, -result.overlap / 2.0);
+                    vec2_addmuls2(body_a.position, result.mtv, -result.overlap / 2.0);
                 }
 
                 if (!body_b.is_static) {
-                    vec2_add_mul_s2(body_b.position, result.mtv, result.overlap / 2.0);
+                    vec2_addmuls2(body_b.position, result.mtv, result.overlap / 2.0);
                 }
             }
         }
@@ -299,11 +299,11 @@ export function narrow_phase(pairs: pair_t[]): void {
 
             if (result.collision && result.mtv) {
                 if (!body_a.is_static) {
-                    vec2_add_mul_s2(body_a.position, result.mtv, -result.overlap / 2.0);
+                    vec2_addmuls2(body_a.position, result.mtv, -result.overlap / 2.0);
                 }
 
                 if (!body_b.is_static) {
-                    vec2_add_mul_s2(body_b.position, result.mtv, result.overlap / 2.0);
+                    vec2_addmuls2(body_b.position, result.mtv, result.overlap / 2.0);
                 }
             }
         }
