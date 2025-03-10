@@ -16,8 +16,8 @@ export function polygon_point_inside(points: vec2_t[], point: vec2_t): boolean {
     let inside = false;
 
     for (let i = 0, j = points.length - 1; i < points.length; j = i++) {
-        var xi = points[i][0], yi = points[i][1];
-        var xj = points[j][0], yj = points[j][1];
+        let xi = points[i][0], yi = points[i][1];
+        let xj = points[j][0], yj = points[j][1];
 
         let intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
 

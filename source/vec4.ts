@@ -136,7 +136,7 @@ export function vec4_inv(v: vec4_t): vec4_t {
     return v;
 }
 
-// arithemtic vector x vector
+// arithmetic vector x vector
 export function vec4_add(a: vec4_t, b: vec4_t): vec4_t {
     const out = new TYPE(4);
 
@@ -217,7 +217,7 @@ export function vec4_div2(a: vec4_t, b: vec4_t): vec4_t {
     return a;
 }
 
-// arithemtic vector x scalar
+// arithmetic vector x scalar
 export function vec4_add_s(v: vec4_t, s: number): vec4_t {
     const out = new TYPE(4);
 
@@ -298,7 +298,7 @@ export function vec4_div_s2(v: vec4_t, s: number): vec4_t {
     return v;
 }
 
-// arithemtic vector x vector x scalar
+// arithmetic vector x vector x scalar
 export function vec4_add_mul_s(a: vec4_t, b: vec4_t, s: number): vec4_t {
     const out = new TYPE(4);
 

@@ -123,7 +123,7 @@ export function vec3_inv(v: vec3_t): vec3_t {
     return v;
 }
 
-// arithemtic vector x vector
+// arithmetic vector x vector
 export function vec3_add(a: vec3_t, b: vec3_t): vec3_t {
     const out = new TYPE(3);
 
@@ -196,7 +196,7 @@ export function vec3_div2(a: vec3_t, b: vec3_t): vec3_t {
     return a;
 }
 
-// arithemtic vector x scalar
+// arithmetic vector x scalar
 export function vec3_add_s(v: vec3_t, s: number): vec3_t {
     const out = new TYPE(3);
 
@@ -269,7 +269,7 @@ export function vec3_div_s2(v: vec3_t, s: number): vec3_t {
     return v;
 }
 
-// arithemtic vector x vector x scalar
+// arithmetic vector x vector x scalar
 export function vec3_add_mul_s(a: vec3_t, b: vec3_t, s: number): vec3_t {
     const out = new TYPE(3);
 
@@ -387,6 +387,16 @@ export function vec3_transf_mat3(v: vec3_t, m: mat3_t): vec3_t {
     return v;
 }
 
+export function vec3_transf_mat3_to(v: vec3_t, m: mat3_t): vec3_t {
+    const x = v[0], y = v[1], z = v[2];
+
+    v[0] = x * m[0] + y * m[3] + z * m[6];
+    v[1] = x * m[1] + y * m[4] + z * m[7];
+    v[2] = x * m[2] + y * m[5] + z * m[8];
+
+    return v;
+}
+
 export function vec3_transf_mat4(v: vec3_t, m: mat4_t): vec3_t {
     const out = new TYPE(3);
     const x = v[0], y = v[1], z = v[2];
@@ -397,6 +407,17 @@ export function vec3_transf_mat4(v: vec3_t, m: mat4_t): vec3_t {
     out[2] = (m[2] * x + m[6] * y + m[10] * z + m[14]) / w;
 
     return out;
+}
+
+export function vec3_transf_mat4_to(v: vec3_t, m: mat4_t): vec3_t {
+    const x = v[0], y = v[1], z = v[2];
+    const w = (m[3] * x + m[7] * y + m[11] * z + m[15]) || 1.0;
+
+    v[0] = (m[0] * x + m[4] * y + m[8] * z + m[12]) / w;
+    v[1] = (m[1] * x + m[5] * y + m[9] * z + m[13]) / w;
+    v[2] = (m[2] * x + m[6] * y + m[10] * z + m[14]) / w;
+
+    return v;
 }
 
 export function vec3_rotate_x(v: vec3_t, c: vec3_t, r: number): vec3_t {
@@ -413,6 +434,19 @@ export function vec3_rotate_x(v: vec3_t, c: vec3_t, r: number): vec3_t {
     return out;
 }
 
+export function vec3_rotate_x2(v: vec3_t, c: vec3_t, r: number): vec3_t {
+    const p0 = v[0] - c[0], p1 = v[1] - c[1], p2 = v[2] - c[2];
+    const r0 = p0,
+          r1 = p1 * Math.cos(r) - p2 * Math.sin(r),
+          r2 = p1 * Math.sin(r) + p2 * Math.cos(r);
+
+    v[0] = r0 + c[0];
+    v[1] = r1 + c[1];
+    v[2] = r2 + c[2];
+
+    return v;
+}
+
 export function vec3_rotate_y(v: vec3_t, c: vec3_t, r: number): vec3_t {
     const out = new TYPE(3);
     const p0 = v[0] - c[0], p1 = v[1] - c[1], p2 = v[2] - c[2];
@@ -425,6 +459,19 @@ export function vec3_rotate_y(v: vec3_t, c: vec3_t, r: number): vec3_t {
     out[2] = r2 + c[2];
 
     return out;
+}
+
+export function vec3_rotate_y2(v: vec3_t, c: vec3_t, r: number): vec3_t {
+    const p0 = v[0] - c[0], p1 = v[1] - c[1], p2 = v[2] - c[2];
+    const r0 = p2 * Math.sin(r) + p0 * Math.cos(r),
+          r1 = p1,
+          r2 = p2 * Math.cos(r) - p0 * Math.sin(r);
+
+    v[0] = r0 + c[0];
+    v[1] = r1 + c[1];
+    v[2] = r2 + c[2];
+
+    return v;
 }
 
 export function vec3_rotate_z(v: vec3_t, c: vec3_t, r: number): vec3_t {
@@ -441,14 +488,26 @@ export function vec3_rotate_z(v: vec3_t, c: vec3_t, r: number): vec3_t {
     return out;
 }
 
+export function vec3_rotate_z2(v: vec3_t, c: vec3_t, r: number): vec3_t {
+    const p0 = v[0] - c[0], p1 = v[1] - c[1], p2 = v[2] - c[2];
+    const r0 = p0 * Math.cos(r) - p1 * Math.sin(r),
+          r1 = p0 * Math.sin(r) + p1 * Math.cos(r),
+          r2 = p2;
+
+    v[0] = r0 + c[0];
+    v[1] = r1 + c[1];
+    v[2] = r2 + c[2];
+
+    return v;
+}
+
 // angular
 export function vec3_angle(v: vec3_t): vec2_t {
     const out = new TYPE(2);
-    const theta = Math.atan2(v[1], v[0]);
-    const phi = Math.acos(v[2] / Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]));
+    const x = v[0], y = v[1], z = v[2];
 
-    out[0] = theta;
-    out[1] = phi;
+    out[0] = Math.atan2(y, x);
+    out[1] = Math.acos(z / Math.hypot(x, y, z));
 
     return out;
 }
@@ -457,9 +516,9 @@ export function vec3_angle2(a: vec3_t, b: vec3_t): number {
     const ax = a[0], ay = a[1], az = a[2];
     const bx = b[0], by = b[1], bz = b[2];
     const mag = Math.sqrt((ax * ax + ay * ay + az * az) * (bx * bx + by * by + bz * bz));
-    const cosine = mag && (ax * bx + ay * by + az * bz) / mag;
+    const cos = mag && (ax * bx + ay * by + az * bz) / mag;
 
-    return Math.acos(Math.min(Math.max(cosine, -1), 1));
+    return Math.acos(Math.min(Math.max(cos, -1.0), 1.0));
 }
 
 // geometric
