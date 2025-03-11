@@ -1,7 +1,7 @@
 import {mat4_t} from "./type.ts";
 
-export function mat4_perspective(out: mat4_t, fov: number, aspect: number, near: number, far: number): mat4_t {
-    let f = 1.0 / Math.tan(fov / 2.0), nf;
+export function mat4_perspective(fov: number, aspect: number, near: number, far: number, out: mat4_t): mat4_t {
+    const f = 1.0 / Math.tan(fov / 2.0);
 
     out[0] = f / aspect;
     out[1] = 0.0;
@@ -19,7 +19,8 @@ export function mat4_perspective(out: mat4_t, fov: number, aspect: number, near:
     out[15] = 0.0;
 
     if (far != null && far !== Infinity) {
-        nf = 1.0 / (near - far);
+        const nf = 1.0 / (near - far);
+
         out[10] = (far + near) * nf;
         out[14] = 2.0 * far * near * nf;
     } else {

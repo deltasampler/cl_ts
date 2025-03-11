@@ -1,4 +1,4 @@
-import {TYPE, mat2_t, mat3_t, vec3_t} from "./type.ts";
+import {TYPE, mat3_t, vec3_t} from "./type.ts";
 
 // creation
 export function mat3(e00: number = 1.0, e01: number = 0.0, e02: number = 0.0, e10: number = 0.0, e11?: number, e12: number = 0.0, e20: number = 0.0, e21: number = 0.0, e22?: number): mat3_t {
@@ -26,6 +26,7 @@ export function mat3_new(): mat3_t {
     out[3] = 0.0;
     out[4] = 0.0;
     out[5] = 0.0;
+    out[6] = 0.0;
     out[7] = 0.0;
     out[8] = 0.0;
 
@@ -168,6 +169,52 @@ export function mat3_sub2(a: mat3_t, b: mat3_t): mat3_t {
     return mat3_sub(a, b, a);
 }
 
+// arithmetic matrix x scalar
+export function mat3_muls(m: mat3_t, s: number, out: mat3_t): mat3_t {
+    out[0] = m[0] * s;
+    out[1] = m[1] * s;
+    out[2] = m[2] * s;
+    out[3] = m[3] * s;
+    out[4] = m[4] * s;
+    out[5] = m[5] * s;
+    out[6] = m[6] * s;
+    out[7] = m[7] * s;
+    out[8] = m[8] * s;
+
+    return out;
+}
+
+export function mat3_muls1(m: mat3_t, s: number): mat3_t {
+    return mat3_muls(m, s, new TYPE(9));
+}
+
+export function mat3_muls2(m: mat3_t, s: number): mat3_t {
+    return mat3_muls(m, s, m);
+}
+
+// arithmetic matrix x matrix x scalar
+export function mat3_addmuls(a: mat3_t, b: mat3_t, s: number, out: mat3_t): mat3_t {
+    out[0] = a[0] + b[0] * s;
+    out[1] = a[1] + b[1] * s;
+    out[2] = a[2] + b[2] * s;
+    out[3] = a[3] + b[3] * s;
+    out[4] = a[4] + b[4] * s;
+    out[5] = a[5] + b[5] * s;
+    out[6] = a[6] + b[6] * s;
+    out[7] = a[7] + b[7] * s;
+    out[8] = a[8] + b[8] * s;
+
+    return out;
+}
+
+export function mat3_addmuls1(a: mat3_t, b: mat3_t, s: number): mat3_t {
+    return mat3_addmuls(a, b, s, new TYPE(9));
+}
+
+export function mat3_addmuls2(a: mat3_t, b: mat3_t, s: number): mat3_t {
+    return mat3_addmuls(a, b, s, a);
+}
+
 // product matrix x matrix
 export function mat3_mul(a: mat3_t, b: mat3_t, out: mat3_t): mat3_t {
     const a00 = a[0], a01 = a[1], a02 = a[2],
@@ -198,52 +245,6 @@ export function mat3_mul2(a: mat3_t, b: mat3_t): mat3_t {
     return mat3_mul(a, b, a);
 }
 
-// product matrix x scalar
-export function mat3_muls(m: mat3_t, s: number, out: mat2_t): mat3_t {
-    out[0] = m[0] * s;
-    out[1] = m[1] * s;
-    out[2] = m[2] * s;
-    out[3] = m[3] * s;
-    out[4] = m[4] * s;
-    out[5] = m[5] * s;
-    out[6] = m[6] * s;
-    out[7] = m[7] * s;
-    out[8] = m[8] * s;
-
-    return out;
-}
-
-export function mat3_muls1(m: mat3_t, s: number): mat3_t {
-    return mat3_muls(m, s, new TYPE(9));
-}
-
-export function mat3_muls2(m: mat3_t, s: number): mat3_t {
-    return mat3_muls(m, s, m);
-}
-
-// product matrix x matrix x scalar
-export function mat3_addmuls(a: mat3_t, b: mat3_t, s: number, out: mat3_t): mat3_t {
-    out[0] = a[0] + b[0] * s;
-    out[1] = a[1] + b[1] * s;
-    out[2] = a[2] + b[2] * s;
-    out[3] = a[3] + b[3] * s;
-    out[4] = a[4] + b[4] * s;
-    out[5] = a[5] + b[5] * s;
-    out[6] = a[6] + b[6] * s;
-    out[7] = a[7] + b[7] * s;
-    out[8] = a[8] + b[8] * s;
-
-    return out;
-}
-
-export function mat3_addmuls1(a: mat3_t, b: mat3_t, s: number): mat3_t {
-    return mat3_addmuls(a, b, s, new TYPE(4));
-}
-
-export function mat3_addmuls2(a: mat3_t, b: mat3_t, s: number): mat3_t {
-    return mat3_addmuls(a, b, s, a);
-}
-
 // product matrix x vector
 export function mat3_mulmv(m: mat3_t, v: vec3_t, out: mat3_t): vec3_t {
     const x = v[0], y = v[1], z = v[2];
@@ -256,7 +257,7 @@ export function mat3_mulmv(m: mat3_t, v: vec3_t, out: mat3_t): vec3_t {
 }
 
 export function mat3_mulmv1(m: mat3_t, v: vec3_t): vec3_t {
-    return mat3_mulmv(m, v, new TYPE(2));
+    return mat3_mulmv(m, v, new TYPE(3));
 }
 
 export function mat3_mulmv2(m: mat3_t, v: vec3_t): vec3_t {
@@ -274,7 +275,7 @@ export function mat3_mulvm(v: vec3_t, m: mat3_t, out: mat3_t): vec3_t {
 }
 
 export function mat3_mulvm1(m: mat3_t, v: vec3_t): vec3_t {
-    return mat3_mulvm(m, v, new TYPE(2));
+    return mat3_mulvm(m, v, new TYPE(3));
 }
 
 export function mat3_mulvm2(m: mat3_t, v: vec3_t): vec3_t {
@@ -282,47 +283,34 @@ export function mat3_mulvm2(m: mat3_t, v: vec3_t): vec3_t {
 }
 
 // determinant
-export function mat3_determinant(m: mat3_t): number {
-    const a00 = m[0],
-          a01 = m[1],
-          a02 = m[2];
-    const a10 = m[3],
-          a11 = m[4],
-          a12 = m[5];
-    const a20 = m[6],
-          a21 = m[7],
-          a22 = m[8];
+export function mat3_det(m: mat3_t): number {
+    const m00 = m[0], m01 = m[1], m02 = m[2],
+          m10 = m[3], m11 = m[4], m12 = m[5],
+          m20 = m[6], m21 = m[7], m22 = m[8];
 
     return (
-        a00 * (a22 * a11 - a12 * a21) +
-        a01 * (-a22 * a10 + a12 * a20) +
-        a02 * (a21 * a10 - a11 * a20)
+        m00 * (m22 * m11 - m12 * m21) +
+        m01 * (-m22 * m10 + m12 * m20) +
+        m02 * (m21 * m10 - m11 * m20)
     );
 }
 
 // norm
 export function mat3_frob(m: mat3_t): number {
-    return Math.sqrt(
-        m[0] * m[0] +
-        m[1] * m[1] +
-        m[2] * m[2] +
-        m[3] * m[3] +
-        m[4] * m[4] +
-        m[5] * m[5] +
-        m[6] * m[6] +
-        m[7] * m[7] +
-        m[8] * m[8]
+    return Math.hypot(
+        m[0], m[1], m[2],
+        m[3], m[4], m[5],
+        m[6], m[7], m[8]
     );
 }
 
-// special
 export function mat3_transpose(m: mat3_t, out: mat3_t): mat3_t {
     if (out === m) {
-        let a01 = m[1], a02 = m[2], a12 = m[5];
+        const m01 = m[1], a02 = m[2], a12 = m[5];
 
         out[1] = m[3];
         out[2] = m[6];
-        out[3] = a01;
+        out[3] = m01;
         out[5] = m[7];
         out[6] = a02;
         out[7] = a12;
@@ -341,44 +329,32 @@ export function mat3_transpose(m: mat3_t, out: mat3_t): mat3_t {
     return out;
 }
 
-export function mat3_adjoint(m: mat3_t, out: mat2_t): mat3_t {
-    const a00 = m[0],
-          a01 = m[1],
-          a02 = m[2];
-    const a10 = m[3],
-          a11 = m[4],
-          a12 = m[5];
-    const a20 = m[6],
-          a21 = m[7],
-          a22 = m[8];
+export function mat3_adjoint(m: mat3_t, out: mat3_t): mat3_t {
+    const m00 = m[0], m01 = m[1], m02 = m[2],
+          m10 = m[3], m11 = m[4], m12 = m[5],
+          m20 = m[6], m21 = m[7], m22 = m[8];
 
-    out[0] = a11 * a22 - a12 * a21;
-    out[1] = a02 * a21 - a01 * a22;
-    out[2] = a01 * a12 - a02 * a11;
-    out[3] = a12 * a20 - a10 * a22;
-    out[4] = a00 * a22 - a02 * a20;
-    out[5] = a02 * a10 - a00 * a12;
-    out[6] = a10 * a21 - a11 * a20;
-    out[7] = a01 * a20 - a00 * a21;
-    out[8] = a00 * a11 - a01 * a10;
+    out[0] = m11 * m22 - m12 * m21;
+    out[1] = m02 * m21 - m01 * m22;
+    out[2] = m01 * m12 - m02 * m11;
+    out[3] = m12 * m20 - m10 * m22;
+    out[4] = m00 * m22 - m02 * m20;
+    out[5] = m02 * m10 - m00 * m12;
+    out[6] = m10 * m21 - m11 * m20;
+    out[7] = m01 * m20 - m00 * m21;
+    out[8] = m00 * m11 - m01 * m10;
 
     return out;
 }
 
-export function mat3_invert(m: mat3_t, out: mat3_t): mat3_t|null {
-    const a00 = m[0],
-          a01 = m[1],
-          a02 = m[2];
-    const a10 = m[3],
-          a11 = m[4],
-          a12 = m[5];
-    const a20 = m[6],
-          a21 = m[7],
-          a22 = m[8];
+export function mat3_inv(m: mat3_t, out: mat3_t): mat3_t|null {
+    const a00 = m[0], a01 = m[1], a02 = m[2],
+          a10 = m[3], a11 = m[4], a12 = m[5],
+          a20 = m[6], a21 = m[7], a22 = m[8];
 
-    let b01 = a22 * a11 - a12 * a21;
-    let b11 = -a22 * a10 + a12 * a20;
-    let b21 = a21 * a10 - a11 * a20;
+    const b01 = a22 * a11 - a12 * a21;
+    const b11 = -a22 * a10 + a12 * a20;
+    const b21 = a21 * a10 - a11 * a20;
 
     let det = a00 * b01 + a01 * b11 + a02 * b21;
 
@@ -407,7 +383,7 @@ export function mat3_str(m: mat3_t): string {
         `\t${m[0]}, ${m[3]}, ${m[6]},\n` +
         `\t${m[1]}, ${m[4]}, ${m[7]},\n` +
         `\t${m[2]}, ${m[5]}, ${m[8]}\n` +
-        ")"
+        ")";
 }
 
 export function mat3_print(m: mat3_t): void {
