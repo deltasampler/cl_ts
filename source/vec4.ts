@@ -325,11 +325,11 @@ export function vec4_adds(v: vec4_t, s: number, out: vec4_t): vec4_t {
 }
 
 export function vec4_adds1(v: vec4_t, s: number): vec4_t {
-    return vec4_add(v, s, new TYPE(4));
+    return vec4_adds(v, s, new TYPE(4));
 }
 
 export function vec4_adds2(v: vec4_t, s: number): vec4_t {
-    return vec4_add(v, s, v);
+    return vec4_adds(v, s, v);
 }
 
 export function vec4_subs(v: vec4_t, s: number, out: vec4_t): vec4_t {
