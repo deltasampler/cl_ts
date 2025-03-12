@@ -1,5 +1,5 @@
 import {vec2_t} from "./type.ts";
-import {vec2, vec2_add2, vec2_addmuls1, vec2_copy, vec2_dir1, vec2_dist, vec2_dist_sq, vec2_rotate_origin1, vec2_sub1} from "./vec2.ts";
+import {vec2, vec2_add2, vec2_addmuls1, vec2_copy, vec2_dir1, vec2_dist, vec2_dist_sq, vec2_divs1, vec2_rotate_origin1, vec2_sub1} from "./vec2.ts";
 import {abs, clamp} from "./math.ts";
 
 // point inside
@@ -404,4 +404,60 @@ export function sat(points_0: vec2_t[], pos_0: vec2_t, angle_0: number, points_1
 
 export function circle_intersect_circle(p0: vec2_t, r0: number, p1: vec2_t, r1: number): boolean {
     return vec2_dist_sq(p0, p1) <= (r0 + r1) * (r0 + r1);
+}
+
+export function aabb2_intersect_aabb(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): boolean {
+    const hs1 = vec2_divs1(as, 2.0);
+    const hs2 = vec2_divs1(bs, 2.0);
+
+    const l1 = ap[0] - hs1[0];
+    const r1 = ap[0] + hs1[0];
+    const b1 = ap[1] - hs1[1];
+    const t1 = ap[1] + hs1[1];
+
+    const l2 = bp[0] - hs2[0];
+    const r2 = bp[0] + hs2[0];
+    const b2 = bp[1] - hs2[1];
+    const t2 = bp[1] + hs2[1];
+
+    return l1 < r2 && r1 > l2 && t1 > b2 && b1 < t2;
+}
+
+export type aabb_mtv_t = {
+    dir: vec2_t;
+    depth: number;
+};
+
+export function aabb2_intersect_aabb_mtv(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): aabb_mtv_t|null {
+    const hs1 = vec2_divs1(as, 2.0);
+    const hs2 = vec2_divs1(bs, 2.0);
+
+    const l1 = ap[0] - hs1[0];
+    const r1 = ap[0] + hs1[0];
+    const b1 = ap[1] - hs1[1];
+    const t1 = ap[1] + hs1[1];
+
+    const l2 = bp[0] - hs2[0];
+    const r2 = bp[0] + hs2[0];
+    const b2 = bp[1] - hs2[1];
+    const t2 = bp[1] + hs2[1];
+
+    if (!(l1 < r2 && r1 > l2 && t1 > b2 && b1 < t2)) {
+        return null;
+    }
+
+    const overlap_x = Math.min(r1 - l2, r2 - l1);
+    const overlap_y = Math.min(t1 - b2, t2 - b1);
+
+    if (overlap_x < overlap_y) {
+        return {
+            dir: vec2((ap[0] < bp[0] ? -1.0: 1.0), 0.0),
+            depth: overlap_x
+        };
+    } else {
+        return {
+            dir: vec2(0.0, (ap[1] < bp[1] ? -1.0 : 1.0)),
+            depth: overlap_y
+        };
+    }
 }
