@@ -1,5 +1,5 @@
 import {vec2_t} from "./type.ts";
-import {vec2, vec2_add2, vec2_addmuls1, vec2_copy, vec2_dir1, vec2_dist, vec2_dist_sq, vec2_divs1, vec2_rotate_origin1, vec2_sub1} from "./vec2.ts";
+import {vec2, vec2_add2, vec2_addmuls1, vec2_copy, vec2_dir1, vec2_dist, vec2_dist_sq, vec2_divs1, vec2_rotate_origin1, vec2_rotate_origin2, vec2_sub1} from "./vec2.ts";
 import {abs, clamp} from "./math.ts";
 
 // point inside
@@ -8,30 +8,29 @@ export function point_inside_circle(cp: vec2_t, cr: number, p: vec2_t): boolean 
 }
 
 export function point_inside_aabb(bp: vec2_t, bs: vec2_t, p: vec2_t): boolean {
-    const [bx, by] = bp;
-    const [px, py] = p;
-    const sx = bs[0] / 2, sy = bs[1] / 2;
+    const sx = bs[0] / 2.0, sy = bs[1] / 2.0;
+    const px = p[0] - bp[0], py = p[1] - bp[1];
 
-    return px >= bx - sx && px <= bx + sx && py >= by - sy && py <= by + sy;
+    return abs(px) <= sx && abs(py) <= sy;
 }
 
 export function point_inside_obb(bp: vec2_t, bs: vec2_t, ba: number, p: vec2_t): boolean {
-    const dp = vec2_sub1(p, bp);
-    const lp = vec2_rotate_origin1(dp, -ba);
-    const sx = bs[0] / 2;
-    const sy = bs[1] / 2;
+    const sx = bs[0] / 2.0, sy = bs[1] / 2.0;
+    const lp = vec2_rotate_origin2(vec2_sub1(p, bp), -ba);
 
     return Math.abs(lp[0]) <= sx && Math.abs(lp[1]) <= sy;
 }
 
 export function point_inside_convex(points: vec2_t[], p: vec2_t): boolean {
-    const [px, py] = p;
+    const l = points.length;
+    const px = p[0], py = p[1];
+    let first_sign: number|null = null;
 
-    let first_sign = 0.0;
-
-    for (let i = 0; i < points.length; i += 1) {
-        const [x0, y0] = points[i];
-        const [x1, y1] = points[(i + 1) % points.length];
+    for (let i = 0; i < l; i += 1) {
+        const curr = points[i];
+        const next = points[(i + 1) % l];
+        const x0 = curr[0], y0 = curr[1];
+        const x1 = next[0], y1 = next[1];
         const cross = (x1 - x0) * (py - y0) - (y1 - y0) * (px - x0);
         const sign = Math.sign(cross);
 
@@ -39,7 +38,7 @@ export function point_inside_convex(points: vec2_t[], p: vec2_t): boolean {
             continue;
         }
 
-        if (first_sign === 0) {
+        if (!first_sign) {
             first_sign = sign;
         } else if (sign !== first_sign) {
             return false;
@@ -49,51 +48,46 @@ export function point_inside_convex(points: vec2_t[], p: vec2_t): boolean {
     return true;
 }
 
-export function point_inside_convex_cent(points: vec2_t[], pos: vec2_t, a: number, p: vec2_t): boolean {
-    const dp = vec2_sub1(p, pos);
-    const lp = vec2_rotate_origin1(dp, -a);
-
-    return point_inside_convex(points, lp);
+export function point_inside_convex2(points: vec2_t[], pp: vec2_t, pa: number, p: vec2_t): boolean {
+    return point_inside_convex(points, vec2_rotate_origin2(vec2_sub1(p, pp), -pa));
 }
 
-export function point_inside_capsule(a: vec2_t, b: vec2_t, cr: number, p: vec2_t) {
-    const bax = b[0] - a[0], bay = b[1] - a[1];
-    const pax = p[0] - a[0], pay = p[1] - a[1];
+export function point_inside_capsule(a: vec2_t, b: vec2_t, r: number, p: vec2_t) {
+    const ax = a[0], ay = a[1];
+    const bax = b[0] - ax, bay = b[1] - ay;
+    const pax = p[0] - ax, pay = p[1] - ay;
     const t = (bax * pax + bay * pay) / (bax * bax + bay * bay);
     const tc = clamp(t, 0.0, 1.0);
-    const tp = vec2(a[0] + bax * tc, a[1] + bay * tc);
+    const tp = vec2(ax + bax * tc, ay + bay * tc);
 
-    return vec2_dist_sq(tp, p) <= cr * cr;
+    return vec2_dist_sq(tp, p) <= r * r;
 }
 
-// point closest
-export function point_closest_line(a: vec2_t, b: vec2_t, p: vec2_t): vec2_t {
-    const bax = b[0] - a[0], bay = b[1] - a[1];
-    const pax = p[0] - a[0], pay = p[1] - a[1];
+// closest point
+export function closest_point_circle(cp: vec2_t, cr: number, p: vec2_t): vec2_t {
+    return vec2_addmuls1(cp, vec2_dir1(p, cp), cr);
+}
+
+export function closest_point_line(a: vec2_t, b: vec2_t, p: vec2_t): vec2_t {
+    const ax = a[0], ay = a[1];
+    const bax = b[0] - ax, bay = b[1] - ay;
+    const pax = p[0] - ax, pay = p[1] - ay;
     const t = (bax * pax + bay * pay) / (bax * bax + bay * bay);
     const tc = clamp(t, 0.0, 1.0);
 
-    return vec2(a[0] + bax * tc, a[1] + bay * tc);
+    return vec2(ax + bax * tc, ay + bay * tc);
 }
 
-export function point_closest_circle(cp: vec2_t, cr: number, p: vec2_t): vec2_t {
-    const d = vec2_dir1(p, cp);
-
-    return vec2_addmuls1(cp, d, cr);
-}
-
-export function point_closest_aabb(bp: vec2_t, bs: vec2_t, p: vec2_t): vec2_t {
-    const [bx, by] = bp;
-    const [px, py] = p;
-    const sx = bs[0] / 2, sy = bs[1] / 2;
+export function closest_point_aabb(bp: vec2_t, bs: vec2_t, p: vec2_t): vec2_t {
+    const bx = bp[0], by = bp[1];
+    const sx = bs[0] / 2.0, sy = bs[1] / 2.0;
+    const px = p[0], py = p[1];
     const minx = bx - sx, miny = by - sy;
     const maxx = bx + sx, maxy = by + sy;
-
     const cx = abs(minx - px) < abs(maxx - px) ? minx : maxx;
     const cy = abs(miny - py) < abs(maxy - py) ? miny : maxy;
-
-    const ex = point_closest_line(vec2(cx, miny), vec2(cx, maxy), p);
-    const ey = point_closest_line(vec2(minx, cy), vec2(maxx, cy), p);
+    const ex = closest_point_line(vec2(cx, miny), vec2(cx, maxy), p);
+    const ey = closest_point_line(vec2(minx, cy), vec2(maxx, cy), p);
 
     if (vec2_dist_sq(ex, p) < vec2_dist_sq(ey, p)) {
         return ex;
@@ -102,22 +96,21 @@ export function point_closest_aabb(bp: vec2_t, bs: vec2_t, p: vec2_t): vec2_t {
     return ey;
 }
 
-export function point_closest_obb(bp: vec2_t, bs: vec2_t, a: number, p: vec2_t): vec2_t {
-    const dp = vec2_sub1(p, bp);
-    const lp = vec2_rotate_origin1(dp, -a);
-    const cp = point_closest_aabb(vec2(), bs, lp);
-    const cpr = vec2_add2(vec2_rotate_origin1(cp, a), bp);
+export function closest_point_obb(bp: vec2_t, bs: vec2_t, ba: number, p: vec2_t): vec2_t {
+    const lp = vec2_rotate_origin2(vec2_sub1(p, bp), -ba);
+    const cp = closest_point_aabb(vec2(), bs, lp);
 
-    return cpr;
+    return vec2_add2(vec2_rotate_origin1(cp, ba), bp);
 }
 
-export function point_closest_convex(points: vec2_t[], p: vec2_t): vec2_t {
-    let closest;
+export function closest_point_convex(points: vec2_t[], p: vec2_t): vec2_t {
+    const l = points.length;
+    let closest: vec2_t|null = null;
 
-    for (let i = 0; i < points.length; i += 1) {
-        const a = points[i];
-        const b = points[(i + 1) % points.length];
-        const c = point_closest_line(a, b, p);
+    for (let i = 0; i < l; i += 1) {
+        const curr = points[i];
+        const next = points[(i + 1) % l];
+        const c = closest_point_line(curr, next, p);
 
         if (!closest || vec2_dist_sq(p, c) < vec2_dist_sq(p, closest)) {
             closest = c;
@@ -127,48 +120,69 @@ export function point_closest_convex(points: vec2_t[], p: vec2_t): vec2_t {
     return closest!;
 }
 
-export function point_closest_convex_cent(points: vec2_t[], pos: vec2_t, a: number, p: vec2_t): vec2_t {
-    const dp = vec2_sub1(p, pos);
-    const lp = vec2_rotate_origin1(dp, -a);
-    const cp = point_closest_convex(points, lp);
-    const cpr = vec2_add2(vec2_rotate_origin1(cp, a), pos);
+export function closest_point_convex2(points: vec2_t[], pp: vec2_t, pa: number, p: vec2_t): vec2_t {
+    const lp = vec2_rotate_origin2(vec2_sub1(p, pp), -pa);
+    const cp = closest_point_convex(points, lp);
 
-    return cpr;
+    return vec2_add2(vec2_rotate_origin1(cp, pa), pp);
 }
 
-export function point_closest_capsule(a: vec2_t, b: vec2_t, cr: number, p: vec2_t): vec2_t {
-    const bax = b[0] - a[0], bay = b[1] - a[1];
-    const pax = p[0] - a[0], pay = p[1] - a[1];
+export function closest_point_capsule(a: vec2_t, b: vec2_t, cr: number, p: vec2_t): vec2_t {
+    const ax = a[0], ay = a[1];
+    const bax = b[0] - ax, bay = b[1] - ay;
+    const pax = p[0] - ax, pay = p[1] - ay;
     const t = (bax * pax + bay * pay) / (bax * bax + bay * bay);
     const tc = clamp(t, 0.0, 1.0);
-    const tp = vec2(a[0] + bax * tc, a[1] + bay * tc);
-    const d = vec2_dir1(p, tp);
+    const tp = vec2(ax + bax * tc, ay + bay * tc);
+    const dir = vec2_dir1(p, tp);
 
-    return vec2_addmuls1(tp, d, cr);
+    return vec2_addmuls1(tp, dir, cr);
 }
+
+// overlap
+export function overlap_circle_circle(p0: vec2_t, r0: number, p1: vec2_t, r1: number): boolean {
+    return vec2_dist_sq(p0, p1) <= (r0 + r1) * (r0 + r1);
+}
+
+export function overlap_aabb2_aabb2(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): boolean {
+    const hs1 = vec2_divs1(as, 2.0);
+    const hs2 = vec2_divs1(bs, 2.0);
+    const l1 = ap[0] - hs1[0];
+    const r1 = ap[0] + hs1[0];
+    const b1 = ap[1] - hs1[1];
+    const t1 = ap[1] + hs1[1];
+    const l2 = bp[0] - hs2[0];
+    const r2 = bp[0] + hs2[0];
+    const b2 = bp[1] - hs2[1];
+    const t2 = bp[1] + hs2[1];
+
+    return l1 < r2 && r1 > l2 && t1 > b2 && b1 < t2;
+}
+
+export function overlap_aabb2_aabb2_x(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): boolean {
+    const hs1 = vec2_divs1(as, 2.0);
+    const hs2 = vec2_divs1(bs, 2.0);
+    const l1 = ap[0] - hs1[0];
+    const r1 = ap[0] + hs1[0];
+    const l2 = bp[0] - hs2[0];
+    const r2 = bp[0] + hs2[0];
+
+    return l1 < r2 && r1 > l2;
+}
+
+export function overlap_aabb2_aabb2_y(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): boolean {
+    const hs1 = vec2_divs1(as, 2.0);
+    const hs2 = vec2_divs1(bs, 2.0);
+    const b1 = ap[1] - hs1[1];
+    const t1 = ap[1] + hs1[1];
+    const b2 = bp[1] - hs2[1];
+    const t2 = bp[1] + hs2[1];
+
+    return t1 > b2 && b1 < t2;
+}
+
 
 // line intersect
-export function line_intersect_line(a0: vec2_t, b0: vec2_t, a1: vec2_t, b1: vec2_t): vec2_t[] {
-    const x1 = a0[0], y1 = a0[1], x2 = b0[0], y2 = b0[1];
-    const x3 = a1[0], y3 = a1[1], x4 = b1[0], y4 = b1[1];
-    const denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
-
-    if (denom === 0) {
-        return [];
-    }
-
-    const px = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / denom;
-    const py = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / denom;
-    const t = ((px - x1) * (x2 - x1) + (py - y1) * (y2 - y1)) / ((x2 - x1) ** 2 + (y2 - y1) ** 2);
-    const u = ((px - x3) * (x4 - x3) + (py - y3) * (y4 - y3)) / ((x4 - x3) ** 2 + (y4 - y3) ** 2);
-
-    if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
-        return [vec2(px, py)];
-    }
-
-    return [];
-}
-
 export function line_intersect_circle(cp: vec2_t, cr: number, a: vec2_t, b: vec2_t): vec2_t[] {
     const dx = b[0] - a[0];
     const dy = b[1] - a[1];
@@ -197,6 +211,27 @@ export function line_intersect_circle(cp: vec2_t, cr: number, a: vec2_t, b: vec2
     }
 
     return points;
+}
+
+export function line_intersect_line(a0: vec2_t, b0: vec2_t, a1: vec2_t, b1: vec2_t): vec2_t[] {
+    const x1 = a0[0], y1 = a0[1], x2 = b0[0], y2 = b0[1];
+    const x3 = a1[0], y3 = a1[1], x4 = b1[0], y4 = b1[1];
+    const denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+
+    if (denom === 0) {
+        return [];
+    }
+
+    const px = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / denom;
+    const py = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / denom;
+    const t = ((px - x1) * (x2 - x1) + (py - y1) * (y2 - y1)) / ((x2 - x1) ** 2 + (y2 - y1) ** 2);
+    const u = ((px - x3) * (x4 - x3) + (py - y3) * (y4 - y3)) / ((x4 - x3) ** 2 + (y4 - y3) ** 2);
+
+    if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
+        return [vec2(px, py)];
+    }
+
+    return [];
 }
 
 export function line_intersect_aabb(bp: vec2_t, bs: vec2_t, a: vec2_t, b: vec2_t): vec2_t[] {
@@ -274,7 +309,7 @@ export function line_intersect_convex(points: vec2_t[], a: vec2_t, b: vec2_t): v
     return intersections;
 }
 
-export function line_intersect_convex_cent(points: vec2_t[], bp: vec2_t, br: number, a: vec2_t, b: vec2_t): vec2_t[] {
+export function line_intersect_convex2(points: vec2_t[], bp: vec2_t, br: number, a: vec2_t, b: vec2_t): vec2_t[] {
     const local_a = vec2_rotate_origin1(vec2_sub1(a, bp), -br);
     const local_b = vec2_rotate_origin1(vec2_sub1(b, bp), -br);
     const intersections = line_intersect_convex(points, local_a, local_b);
@@ -297,13 +332,13 @@ export function line_intersect_capsule(a0: vec2_t, b0: vec2_t, cr: number, a1: v
     const out: vec2_t[] = [];
 
     for (const point of line_intersect_circle(a0, cr, a1, b1)) {
-        if (vec2_dist(point, point_closest_capsule(a0, b0, cr, point)) <= 0.001) {
+        if (vec2_dist(point, closest_point_capsule(a0, b0, cr, point)) <= 0.001) {
             out.push(point);
         }
     }
 
     for (const point of line_intersect_circle(b0, cr, a1, b1)) {
-        if (vec2_dist(point, point_closest_capsule(a0, b0, cr, point)) <= 0.001) {
+        if (vec2_dist(point, closest_point_capsule(a0, b0, cr, point)) <= 0.001) {
             out.push(point);
         }
     }
@@ -314,121 +349,13 @@ export function line_intersect_capsule(a0: vec2_t, b0: vec2_t, cr: number, a1: v
     return out;
 }
 
-// sat
-export type sat_return = {
-    collision: boolean;
-    mtv: vec2_t;
-    overlap: number;
-};
-
-function get_perpendicular_axis(p1: vec2_t, p2: vec2_t): vec2_t {
-    const edge = vec2(p2[0] - p1[0], p2[1] - p1[1]);
-    return vec2(-edge[1], edge[0]);
-}
-
-function project_points(points: vec2_t[], axis: vec2_t): { min: number; max: number } {
-    let min = Infinity, max = -Infinity;
-
-    for (const p of points) {
-        const projection = p[0] * axis[0] + p[1] * axis[1];
-        min = Math.min(min, projection);
-        max = Math.max(max, projection);
-    }
-
-    return { min, max };
-}
-
-function transform_polygon(points: vec2_t[], position: vec2_t, angle: number): vec2_t[] {
-    return points.map(p => {
-        const rotated = vec2_rotate_origin1(p, angle);
-        return vec2(rotated[0] + position[0], rotated[1] + position[1]);
-    });
-}
-
-export function sat(points_0: vec2_t[], pos_0: vec2_t, angle_0: number, points_1: vec2_t[], pos_1: vec2_t, angle_1: number): sat_return {
-    let min_overlap = Infinity;
-    let smallest_axis: vec2_t | null = null;
-
-    const transformed_0 = transform_polygon(points_0, pos_0, angle_0);
-    const transformed_1 = transform_polygon(points_1, pos_1, angle_1);
-
-    function check_axes(points_a: vec2_t[]): boolean {
-        for (let i = 0; i < points_a.length; i++) {
-            const axis = get_perpendicular_axis(points_a[i], points_a[(i + 1) % points_a.length]);
-            const length = Math.hypot(axis[0], axis[1]);
-            const normalized_axis = vec2(axis[0] / length, axis[1] / length);
-
-            const proj_0 = project_points(transformed_0, normalized_axis);
-            const proj_1 = project_points(transformed_1, normalized_axis);
-
-            const overlap = Math.min(proj_0.max, proj_1.max) - Math.max(proj_0.min, proj_1.min);
-
-            if (overlap <= 0) return false;
-
-            if (overlap < min_overlap) {
-                min_overlap = overlap;
-                smallest_axis = normalized_axis;
-            }
-        }
-        return true;
-    }
-
-    if (!check_axes(transformed_0) || !check_axes(transformed_1)) {
-        return {
-            collision: false,
-            mtv: vec2(),
-            overlap: 0.0
-        };
-    }
-
-    if (smallest_axis) {
-        const direction = vec2_sub1(pos_1, pos_0);
-
-        if (direction[0] * smallest_axis[0] + direction[1] * smallest_axis[1] < 0) {
-            smallest_axis = vec2(-smallest_axis[0], -smallest_axis[1]);
-        }
-
-        return {
-            collision: true,
-            mtv: vec2(smallest_axis[0], smallest_axis[1]),
-            overlap: min_overlap
-        };
-    }
-
-    return {
-        collision: false,
-        mtv: vec2(),
-        overlap: 0.0
-    };
-}
-
-export function circle_intersect_circle(p0: vec2_t, r0: number, p1: vec2_t, r1: number): boolean {
-    return vec2_dist_sq(p0, p1) <= (r0 + r1) * (r0 + r1);
-}
-
-export function aabb2_intersect_aabb(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): boolean {
-    const hs1 = vec2_divs1(as, 2.0);
-    const hs2 = vec2_divs1(bs, 2.0);
-
-    const l1 = ap[0] - hs1[0];
-    const r1 = ap[0] + hs1[0];
-    const b1 = ap[1] - hs1[1];
-    const t1 = ap[1] + hs1[1];
-
-    const l2 = bp[0] - hs2[0];
-    const r2 = bp[0] + hs2[0];
-    const b2 = bp[1] - hs2[1];
-    const t2 = bp[1] + hs2[1];
-
-    return l1 < r2 && r1 > l2 && t1 > b2 && b1 < t2;
-}
-
-export type aabb_mtv_t = {
+// mtv
+export type mtv_t = {
     dir: vec2_t;
     depth: number;
 };
 
-export function aabb2_intersect_aabb_mtv(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): aabb_mtv_t|null {
+export function mtv_aabb2_aabb2(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): mtv_t|null {
     const hs1 = vec2_divs1(as, 2.0);
     const hs2 = vec2_divs1(bs, 2.0);
 
@@ -460,4 +387,76 @@ export function aabb2_intersect_aabb_mtv(ap: vec2_t, as: vec2_t, bp: vec2_t, bs:
             depth: overlap_y
         };
     }
+}
+
+function get_perpendicular_axis(p1: vec2_t, p2: vec2_t): vec2_t {
+    const edge = vec2(p2[0] - p1[0], p2[1] - p1[1]);
+    return vec2(-edge[1], edge[0]);
+}
+
+function project_points(points: vec2_t[], axis: vec2_t): { min: number; max: number } {
+    let min = Infinity, max = -Infinity;
+
+    for (const p of points) {
+        const projection = p[0] * axis[0] + p[1] * axis[1];
+        min = Math.min(min, projection);
+        max = Math.max(max, projection);
+    }
+
+    return { min, max };
+}
+
+function transform_polygon(points: vec2_t[], position: vec2_t, angle: number): vec2_t[] {
+    return points.map(p => {
+        const rotated = vec2_rotate_origin1(p, angle);
+        return vec2(rotated[0] + position[0], rotated[1] + position[1]);
+    });
+}
+
+export function sat(points_0: vec2_t[], pos_0: vec2_t, angle_0: number, points_1: vec2_t[], pos_1: vec2_t, angle_1: number): mtv_t|null {
+    let min_overlap = Infinity;
+    let smallest_axis: vec2_t | null = null;
+
+    const transformed_0 = transform_polygon(points_0, pos_0, angle_0);
+    const transformed_1 = transform_polygon(points_1, pos_1, angle_1);
+
+    function check_axes(points_a: vec2_t[]): boolean {
+        for (let i = 0; i < points_a.length; i++) {
+            const axis = get_perpendicular_axis(points_a[i], points_a[(i + 1) % points_a.length]);
+            const length = Math.hypot(axis[0], axis[1]);
+            const normalized_axis = vec2(axis[0] / length, axis[1] / length);
+
+            const proj_0 = project_points(transformed_0, normalized_axis);
+            const proj_1 = project_points(transformed_1, normalized_axis);
+
+            const overlap = Math.min(proj_0.max, proj_1.max) - Math.max(proj_0.min, proj_1.min);
+
+            if (overlap <= 0) return false;
+
+            if (overlap < min_overlap) {
+                min_overlap = overlap;
+                smallest_axis = normalized_axis;
+            }
+        }
+        return true;
+    }
+
+    if (!check_axes(transformed_0) || !check_axes(transformed_1)) {
+        return null;
+    }
+
+    if (smallest_axis) {
+        const direction = vec2_sub1(pos_1, pos_0);
+
+        if (direction[0] * smallest_axis[0] + direction[1] * smallest_axis[1] < 0) {
+            smallest_axis = vec2(-smallest_axis[0], -smallest_axis[1]);
+        }
+
+        return {
+            dir: vec2(smallest_axis[0], smallest_axis[1]),
+            depth: min_overlap
+        };
+    }
+
+    return null;
 }

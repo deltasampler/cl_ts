@@ -2,7 +2,7 @@ import {vec2_t} from "./type.ts";
 import {vec2, vec2_add1, vec2_add2, vec2_addmuls2, vec2_copy, vec2_dir1, vec2_dist, vec2_dist_sq, vec2_divs1, vec2_divs2, vec2_muls1} from "./vec2.ts";
 import {vec2_len_sq} from "@cl/vec2.ts";
 import {hypot, sqrt} from "@cl/math.ts";
-import {point_closest_convex_cent, point_closest_obb, point_inside_convex_cent, point_inside_obb, sat} from "./collision2.ts";
+import {closest_point_convex2, closest_point_obb, point_inside_convex2, point_inside_obb, sat} from "./collision2.ts";
 
 export function center_vertices(vertices: vec2_t[]): vec2_t[] {
     let cx = 0.0, cy = 0.0, area = 0.0;
@@ -184,7 +184,7 @@ class pair_t {
     body_b: body_t;
 };
 
-export function circle_intersect_circle(p0: vec2_t, r0: number, p1: vec2_t, r1: number): boolean {
+export function overlap_circle_circle(p0: vec2_t, r0: number, p1: vec2_t, r1: number): boolean {
     return vec2_dist_sq(p0, p1) <= (r0 + r1) * (r0 + r1);
 }
 
@@ -194,7 +194,7 @@ export function broad_phase_naive(bodies: body_t[]): pair_t[] {
     for (const body_a of bodies) {
         for (const body_b of bodies) {
             if (body_a !== body_b) {
-                if (circle_intersect_circle(body_a.position, body_a.radius, body_b.position, body_b.radius)) {
+                if (overlap_circle_circle(body_a.position, body_a.radius, body_b.position, body_b.radius)) {
                     const pair = new pair_t();
                     pair.body_a = body_a;
                     pair.body_b = body_b;
@@ -226,7 +226,7 @@ export function narrow_phase(pairs: pair_t[]): void {
         }
 
         if (body_a.type === BODY_TYPE.CIRCLE && body_b.type === BODY_TYPE.BOX) {
-            const cp = point_closest_obb(body_b.position, body_b.size, body_b.rotation, body_a.position);
+            const cp = closest_point_obb(body_b.position, body_b.size, body_b.rotation, body_a.position);
             const is_inside = point_inside_obb(body_b.position, body_b.size, body_b.rotation, body_a.position);
             const sign = is_inside ? -1.0 : 1.0;
             const distance_to_cp = vec2_dist(body_a.position, cp) * sign;
@@ -245,8 +245,8 @@ export function narrow_phase(pairs: pair_t[]): void {
         }
 
         if (body_a.type === BODY_TYPE.CIRCLE && body_b.type === BODY_TYPE.POLYGON) {
-            const cp = point_closest_convex_cent(body_b.vertices, body_b.position, body_b.rotation, body_a.position);
-            const is_inside = point_inside_convex_cent(body_b.vertices, body_b.position, body_b.rotation, body_a.position);
+            const cp = closest_point_convex2(body_b.vertices, body_b.position, body_b.rotation, body_a.position);
+            const is_inside = point_inside_convex2(body_b.vertices, body_b.position, body_b.rotation, body_a.position);
             const sign = is_inside ? -1.0 : 1.0;
             const distance_to_cp = vec2_dist(body_a.position, cp) * sign;
             const depth = body_a.radius - distance_to_cp;
@@ -268,13 +268,13 @@ export function narrow_phase(pairs: pair_t[]): void {
             const vertices2 = [vec2(body_b.min[0], body_b.max[1]), body_b.max, vec2(body_b.max[0], body_b.min[1]), body_b.min];
             const result = sat(vertices1, body_a.position, body_a.rotation, vertices2, body_b.position, body_b.rotation);
 
-            if (result.collision && result.mtv) {
+            if (result) {
                 if (!body_a.is_static) {
-                    vec2_addmuls2(body_a.position, result.mtv, -result.overlap / 2.0);
+                    vec2_addmuls2(body_a.position, result.dir, -result.depth / 2.0);
                 }
 
                 if (!body_b.is_static) {
-                    vec2_addmuls2(body_b.position, result.mtv, result.overlap / 2.0);
+                    vec2_addmuls2(body_b.position, result.dir, result.depth / 2.0);
                 }
             }
         }
@@ -282,13 +282,13 @@ export function narrow_phase(pairs: pair_t[]): void {
         if (body_a.type === BODY_TYPE.POLYGON && body_b.type === BODY_TYPE.POLYGON) {
             const result = sat(body_a.vertices, body_a.position, body_a.rotation, body_b.vertices, body_b.position, body_b.rotation);
 
-            if (result.collision && result.mtv) {
+            if (result) {
                 if (!body_a.is_static) {
-                    vec2_addmuls2(body_a.position, result.mtv, -result.overlap / 2.0);
+                    vec2_addmuls2(body_a.position, result.dir, -result.depth / 2.0);
                 }
 
                 if (!body_b.is_static) {
-                    vec2_addmuls2(body_b.position, result.mtv, result.overlap / 2.0);
+                    vec2_addmuls2(body_b.position, result.dir, result.depth / 2.0);
                 }
             }
         }
@@ -297,13 +297,13 @@ export function narrow_phase(pairs: pair_t[]): void {
             const vertices = [vec2(body_b.min[0], body_b.max[1]), body_b.max, vec2(body_b.max[0], body_b.min[1]), body_b.min];
             const result = sat(body_a.vertices, body_a.position, body_a.rotation, vertices, body_b.position, body_b.rotation);
 
-            if (result.collision && result.mtv) {
+            if (result) {
                 if (!body_a.is_static) {
-                    vec2_addmuls2(body_a.position, result.mtv, -result.overlap / 2.0);
+                    vec2_addmuls2(body_a.position, result.dir, -result.depth / 2.0);
                 }
 
                 if (!body_b.is_static) {
-                    vec2_addmuls2(body_b.position, result.mtv, result.overlap / 2.0);
+                    vec2_addmuls2(body_b.position, result.dir, result.depth / 2.0);
                 }
             }
         }
