@@ -1,5 +1,5 @@
-import {vec2_t} from "./type.ts";
-import {vec2, vec2_add2, vec2_addmuls1, vec2_copy, vec2_dir1, vec2_dist, vec2_dist_sq, vec2_divs1, vec2_rotate_origin1, vec2_rotate_origin2, vec2_sub1} from "./vec2.ts";
+import {TYPE, vec2_t} from "./type.ts";
+import {vec2, vec2_add2, vec2_addmuls1, vec2_copy, vec2_dir1, vec2_dist, vec2_dist_sq, vec2_divs1, vec2_dot, vec2_perp_ab1, vec2_rotate_origin1, vec2_rotate_origin2, vec2_sub1, vec2_unit, vec2_unit1, vec2_unit2} from "./vec2.ts";
 import {abs, clamp} from "./math.ts";
 
 // point inside
@@ -389,71 +389,93 @@ export function mtv_aabb2_aabb2(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t):
     }
 }
 
-function get_perpendicular_axis(p1: vec2_t, p2: vec2_t): vec2_t {
-    const edge = vec2(p2[0] - p1[0], p2[1] - p1[1]);
-    return vec2(-edge[1], edge[0]);
+export function compute_axes(points: vec2_t[]): vec2_t[] {
+    const l = points.length;
+    const axes = [];
+
+    for (let i = 0; i < l; i++) {
+        const curr = points[i];
+        const next = points[(i + 1) % l];
+        const axis = vec2_unit2(vec2_perp_ab1(curr, next));
+
+        axes.push(axis);
+    }
+
+    return axes;
 }
 
-function project_points(points: vec2_t[], axis: vec2_t): { min: number; max: number } {
+function project_points(points: vec2_t[], axis: vec2_t, pp: vec2_t, pa: number): {min: number; max: number} {
     let min = Infinity, max = -Infinity;
 
     for (const p of points) {
-        const projection = p[0] * axis[0] + p[1] * axis[1];
-        min = Math.min(min, projection);
-        max = Math.max(max, projection);
+        const transformed = vec2_add2(vec2_rotate_origin1(p, pa), pp);
+        const proj = vec2_dot(transformed, axis);
+
+        min = Math.min(min, proj);
+        max = Math.max(max, proj);
     }
 
-    return { min, max };
+    return {min, max};
 }
 
-function transform_polygon(points: vec2_t[], position: vec2_t, angle: number): vec2_t[] {
-    return points.map(p => {
-        const rotated = vec2_rotate_origin1(p, angle);
-        return vec2(rotated[0] + position[0], rotated[1] + position[1]);
-    });
-}
-
-export function sat(points_0: vec2_t[], pos_0: vec2_t, angle_0: number, points_1: vec2_t[], pos_1: vec2_t, angle_1: number): mtv_t|null {
+export function mtv_sat(
+    points0: vec2_t[], axes0: vec2_t[], pp0: vec2_t, pa0: number,
+    points1: vec2_t[], axes1: vec2_t[], pp1: vec2_t, pa1: number
+): mtv_t|null {
     let min_overlap = Infinity;
-    let smallest_axis: vec2_t | null = null;
+    let min_axis: vec2_t | null = null;
 
-    const transformed_0 = transform_polygon(points_0, pos_0, angle_0);
-    const transformed_1 = transform_polygon(points_1, pos_1, angle_1);
+    for (const axis of axes0) {
+        const raxis = vec2_rotate_origin1(axis, pa0);
+        const proj0 = project_points(points0, raxis, pp0, pa0);
+        const proj1 = project_points(points1, raxis, pp1, pa1);
 
-    function check_axes(points_a: vec2_t[]): boolean {
-        for (let i = 0; i < points_a.length; i++) {
-            const axis = get_perpendicular_axis(points_a[i], points_a[(i + 1) % points_a.length]);
-            const length = Math.hypot(axis[0], axis[1]);
-            const normalized_axis = vec2(axis[0] / length, axis[1] / length);
-
-            const proj_0 = project_points(transformed_0, normalized_axis);
-            const proj_1 = project_points(transformed_1, normalized_axis);
-
-            const overlap = Math.min(proj_0.max, proj_1.max) - Math.max(proj_0.min, proj_1.min);
-
-            if (overlap <= 0) return false;
-
-            if (overlap < min_overlap) {
-                min_overlap = overlap;
-                smallest_axis = normalized_axis;
-            }
+        if (proj0.max < proj1.min || proj1.max < proj0.min) {
+            return null;
         }
-        return true;
+
+        const overlap = Math.min(proj0.max, proj1.max) - Math.max(proj0.min, proj1.min);
+
+        if (overlap <= 0) {
+            return null;
+        }
+
+        if (overlap < min_overlap) {
+            min_overlap = overlap;
+            min_axis = raxis;
+        }
     }
 
-    if (!check_axes(transformed_0) || !check_axes(transformed_1)) {
-        return null;
+    for (const axis of axes1) {
+        const raxis = vec2_rotate_origin1(axis, pa1);
+        const proj0 = project_points(points0, raxis, pp0, pa0);
+        const proj1 = project_points(points1, raxis, pp1, pa1);
+
+        if (proj0.max < proj1.min || proj1.max < proj0.min) {
+            return null;
+        }
+
+        const overlap = Math.min(proj0.max, proj1.max) - Math.max(proj0.min, proj1.min);
+
+        if (overlap <= 0) {
+            return null;
+        }
+
+        if (overlap < min_overlap) {
+            min_overlap = overlap;
+            min_axis = raxis;
+        }
     }
 
-    if (smallest_axis) {
-        const direction = vec2_sub1(pos_1, pos_0);
+    if (min_axis) {
+        const direction = vec2_sub1(pp1, pp0);
 
-        if (direction[0] * smallest_axis[0] + direction[1] * smallest_axis[1] < 0) {
-            smallest_axis = vec2(-smallest_axis[0], -smallest_axis[1]);
+        if (direction[0] * min_axis[0] + direction[1] * min_axis[1] < 0) {
+            min_axis = vec2(-min_axis[0], -min_axis[1]);
         }
 
         return {
-            dir: vec2(smallest_axis[0], smallest_axis[1]),
+            dir: vec2(min_axis[0], min_axis[1]),
             depth: min_overlap
         };
     }

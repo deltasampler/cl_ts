@@ -2,7 +2,7 @@ import {vec2_t} from "./type.ts";
 import {vec2, vec2_add1, vec2_add2, vec2_addmuls2, vec2_copy, vec2_dir1, vec2_dist, vec2_dist_sq, vec2_divs1, vec2_divs2, vec2_muls1} from "./vec2.ts";
 import {vec2_len_sq} from "@cl/vec2.ts";
 import {hypot, sqrt} from "@cl/math.ts";
-import {closest_point_convex2, closest_point_obb, point_inside_convex2, point_inside_obb, sat} from "./collision2.ts";
+import {closest_point_convex2, closest_point_obb, point_inside_convex2, point_inside_obb, mtv_sat, compute_axes} from "./collision2.ts";
 
 export function center_vertices(vertices: vec2_t[]): vec2_t[] {
     let cx = 0.0, cy = 0.0, area = 0.0;
@@ -266,7 +266,9 @@ export function narrow_phase(pairs: pair_t[]): void {
         if (body_a.type === BODY_TYPE.BOX && body_b.type === BODY_TYPE.BOX) {
             const vertices1 = [vec2(body_a.min[0], body_a.max[1]), body_a.max, vec2(body_a.max[0], body_a.min[1]), body_a.min];
             const vertices2 = [vec2(body_b.min[0], body_b.max[1]), body_b.max, vec2(body_b.max[0], body_b.min[1]), body_b.min];
-            const result = sat(vertices1, body_a.position, body_a.rotation, vertices2, body_b.position, body_b.rotation);
+            const axes1 = compute_axes(vertices1);
+            const axes2 = compute_axes(vertices2);
+            const result = mtv_sat(vertices1, axes1, body_a.position, body_a.rotation, vertices2, axes2, body_b.position, body_b.rotation);
 
             if (result) {
                 if (!body_a.is_static) {
@@ -280,7 +282,9 @@ export function narrow_phase(pairs: pair_t[]): void {
         }
 
         if (body_a.type === BODY_TYPE.POLYGON && body_b.type === BODY_TYPE.POLYGON) {
-            const result = sat(body_a.vertices, body_a.position, body_a.rotation, body_b.vertices, body_b.position, body_b.rotation);
+            const axes1 = compute_axes(body_a.vertices);
+            const axes2 = compute_axes(body_b.vertices);
+            const result = mtv_sat(body_a.vertices, axes1, body_a.position, body_a.rotation, body_b.vertices, axes2, body_b.position, body_b.rotation);
 
             if (result) {
                 if (!body_a.is_static) {
@@ -295,7 +299,9 @@ export function narrow_phase(pairs: pair_t[]): void {
 
         if (body_a.type === BODY_TYPE.POLYGON && body_b.type === BODY_TYPE.BOX) {
             const vertices = [vec2(body_b.min[0], body_b.max[1]), body_b.max, vec2(body_b.max[0], body_b.min[1]), body_b.min];
-            const result = sat(body_a.vertices, body_a.position, body_a.rotation, vertices, body_b.position, body_b.rotation);
+            const axes1 = compute_axes(body_a.vertices);
+            const axes2 = compute_axes(vertices);
+            const result = mtv_sat(body_a.vertices, axes1, body_a.position, body_a.rotation, vertices, axes2, body_b.position, body_b.rotation);
 
             if (result) {
                 if (!body_a.is_static) {

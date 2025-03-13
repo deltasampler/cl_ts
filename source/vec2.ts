@@ -406,6 +406,28 @@ export function vec2_rotate2(v: vec2_t, c: vec2_t, a: number): vec2_t {
 }
 
 // geometric
+export function vec2_perp(v: vec2_t, out: vec2_t): vec2_t {
+    out[0] = -v[1];
+    out[1] = v[0];
+
+    return out;
+}
+
+export function vec2_perp1(v: vec2_t): vec2_t {
+    return vec2_perp(v, new TYPE(2));
+}
+
+export function vec2_perp_ab(a: vec2_t, b: vec2_t, out: vec2_t): vec2_t {
+    out[0] = -(b[1] - a[1])
+    out[1] = b[0] - a[0];
+
+    return out;
+}
+
+export function vec2_perp_ab1(a: vec2_t, b: vec2_t): vec2_t {
+    return vec2_perp_ab(a, b, new TYPE(2));
+}
+
 export function vec2_refl(v: vec2_t, n: vec2_t, out: vec2_t): vec2_t {
     const l = vec2_dot(n, v) * 2.0;
 
