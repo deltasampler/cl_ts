@@ -73,7 +73,7 @@ export function cam3_roll(camera: cam3_t, dir: number) {
     camera.roll += camera.roll_speed * dir;
 }
 
-export function cam3_update(camera: cam3_t) {
+export function cam3_fru(camera: cam3_t) {
     camera.forward = vec3_unit2(vec3(
         sin(rad(camera.yaw)) * cos(rad(camera.pitch)),
         sin(rad(camera.pitch)),

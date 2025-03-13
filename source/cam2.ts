@@ -48,14 +48,14 @@ export function cam2_roll(camera: cam2_t, dir: number) {
 
 export function cam2_compute_proj(camera: cam2_t, viewport_x: number, viewport_y: number): mat4_t {
     mat4_ident(camera.projection);
-    mat4_scale(camera.projection, vec3(camera.scale / viewport_x, camera.scale / viewport_y, 1.0));
+    mat4_scale(camera.projection, vec3(camera.scale / viewport_x, camera.scale / viewport_y, 1.0), camera.projection);
 
     return camera.projection;
 }
 
 export function cam2_compute_view(camera: cam2_t): mat4_t {
     mat4_ident(camera.view);
-    mat4_translate(camera.view, vec3(-camera.position[0], -camera.position[1], 0.0));
+    mat4_translate(camera.view, vec3(-camera.position[0], -camera.position[1], 0.0), camera.view);
 
     return camera.view;
 }
