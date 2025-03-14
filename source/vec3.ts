@@ -98,6 +98,14 @@ export function hex(h: number): vec3_t {
     return out;
 }
 
+export function vec3_pack256(r: number, g: number, b: number): number {
+    return r + g * 256 + b * 65536;
+}
+
+export function vec3_pack256v(v: vec3_t): number {
+    return v[0] + v[1] * 256 + v[2] * 65536;
+}
+
 // unary
 export function vec3_neg(v: vec3_t): vec3_t {
     v[0] = -v[0];
