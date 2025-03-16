@@ -98,6 +98,14 @@ export function hex(h: number): vec3_t {
     return out;
 }
 
+export function vec3_bitpack256(r: number, g: number, b: number): number {
+    return ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | (b & 0xFF);
+}
+
+export function vec3_bitpack256v(v: vec3_t): number {
+    return ((v[0] & 0xFF) << 16) | ((v[1] & 0xFF) << 8) | (v[2] & 0xFF);
+}
+
 export function vec3_pack256(r: number, g: number, b: number): number {
     return r + g * 256 + b * 65536;
 }
