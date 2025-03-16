@@ -391,7 +391,7 @@ export function mtv_aabb2_aabb2(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t):
 
 export function compute_axes(points: vec2_t[]): vec2_t[] {
     const l = points.length;
-    const axes = [];
+    const axes: vec2_t[] = [];
 
     for (let i = 0; i < l; i++) {
         const curr = points[i];
