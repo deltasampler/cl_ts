@@ -1,81 +1,71 @@
+import {exp, rad} from "./math.ts";
 import {vec2_t} from "@cl/type.ts";
 import {vec2, vec2_addmuls1, vec2_clone, vec2_copy} from "@cl/vec2.ts";
-import {rad} from "./math.ts";
 
-enum LSYS_ACTION_TYPE {
-    FORWARD,
-    ROTATE_CCW,
-    ROTATE_CW,
-    STACK_PUSH,
-    STACK_POP,
-    RULE,
-    CALLBACK
+export enum CHANGER_TYPE {
+    NONE,
+    LINEAR,
+    QUADRATIC,
+    CUBIC,
+    EXPONENTIAL,
+    LOGARITHMIC
 };
 
-export class lsys_action_t {
-    type: LSYS_ACTION_TYPE;
-    ref: string;
-    actions: lsys_action_t[];
+export class changer_t {
+    type: CHANGER_TYPE;
+    dir: number;
+    param: number;
 };
 
-export function lsys_action_new(type: LSYS_ACTION_TYPE, ref = "") {
-    const action = new lsys_action_t();
-    action.type = type;
-    action.ref = ref;
-    action.actions = [];
+export function changer_new(type: CHANGER_TYPE, param: number): changer_t {
+    const changer = new changer_t();
+    changer.type = type;
+    changer.param = param;
 
-    return action;
+    return changer;
 }
 
-export type lsys_callback_t = (p0: vec2_t, w0: number, p1: vec2_t, w1: number, n: number) => void;
+export function changer_none(): changer_t {
+    return changer_new(CHANGER_TYPE.NONE, 0);
+}
 
-export type change_callback_t = (v: number, n: number, d: number) => number;
-
-export function change_exp(r: number): change_callback_t {
-    return function(v: number, n: number, d: number) {
-        return v * Math.pow(r, n);
+export function changer_calc(changer: changer_t, value: number): number {
+    if (changer.type === CHANGER_TYPE.LINEAR) {
+        return value + changer.param;
     }
+
+    return value;
 }
 
-export function change_exp1(r: number): change_callback_t {
-    return function(v: number, n: number, d: number) {
-        return v * r;
-    }
-}
-
-export function change_deg(a: number): change_callback_t {
-    return function(v: number, n: number, d: number) {
-        return v + a * d;
-    }
-}
+export type lsys_callback_t = (p0: vec2_t, w0: number, p1: vec2_t, w1: number) => void;
 
 export class lsys_t {
-    start_position: vec2_t;
-    start_angle: number;
-    start_width: number;
-    start_length: number;
-
-    change_angle: change_callback_t;
-    on_forward: lsys_callback_t;
-    change_width: change_callback_t;
-    change_length: change_callback_t;
-
-    rules: {[key: string]: lsys_action_t};
-    callbacks: {[key: string]: lsys_callback_t};
+    position: vec2_t;
+    angle: number;
+    width: number;
+    length: number;
+    delta_angle: number;
+    delta_width: number;
+    delta_length: number;
+    changer_width: changer_t;
+    changer_length: changer_t;
+    rules: {[key: string]: string};
+    forward_callback: lsys_callback_t;
 };
 
-export function lsys_new(start_position: vec2_t, start_angle: number, start_width: number, start_length: number): lsys_t {
+export function lsys_new(position: vec2_t, angle: number, width: number, length: number): lsys_t {
     const lsys = new lsys_t();
-    lsys.start_position = start_position;
-    lsys.start_angle = start_angle;
-    lsys.start_width = start_width;
-    lsys.start_length = start_length;
-    lsys.change_length = change_exp(0.98);
-    lsys.change_width = change_exp(0.9);
-    lsys.change_angle = change_deg(20.0);
-    lsys.on_forward = () => {};
+    lsys.position = position;
+    lsys.angle = angle;
+    lsys.width = width;
+    lsys.length = length;
+    lsys.delta_angle = 90.0;
+    lsys.delta_width = 0.0;
+    lsys.delta_length = 0.0;
+    lsys.changer_width = changer_none();
+    lsys.changer_length = changer_none();
     lsys.rules = {};
-    lsys.callbacks = {};
+    lsys.forward_callback = () => {};
 
     return lsys;
 }
@@ -97,133 +87,131 @@ export function lsys_state_new(position: vec2_t, angle: number, width: number, l
     return state;
 }
 
-export function lsys_parse(input: string): lsys_action_t[] {
-    const actions: lsys_action_t[] = [];
-    let expect_rule = false;
-    let expect_callback = false;
+export class lsys_action_t {
+    value: string;
+    prev: lsys_action_t|null;
+    next: lsys_action_t|null;
+};
 
-    for (let i = 0; i < input.length; i += 1) {
+export function lsys_action_new(value: string): lsys_action_t {
+    const action = new lsys_action_t();
+    action.value = value;
+    action.prev = null;
+    action.next = null;
+
+    return action;
+};
+
+export function lsys_add_rule(lsys: lsys_t, key: string, value: string) {
+    lsys.rules[key] = value;
+}
+
+export function lsys_clear_rules(lsys: lsys_t) {
+    lsys.rules = {};
+}
+
+export function lsys_parse(lsys: lsys_t, input: string): [lsys_action_t, lsys_action_t] {
+    const first = lsys_action_new(input[0]);
+    let last = first;
+
+    for (let i = 1; i < input.length; i += 1) {
         const c = input[i];
 
-        switch (c) {
-            case "F":
-                actions.push(lsys_action_new(LSYS_ACTION_TYPE.FORWARD));
+        const action = lsys_action_new(c);
+        action.prev = last;
+        last.next = action;
 
-                break;
-            case "-":
-                actions.push(lsys_action_new(LSYS_ACTION_TYPE.ROTATE_CCW));
+        last = action;
+    }
 
-                break;
-            case "+":
-                actions.push(lsys_action_new(LSYS_ACTION_TYPE.ROTATE_CW));
+    return [first, last];
+}
 
-                break;
-            case "[":
-                actions.push(lsys_action_new(LSYS_ACTION_TYPE.STACK_PUSH));
+export function lsys_expand(lsys: lsys_t, action: lsys_action_t): void {
+    let curr: lsys_action_t|null = action;
 
-                break;
-            case "]":
-                actions.push(lsys_action_new(LSYS_ACTION_TYPE.STACK_POP));
+    while (curr) {
+        const rule = lsys.rules[curr.value];
 
-                break;
-            case "?":
-                expect_rule = true;
+        if (rule) {
+            const [first, last] = lsys_parse(lsys, rule);
 
-                break;
-            case "!":
-                expect_callback = true;
+            if (curr.prev) {
+                curr.prev.next = first;
+            }
 
-                break;
-            default:
-                if (expect_rule) {
-                    expect_rule = false;
-                    actions.push(lsys_action_new(LSYS_ACTION_TYPE.RULE, c));
-                } else if (expect_callback) {
-                    expect_callback = false;
-                    actions.push(lsys_action_new(LSYS_ACTION_TYPE.CALLBACK, c));
-                }
+            if (curr.next) {
+                last.next = curr.next;
+                curr.next.prev = last;
+            }
 
-                break;
+            first.prev = curr.prev;
+
+            if (curr === action) {
+                action = first;
+            }
         }
+
+        curr = curr.next;
+    }
+}
+
+export function lsys_gen(lsys: lsys_t, input: string, limit: number) {
+    const [first] = lsys_parse(lsys, input);
+
+    for (let i = 0; i < limit; i += 1) {
+        lsys_expand(lsys, first);
     }
 
-    return actions;
-}
+    const stack: lsys_state_t[] = [];
+    let state = lsys_state_new(lsys.position, lsys.angle, lsys.width, lsys.length);
+    let curr: lsys_action_t|null = first;
 
-export function lsys_add_rule(sys: lsys_t, key: string, input: string): void {
-    const rule = lsys_action_new(LSYS_ACTION_TYPE.RULE);
-    rule.actions = lsys_parse(input);
+    while (curr) {
+        const c = curr.value;
 
-    sys.rules[key] = rule;
-}
+        switch (c) {
+            case "f":
+            case "F":
+                const direction = vec2(Math.cos(rad(state.angle)), Math.sin(rad(state.angle)));
 
-export function lsys_add_callback(sys: lsys_t, key: string, callback: lsys_callback_t): void {
-    sys.callbacks[key] = callback;
-}
+                const next_position = vec2_addmuls1(state.position, direction, state.length);
+                const next_width = changer_calc(lsys.changer_width, state.width);
+                const next_length =  changer_calc(lsys.changer_length, state.length);
 
-function lsys_rec(sys: lsys_t, actions: lsys_action_t[], stack: lsys_state_t[], state: lsys_state_t, limit: number) {
-    if (limit <= 0) {
-        return;
-    }
-
-    for (const action of actions) {
-        switch (action.type) {
-            case LSYS_ACTION_TYPE.FORWARD:
-                const dir = vec2(Math.cos(rad(state.angle)), Math.sin(rad(state.angle)));
-                const next_position = vec2_addmuls1(state.position, dir, state.length);
-                const next_width = sys.change_width(state.width, limit, 0);
-                const next_length = sys.change_length(state.length, limit, 0);
-
-                sys.on_forward(vec2_clone(state.position), state.width, next_position, next_width, limit);
+                if (c === "F") {
+                    lsys.forward_callback(vec2_clone(state.position), state.width, vec2_clone(next_position), next_width);
+                }
 
                 vec2_copy(state.position, next_position);
                 state.width = next_width;
                 state.length = next_length;
 
                 break;
-            case LSYS_ACTION_TYPE.ROTATE_CCW:
-                state.angle = sys.change_angle(state.angle, limit, 1);
+            case "-":
+                state.angle += lsys.delta_angle;
 
                 break;
-            case LSYS_ACTION_TYPE.ROTATE_CW:
-                state.angle = sys.change_angle(state.angle, limit, -1);
+            case "+":
+                state.angle -= lsys.delta_angle;
 
                 break;
-            case LSYS_ACTION_TYPE.STACK_PUSH:
+            case "[":
                 stack.push(lsys_state_new(state.position, state.angle, state.width, state.length));
 
                 break;
-            case LSYS_ACTION_TYPE.STACK_POP:
-                const temp = stack.pop();
+            case "]":
+                const stack_state = stack.pop();
 
-                if (temp) {
-                    state = temp;
+                if (stack_state) {
+                    state = stack_state;
                 }
 
                 break;
-            case LSYS_ACTION_TYPE.RULE:
-                const rule = sys.rules[action.ref];
-
-                if (rule) {
-                    lsys_rec(sys, rule.actions, stack, state, limit - 1);
-                }
-
-                break;
-            case LSYS_ACTION_TYPE.CALLBACK:
-                const callback = sys.callbacks[action.ref];
-
-                if (callback) {
-                    callback(vec2_clone(state.position), state.width, vec2_clone(state.position), state.width, limit);
-                }
-
+            default:
                 break;
         }
+
+        curr = curr.next;
     }
 }
-
-export function lsys_gen(sys: lsys_t, input: string, limit: number): void {
-    const actions = lsys_parse(input);
-    const state = lsys_state_new(sys.start_position, sys.start_angle, sys.start_width, sys.start_length);
-
-    lsys_rec(sys, actions, [], state, limit);
-};
