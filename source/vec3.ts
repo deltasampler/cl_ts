@@ -42,6 +42,16 @@ export function vec3_xyz(x: number, y: number, z: number): vec3_t {
     return out;
 }
 
+export function vec3_v2w(v2: vec3_t, z: number): vec3_t {
+    const out = new TYPE(4);
+
+    out[0] = v2[0];
+    out[1] = v2[1];
+    out[2] = z;
+
+    return out;
+}
+
 export function vec3_clone(v: vec3_t): vec3_t {
     const out = new TYPE(3);
 

@@ -21,6 +21,20 @@ export function point_inside_obb(bp: vec2_t, bs: vec2_t, ba: number, p: vec2_t):
     return Math.abs(lp[0]) <= sx && Math.abs(lp[1]) <= sy;
 }
 
+export function sign(p0: vec2_t, p1: vec2_t, p2: vec2_t): number {
+    return (p0[0] - p2[0]) * (p1[1] - p2[1]) - (p1[0] - p2[0]) * (p0[1] - p2[1]);
+}
+
+export function point_inside_triangle(a: vec2_t, b: vec2_t, c: vec2_t, p: vec2_t): boolean {
+    const d0 = sign(p, a, b);
+    const d1 = sign(p, b, c);
+    const d2 = sign(p, c, a);
+    const has_neg = (d0 < 0) || (d1 < 0) || (d2 < 0);
+    const has_pos = (d0 > 0) || (d1 > 0) || (d2 > 0);
+
+    return !(has_neg && has_pos);
+}
+
 export function point_inside_convex(points: vec2_t[], p: vec2_t): boolean {
     const l = points.length;
     const px = p[0], py = p[1];
