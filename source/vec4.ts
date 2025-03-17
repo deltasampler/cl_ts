@@ -1,4 +1,4 @@
-import {EPSILON, exp} from "./math.ts";
+import {EPSILON} from "./math.ts";
 import {TYPE, mat4_t, vec3_t, vec4_t} from "./type.ts";
 
 // creation

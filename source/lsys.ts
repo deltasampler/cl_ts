@@ -1,14 +1,12 @@
-import {exp, rad} from "./math.ts";
+import {rad} from "./math.ts";
 import {vec2_t} from "@cl/type.ts";
 import {vec2, vec2_addmuls1, vec2_clone, vec2_copy} from "@cl/vec2.ts";
 
 export enum CHANGER_TYPE {
     NONE,
     LINEAR,
-    QUADRATIC,
-    CUBIC,
-    EXPONENTIAL,
-    LOGARITHMIC
+    GEOMETRIC,
+    EXPONENTIAL
 };
 
 export class changer_t {
@@ -32,6 +30,10 @@ export function changer_none(): changer_t {
 export function changer_calc(changer: changer_t, value: number): number {
     if (changer.type === CHANGER_TYPE.LINEAR) {
         return value + changer.param;
+    } else if (changer.type === CHANGER_TYPE.GEOMETRIC) {
+        return value * changer.param;
+    } else if (changer.type === CHANGER_TYPE.EXPONENTIAL) {
+        return Math.pow(value, changer.param);
     }
 
     return value;
@@ -45,12 +47,10 @@ export class lsys_t {
     width: number;
     length: number;
     delta_angle: number;
-    delta_width: number;
-    delta_length: number;
     changer_width: changer_t;
     changer_length: changer_t;
     rules: {[key: string]: string};
-    forward_callback: lsys_callback_t;
+    callbacks: {[key: string]: lsys_callback_t};
 };
 
 export function lsys_new(position: vec2_t, angle: number, width: number, length: number): lsys_t {
@@ -60,12 +60,10 @@ export function lsys_new(position: vec2_t, angle: number, width: number, length:
     lsys.width = width;
     lsys.length = length;
     lsys.delta_angle = 90.0;
-    lsys.delta_width = 0.0;
-    lsys.delta_length = 0.0;
     lsys.changer_width = changer_none();
     lsys.changer_length = changer_none();
     lsys.rules = {};
-    lsys.forward_callback = () => {};
+    lsys.callbacks = {};
 
     return lsys;
 }
@@ -104,6 +102,10 @@ export function lsys_action_new(value: string): lsys_action_t {
 
 export function lsys_add_rule(lsys: lsys_t, key: string, value: string) {
     lsys.rules[key] = value;
+}
+
+export function lsys_add_callback(lsys: lsys_t, key: string, callback: lsys_callback_t) {
+    lsys.callbacks[key] = callback;
 }
 
 export function lsys_clear_rules(lsys: lsys_t) {
@@ -166,6 +168,8 @@ export function lsys_gen(lsys: lsys_t, input: string, limit: number) {
     const stack: lsys_state_t[] = [];
     let state = lsys_state_new(lsys.position, lsys.angle, lsys.width, lsys.length);
     let curr: lsys_action_t|null = first;
+    let prev_pos = vec2_clone(state.position);
+    let prev_width = state.width;
 
     while (curr) {
         const c = curr.value;
@@ -177,12 +181,16 @@ export function lsys_gen(lsys: lsys_t, input: string, limit: number) {
 
                 const next_position = vec2_addmuls1(state.position, direction, state.length);
                 const next_width = changer_calc(lsys.changer_width, state.width);
-                const next_length =  changer_calc(lsys.changer_length, state.length);
+                const next_length = changer_calc(lsys.changer_length, state.length);
 
-                if (c === "F") {
-                    lsys.forward_callback(vec2_clone(state.position), state.width, vec2_clone(next_position), next_width);
+                const callback = lsys.callbacks[c];
+
+                if (callback) {
+                    callback(vec2_clone(state.position), state.width, vec2_clone(next_position), next_width);
                 }
 
+                vec2_copy(prev_pos, state.position);
+                prev_width = state.width;
                 vec2_copy(state.position, next_position);
                 state.width = next_width;
                 state.length = next_length;
@@ -209,6 +217,14 @@ export function lsys_gen(lsys: lsys_t, input: string, limit: number) {
 
                 break;
             default:
+                {
+                    const callback = lsys.callbacks[c];
+
+                    if (callback) {
+                        callback(prev_pos, prev_width, state.position, state.width);
+                    }
+                }
+
                 break;
         }
 
