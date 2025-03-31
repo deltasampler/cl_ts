@@ -15,6 +15,7 @@ export class cam2_t {
     view: mat4_t;
     movement_speed: number;
     roll_speed: number;
+    zoom_speed: number;
 };
 
 export function cam2_new() {
@@ -30,6 +31,7 @@ export function cam2_new() {
     cam.roll = 0.0;
     cam.movement_speed = 0.1;
     cam.roll_speed = 0.1;
+    cam.zoom_speed = 0.1;
 
     return cam;
 }
