@@ -62,11 +62,11 @@ export function cam2_compute_view(camera: cam2_t): mat4_t {
     return camera.view;
 }
 
-export function cam2_proj_mouse(camera: cam2_t, mx: number, my: number, width: number, height: number): vec2_t {
-    const x = mx / width * 2.0 - 1.0;
-    const y = my / height * -2.0 + 1.0;
-    const w = width / camera.scale;
-    const h = height / camera.scale;
+export function cam2_proj_mouse(camera: cam2_t, mouse: vec2_t, viewport_x: number, viewport_y: number): vec2_t {
+    const x = mouse[0] / viewport_x * 2.0 - 1.0;
+    const y = mouse[1] / viewport_y * -2.0 + 1.0;
+    const w = viewport_x / camera.scale;
+    const h = viewport_y / camera.scale;
 
     return vec2(camera.position[0] + x * w, camera.position[1] + y * h);
 }

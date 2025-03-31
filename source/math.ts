@@ -78,6 +78,12 @@ export const ceil = Math.ceil;
 
 export const round = Math.round;
 
+export function round2(x: number, precision: number) {
+    const factor = Math.pow(10.0, precision);
+
+    return Math.round(x * factor) / factor;
+}
+
 export const trunc = Math.trunc;
 
 export const min = Math.min;

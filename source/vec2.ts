@@ -1,4 +1,4 @@
-import {EPSILON} from "./math.ts";
+import {EPSILON, round2} from "./math.ts";
 import {TYPE, mat2_t, mat2x3_t, mat3_t, mat4_t, vec2_t} from "./type.ts";
 
 // creation
@@ -627,7 +627,7 @@ export function vec2_equals(a: vec2_t, b: vec2_t, e: number = EPSILON): boolean 
 
 // string
 export function vec2_str(v: vec2_t): string {
-    return `vec2(${v[0]}, ${v[1]})`;
+    return `vec2(${round2(v[0], 6)}, ${round2(v[1], 6)})`;
 }
 
 export function vec2_print(v: vec2_t): void {
