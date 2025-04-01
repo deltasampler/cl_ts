@@ -1,26 +1,26 @@
 import {vec3_t} from "./type.ts";
 
-export class he_halfedge_t {
-    twin: he_halfedge_t;
-    prev: he_halfedge_t;
-    next: he_halfedge_t;
-    vertex: he_vertex_t;
-    face: he_face_t|null;
+export class halfedge_t {
+    twin: halfedge_t;
+    prev: halfedge_t;
+    next: halfedge_t;
+    vertex: vertex_t;
+    face: face_t|null;
 
-    constructor(vertex: he_vertex_t) {
+    constructor(vertex: vertex_t) {
         this.vertex = vertex;
     }
 };
 
-export class he_vertex_t {
-    halfedge: he_halfedge_t|null;
+export class vertex_t {
+    halfedge: halfedge_t|null;
     position: vec3_t;
 };
 
-export class he_face_t {
-    halfedge: he_halfedge_t;
+export class face_t {
+    halfedge: halfedge_t;
 
-    constructor(halfedge: he_halfedge_t) {
+    constructor(halfedge: halfedge_t) {
         this.halfedge = halfedge;
     }
 };

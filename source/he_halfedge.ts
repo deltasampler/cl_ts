@@ -1,15 +1,15 @@
-import {he_halfedge_t} from "./he_type.ts";
+import {halfedge_t} from "./he_type.ts";
 
-export function he_halfedge_is_free(halfedge: he_halfedge_t): boolean {
+export function halfedge_is_free(halfedge: halfedge_t): boolean {
     return halfedge.face === null;
 }
 
-export function he_halfedge_is_boundary(halfedge: he_halfedge_t): boolean {
+export function halfedge_is_boundary(halfedge: halfedge_t): boolean {
     return halfedge.face === null && halfedge.twin.face !== null;
 }
 
-export function *he_halfedge_next_loop(start: he_halfedge_t) {
-    let curr: he_halfedge_t = start;
+export function *halfedge_next_loop(start: halfedge_t) {
+    let curr: halfedge_t = start;
 
     do {
         yield curr;
@@ -20,8 +20,8 @@ export function *he_halfedge_next_loop(start: he_halfedge_t) {
     return null;
 }
 
-export function *he_halfedge_prev_loop(start: he_halfedge_t) {
-    let curr: he_halfedge_t = start;
+export function *halfedge_prev_loop(start: halfedge_t) {
+    let curr: halfedge_t = start;
 
     do {
         yield curr;
