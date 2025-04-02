@@ -1,5 +1,5 @@
-import {TYPE, vec2_t} from "./type.ts";
-import {vec2, vec2_add2, vec2_addmuls1, vec2_copy, vec2_dir1, vec2_dist, vec2_dist_sq, vec2_divs1, vec2_dot, vec2_perp_ab1, vec2_rotate_origin1, vec2_rotate_origin2, vec2_sub1, vec2_unit, vec2_unit1, vec2_unit2} from "./vec2.ts";
+import {vec2_t} from "./type.ts";
+import {vec2, vec2_add2, vec2_addmuls1, vec2_clamp, vec2_clone, vec2_copy, vec2_dir1, vec2_dist, vec2_dist_sq, vec2_divs1, vec2_dot, vec2_perp_ab1, vec2_rotate_origin1, vec2_rotate_origin2, vec2_sub1, vec2_unit2} from "./vec2.ts";
 import {abs, clamp} from "./math.ts";
 
 // point inside
@@ -9,6 +9,20 @@ export function point_inside_circle(cp: vec2_t, cr: number, p: vec2_t): boolean 
 
 export function point_inside_aabb(bp: vec2_t, bs: vec2_t, p: vec2_t): boolean {
     const sx = bs[0] / 2.0, sy = bs[1] / 2.0;
+    const px = p[0] - bp[0], py = p[1] - bp[1];
+
+    return abs(px) <= sx && abs(py) <= sy;
+}
+
+export function point_inside_raabb(bp: vec2_t, bs: vec2_t, br: number, p: vec2_t): boolean {
+    let sx = bs[0] / 2.0, sy = bs[1] / 2.0;
+
+    if ((br / 90) % 2 != 0) {
+        const temp = sx;
+        sx = sy;
+        sy = temp;
+    }
+
     const px = p[0] - bp[0], py = p[1] - bp[1];
 
     return abs(px) <= sx && abs(py) <= sy;
@@ -195,6 +209,33 @@ export function overlap_aabb2_aabb2_y(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: ve
     return t1 > b2 && b1 < t2;
 }
 
+export function overlap_raabb2_raabb2(ap: vec2_t, as: vec2_t, ar: number, bp: vec2_t, bs: vec2_t, br: number): boolean {
+    const hs1 = vec2_divs1(as, 2.0);
+    const hs2 = vec2_divs1(bs, 2.0);
+
+    if ((ar / 90) % 2 != 0) {
+        const temp = hs1[0];
+        hs1[0] = hs1[1];
+        hs1[1] = temp;
+    }
+
+    if ((br / 90) % 2 != 0) {
+        const temp = hs2[0];
+        hs2[0] = hs2[1];
+        hs2[1] = temp;
+    }
+
+    const l1 = ap[0] - hs1[0];
+    const r1 = ap[0] + hs1[0];
+    const b1 = ap[1] - hs1[1];
+    const t1 = ap[1] + hs1[1];
+    const l2 = bp[0] - hs2[0];
+    const r2 = bp[0] + hs2[0];
+    const b2 = bp[1] - hs2[1];
+    const t2 = bp[1] + hs2[1];
+
+    return l1 < r2 && r1 > l2 && t1 > b2 && b1 < t2;
+}
 
 // line intersect
 export function line_intersect_circle(cp: vec2_t, cr: number, a: vec2_t, b: vec2_t): vec2_t[] {
@@ -401,6 +442,25 @@ export function mtv_aabb2_aabb2(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t):
             depth: overlap_y
         };
     }
+}
+
+export function mtv_raabb2_raabb2(ap: vec2_t, as: vec2_t, ar: number, bp: vec2_t, bs: vec2_t, br: number): mtv_t|null {
+    const hs1 = vec2_clone(as);
+    const hs2 = vec2_clone(bs);
+
+    if ((ar / 90) % 2 != 0) {
+        const temp = hs1[0];
+        hs1[0] = hs1[1];
+        hs1[1] = temp;
+    }
+
+    if ((br / 90) % 2 != 0) {
+        const temp = hs2[0];
+        hs2[0] = hs2[1];
+        hs2[1] = temp;
+    }
+
+    return mtv_aabb2_aabb2(ap, hs1, bp, hs2);
 }
 
 export function compute_axes(points: vec2_t[]): vec2_t[] {
