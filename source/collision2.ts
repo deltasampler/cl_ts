@@ -1,5 +1,5 @@
 import {vec2_t} from "./type.ts";
-import {vec2, vec2_add2, vec2_addmuls1, vec2_clamp, vec2_clone, vec2_copy, vec2_dir1, vec2_dist, vec2_dist_sq, vec2_divs1, vec2_dot, vec2_perp_ab1, vec2_rotate_origin1, vec2_rotate_origin2, vec2_sub1, vec2_unit2} from "./vec2.ts";
+import {vec2, vec2_add2, vec2_addmuls1, vec2_clone, vec2_copy, vec2_dir1, vec2_dist, vec2_dist_sq, vec2_divs1, vec2_dot, vec2_perp_ab1, vec2_rotate_origin1, vec2_rotate_origin2, vec2_sub1, vec2_swap, vec2_unit2} from "./vec2.ts";
 import {abs, clamp} from "./math.ts";
 
 // point inside
@@ -14,10 +14,10 @@ export function point_inside_aabb(bp: vec2_t, bs: vec2_t, p: vec2_t): boolean {
     return abs(px) <= sx && abs(py) <= sy;
 }
 
-export function point_inside_raabb(bp: vec2_t, bs: vec2_t, br: number, p: vec2_t): boolean {
+export function point_inside_raabb(bp: vec2_t, bs: vec2_t, bf: boolean, p: vec2_t): boolean {
     let sx = bs[0] / 2.0, sy = bs[1] / 2.0;
 
-    if ((br / 90) % 2 != 0) {
+    if (bf) {
         const temp = sx;
         sx = sy;
         sy = temp;
@@ -172,7 +172,7 @@ export function overlap_circle_circle(p0: vec2_t, r0: number, p1: vec2_t, r1: nu
     return vec2_dist_sq(p0, p1) <= (r0 + r1) * (r0 + r1);
 }
 
-export function overlap_aabb2_aabb2(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): boolean {
+export function overlap_aabb_aabb2(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): boolean {
     const hs1 = vec2_divs1(as, 2.0);
     const hs2 = vec2_divs1(bs, 2.0);
     const l1 = ap[0] - hs1[0];
@@ -187,7 +187,7 @@ export function overlap_aabb2_aabb2(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2
     return l1 < r2 && r1 > l2 && t1 > b2 && b1 < t2;
 }
 
-export function overlap_aabb2_aabb2_x(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): boolean {
+export function overlap_aabb_aabb2_x(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): boolean {
     const hs1 = vec2_divs1(as, 2.0);
     const hs2 = vec2_divs1(bs, 2.0);
     const l1 = ap[0] - hs1[0];
@@ -198,7 +198,7 @@ export function overlap_aabb2_aabb2_x(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: ve
     return l1 < r2 && r1 > l2;
 }
 
-export function overlap_aabb2_aabb2_y(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): boolean {
+export function overlap_aabb_aabb2_y(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): boolean {
     const hs1 = vec2_divs1(as, 2.0);
     const hs2 = vec2_divs1(bs, 2.0);
     const b1 = ap[1] - hs1[1];
@@ -209,32 +209,25 @@ export function overlap_aabb2_aabb2_y(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: ve
     return t1 > b2 && b1 < t2;
 }
 
-export function overlap_raabb2_raabb2(ap: vec2_t, as: vec2_t, ar: number, bp: vec2_t, bs: vec2_t, br: number): boolean {
-    const hs1 = vec2_divs1(as, 2.0);
-    const hs2 = vec2_divs1(bs, 2.0);
+export function overlap_raabb_raabb2(ap: vec2_t, as: vec2_t, af: boolean, bp: vec2_t, bs: vec2_t, bf: boolean): boolean {
+    const hs1 = af ? vec2_swap(vec2_clone(as)) : as;
+    const hs2 = bf ? vec2_swap(vec2_clone(bs)) : bs;
 
-    if ((ar / 90) % 2 != 0) {
-        const temp = hs1[0];
-        hs1[0] = hs1[1];
-        hs1[1] = temp;
-    }
+    return overlap_aabb_aabb2(ap, hs1, bp, hs2);
+}
 
-    if ((br / 90) % 2 != 0) {
-        const temp = hs2[0];
-        hs2[0] = hs2[1];
-        hs2[1] = temp;
-    }
+export function overlap_raabb_raabb2_x(ap: vec2_t, as: vec2_t, af: boolean, bp: vec2_t, bs: vec2_t, bf: boolean): boolean {
+    const hs1 = af ? vec2_swap(vec2_clone(as)) : as;
+    const hs2 = bf ? vec2_swap(vec2_clone(bs)) : bs;
 
-    const l1 = ap[0] - hs1[0];
-    const r1 = ap[0] + hs1[0];
-    const b1 = ap[1] - hs1[1];
-    const t1 = ap[1] + hs1[1];
-    const l2 = bp[0] - hs2[0];
-    const r2 = bp[0] + hs2[0];
-    const b2 = bp[1] - hs2[1];
-    const t2 = bp[1] + hs2[1];
+    return overlap_aabb_aabb2_x(ap, hs1, bp, hs2);
+}
 
-    return l1 < r2 && r1 > l2 && t1 > b2 && b1 < t2;
+export function overlap_raabb_raabb2_y(ap: vec2_t, as: vec2_t, af: boolean, bp: vec2_t, bs: vec2_t, bf: boolean): boolean {
+    const hs1 = af ? vec2_swap(vec2_clone(as)) : as;
+    const hs2 = bf ? vec2_swap(vec2_clone(bs)) : bs;
+
+    return overlap_aabb_aabb2_y(ap, hs1, bp, hs2);
 }
 
 // line intersect
@@ -410,7 +403,7 @@ export type mtv_t = {
     depth: number;
 };
 
-export function mtv_aabb2_aabb2(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): mtv_t|null {
+export function mtv_aabb_aabb2(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): mtv_t|null {
     const hs1 = vec2_divs1(as, 2.0);
     const hs2 = vec2_divs1(bs, 2.0);
 
@@ -444,23 +437,11 @@ export function mtv_aabb2_aabb2(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t):
     }
 }
 
-export function mtv_raabb2_raabb2(ap: vec2_t, as: vec2_t, ar: number, bp: vec2_t, bs: vec2_t, br: number): mtv_t|null {
-    const hs1 = vec2_clone(as);
-    const hs2 = vec2_clone(bs);
+export function mtv_raabb_raabb2(ap: vec2_t, as: vec2_t, af: boolean, bp: vec2_t, bs: vec2_t, bf: boolean): mtv_t|null {
+    const hs1 = af ? vec2_swap(vec2_clone(as)) : as;
+    const hs2 = bf ? vec2_swap(vec2_clone(bs)) : bs;
 
-    if ((ar / 90) % 2 != 0) {
-        const temp = hs1[0];
-        hs1[0] = hs1[1];
-        hs1[1] = temp;
-    }
-
-    if ((br / 90) % 2 != 0) {
-        const temp = hs2[0];
-        hs2[0] = hs2[1];
-        hs2[1] = temp;
-    }
-
-    return mtv_aabb2_aabb2(ap, hs1, bp, hs2);
+    return mtv_aabb_aabb2(ap, hs1, bp, hs2);
 }
 
 export function compute_axes(points: vec2_t[]): vec2_t[] {
