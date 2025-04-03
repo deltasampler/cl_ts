@@ -147,3 +147,19 @@ export function rand_in(min: number, max: number): number {
 export function index2(x: number, y: number, width: number): number {
     return y * width + x;
 }
+
+export function deg90even(d: number): boolean {
+    return (d / 90.0) % 2 === 0;
+}
+
+export function deg90odd(d: number): boolean {
+    return (d / 90.0) % 2 === 1;
+}
+
+export function rad90even(r: number): boolean {
+    return deg90even(deg(r));
+}
+
+export function rad90odd(r: number): boolean {
+    return deg90odd(deg(r));
+}
