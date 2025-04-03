@@ -1,9 +1,9 @@
-import {face_halfedge_from_vertex} from "./he_face.ts";
-import {halfedge_next_loop} from "./he_halfedge.ts";
-import {face_t, halfedge_t, vertex_t} from "./he_type.ts";
-import {free_halfedges_in_loop, free_halfedges_out_loop, get_halfedge_to_vertex, loop_cw, vertex_is_free, vertex_matches_position} from "./he_vertex.ts";
-import {vec3_t} from "./type.ts";
-import {vec3_copy} from "./vec3.ts";
+import {face_halfedge_from_vertex} from "./face.ts";
+import {halfedge_next_loop} from "./halfedge.ts";
+import {face_t, halfedge_t, vertex_t} from "./type.ts";
+import {free_halfedges_in_loop, free_halfedges_out_loop, get_halfedge_to_vertex, loop_cw, vertex_is_free, vertex_matches_position} from "./vertex.ts";
+import {vec3_t} from "../type.ts";
+import {vec3_copy} from "../vec3.ts";
 
 export class mesh_t {
     faces: face_t[];

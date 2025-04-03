@@ -1,4 +1,4 @@
-import {vec3_t} from "./type.ts";
+import {vec3_t} from "../type.ts";
 
 export class halfedge_t {
     twin: halfedge_t;

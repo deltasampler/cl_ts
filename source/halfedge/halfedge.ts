@@ -1,4 +1,4 @@
-import {halfedge_t} from "./he_type.ts";
+import {halfedge_t} from "./type.ts";
 
 export function halfedge_is_free(halfedge: halfedge_t): boolean {
     return halfedge.face === null;
