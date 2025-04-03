@@ -91,6 +91,14 @@ export function vec2_inv(v: vec2_t): vec2_t {
     return v;
 }
 
+export function vec2_swap(v: vec2_t): vec2_t {
+    const temp = v[0];
+    v[0] = v[1];
+    v[1] = temp;
+
+    return v;
+}
+
 // arithmetic vector x vector
 export function vec2_add(a: vec2_t, b: vec2_t, out: vec2_t): vec2_t {
     out[0] = a[0] + b[0];
