@@ -23,6 +23,7 @@ export class cam3_t {
     yaw_speed: number;
     pitch_speed: number;
     roll_speed: number;
+    zoom_speed: number;
 };
 
 export function cam3_new() {
@@ -45,50 +46,55 @@ export function cam3_new() {
     cam.yaw_speed = 0.1;
     cam.pitch_speed = 0.1;
     cam.roll_speed = 0.1;
+    cam.zoom_speed = 0.1;
 
     return cam;
 }
 
-export function cam3_move_forward(camera: cam3_t, dir: number) {
-    vec3_addmuls2(camera.position, camera.forward, camera.movement_speed * dir);
+export function cam3_move_forward(cam: cam3_t, dir: number) {
+    vec3_addmuls2(cam.position, cam.forward, cam.movement_speed * dir);
 }
 
-export function cam3_move_right(camera: cam3_t, dir: number) {
-    vec3_addmuls2(camera.position, camera.right, camera.movement_speed * dir);
+export function cam3_move_right(cam: cam3_t, dir: number) {
+    vec3_addmuls2(cam.position, cam.right, cam.movement_speed * dir);
 }
 
-export function cam3_move_up(camera: cam3_t, dir: number) {
-    vec3_addmuls2(camera.position, camera.up, camera.movement_speed * dir);
+export function cam3_move_up(cam: cam3_t, dir: number) {
+    vec3_addmuls2(cam.position, cam.up, cam.movement_speed * dir);
 }
 
-export function cam3_pan(camera: cam3_t, dir: number) {
-    camera.yaw += camera.yaw_speed * dir;
+export function cam3_pan(cam: cam3_t, dir: number) {
+    cam.yaw += cam.yaw_speed * dir;
 }
 
-export function cam3_tilt(camera: cam3_t, dir: number) {
-    camera.pitch = clamp(camera.pitch - camera.pitch_speed * dir, -89.0, 89.0);
+export function cam3_tilt(cam: cam3_t, dir: number) {
+    cam.pitch = clamp(cam.pitch - cam.pitch_speed * dir, -89.0, 89.0);
 }
 
-export function cam3_roll(camera: cam3_t, dir: number) {
-    camera.roll += camera.roll_speed * dir;
+export function cam3_roll(cam: cam3_t, dir: number) {
+    cam.roll += cam.roll_speed * dir;
 }
 
-export function cam3_fru(camera: cam3_t) {
-    camera.forward = vec3_unit2(vec3(
-        sin(rad(camera.yaw)) * cos(rad(camera.pitch)),
-        sin(rad(camera.pitch)),
-        -cos(rad(camera.yaw)) * cos(rad(camera.pitch))
+export function cam3_zoom(cam: cam3_t, dir: number) {
+    cam.fov += cam.zoom_speed * dir;
+}
+
+export function cam3_fru(cam: cam3_t) {
+    cam.forward = vec3_unit2(vec3(
+        sin(rad(cam.yaw)) * cos(rad(cam.pitch)),
+        sin(rad(cam.pitch)),
+        -cos(rad(cam.yaw)) * cos(rad(cam.pitch))
     ));
 
-    camera.right = vec3_unit2(vec3_cross1(camera.forward, camera.world_up));
+    cam.right = vec3_unit2(vec3_cross1(cam.forward, cam.world_up));
 
-    camera.up = vec3_unit2(vec3_cross1(camera.right, camera.forward));
+    cam.up = vec3_unit2(vec3_cross1(cam.right, cam.forward));
 }
 
-export function cam3_compute_proj(camera: cam3_t, viewport_x: number, viewport_y: number) {
-    mat4_perspective(rad(camera.fov), viewport_x / viewport_y, camera.near, camera.far, camera.projection);
+export function cam3_compute_proj(cam: cam3_t, viewport_x: number, viewport_y: number) {
+    mat4_perspective(rad(cam.fov), viewport_x / viewport_y, cam.near, cam.far, cam.projection);
 }
 
-export function cam3_compute_view(camera: cam3_t) {
-    mat4_look_at(camera.position, vec3_add1(camera.position, camera.forward), camera.up, camera.view);
+export function cam3_compute_view(cam: cam3_t) {
+    mat4_look_at(cam.position, vec3_add1(cam.position, cam.forward), cam.up, cam.view);
 }
