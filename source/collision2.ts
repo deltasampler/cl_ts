@@ -172,6 +172,10 @@ export function overlap_circle_circle(p0: vec2_t, r0: number, p1: vec2_t, r1: nu
     return vec2_dist_sq(p0, p1) <= (r0 + r1) * (r0 + r1);
 }
 
+export function overlap_aabb_aabb_min_max2(min0: vec2_t, max0: vec2_t, min1: vec2_t, max1: vec2_t): boolean {
+    return min0[0] < max1[0] && max0[0] > min1[0] && max0[1] > min1[1] && min0[1] < max1[1];
+}
+
 export function overlap_aabb_aabb2(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): boolean {
     const hs1 = vec2_divs1(as, 2.0);
     const hs2 = vec2_divs1(bs, 2.0);
