@@ -605,7 +605,7 @@ export function vec3_rand_unit(scale: number, out: vec3_t): vec3_t {
     return out;
 }
 
-export function vec3_rand_unit1(scale: number, out: vec3_t): vec3_t {
+export function vec3_rand_unit1(scale: number): vec3_t {
     return vec3_rand_unit(scale, new TYPE(3));
 }
 
