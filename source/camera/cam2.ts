@@ -57,14 +57,14 @@ export function cam2_zoom(cam: cam2_t, dir: number) {
 
 export function cam2_compute_proj(cam: cam2_t, viewport_x: number, viewport_y: number): mat4_t {
     mat4_ident(cam.projection);
-    mat4_scale(cam.projection, vec3(cam.scale / viewport_x, cam.scale / viewport_y, 1.0), cam.projection);
+    mat4_scale(cam.projection, cam.projection, vec3(cam.scale / viewport_x, cam.scale / viewport_y, 1.0));
 
     return cam.projection;
 }
 
 export function cam2_compute_view(cam: cam2_t): mat4_t {
     mat4_ident(cam.view);
-    mat4_translate(cam.view, vec3(-cam.position[0], -cam.position[1], 0.0), cam.view);
+    mat4_translate(cam.view, cam.view, vec3(-cam.position[0], -cam.position[1], 0.0));
 
     return cam.view;
 }

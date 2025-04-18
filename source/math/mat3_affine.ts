@@ -1,7 +1,7 @@
 import {mat3_t} from "./mat3.ts";
 import {vec2_t} from "./vec2.ts";
 
-export function mat3_translation(v: vec2_t, out: mat3_t): mat3_t {
+export function mat3_translation(out: mat3_t, v: vec2_t): mat3_t {
     out[0] = 1;
     out[1] = 0;
     out[2] = 0;
@@ -15,7 +15,7 @@ export function mat3_translation(v: vec2_t, out: mat3_t): mat3_t {
     return out;
 }
 
-export function mat3_rotation(r: number, out: mat3_t) {
+export function mat3_rotation(out: mat3_t, r: number) {
     const s = Math.sin(r),
           c = Math.cos(r);
 
@@ -32,7 +32,7 @@ export function mat3_rotation(r: number, out: mat3_t) {
     return out;
 }
 
-export function mat3_scaling(v: vec2_t, out: mat3_t): mat3_t {
+export function mat3_scaling(out: mat3_t, v: vec2_t): mat3_t {
     out[0] = v[0];
     out[1] = 0;
     out[2] = 0;
@@ -46,7 +46,7 @@ export function mat3_scaling(v: vec2_t, out: mat3_t): mat3_t {
     return out;
 }
 
-export function mat3_translate(m: mat3_t, v: vec2_t, out: mat3_t): mat3_t {
+export function mat3_translate(out: mat3_t, m: mat3_t, v: vec2_t): mat3_t {
     const a00 = m[0],
           a01 = m[1],
           a02 = m[2],
@@ -72,7 +72,7 @@ export function mat3_translate(m: mat3_t, v: vec2_t, out: mat3_t): mat3_t {
     return out;
 }
 
-export function mat3_rotate(m: mat3_t, r: number, out: mat3_t): mat3_t {
+export function mat3_rotate(out: mat3_t, m: mat3_t, r: number): mat3_t {
     const a00 = m[0],
           a01 = m[1],
           a02 = m[2],
@@ -98,7 +98,7 @@ export function mat3_rotate(m: mat3_t, r: number, out: mat3_t): mat3_t {
     return out;
 }
 
-export function mat3_scale(m: mat3_t, v: vec2_t, out: mat3_t): mat3_t {
+export function mat3_scale(out: mat3_t, m: mat3_t, v: vec2_t): mat3_t {
     const x = v[0], y = v[1];
 
     out[0] = x * m[0];

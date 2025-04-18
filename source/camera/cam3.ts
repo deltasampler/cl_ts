@@ -91,9 +91,9 @@ export function cam3_fru(cam: cam3_t) {
 }
 
 export function cam3_compute_proj(cam: cam3_t, viewport_x: number, viewport_y: number) {
-    mat4_perspective(rad(cam.fov), viewport_x / viewport_y, cam.near, cam.far, cam.projection);
+    mat4_perspective(cam.projection, rad(cam.fov), viewport_x / viewport_y, cam.near, cam.far);
 }
 
 export function cam3_compute_view(cam: cam3_t) {
-    mat4_look_at(cam.position, vec3_add1(cam.position, cam.forward), cam.up, cam.view);
+    mat4_look_at(cam.view, cam.position, vec3_add1(cam.position, cam.forward), cam.up);
 }

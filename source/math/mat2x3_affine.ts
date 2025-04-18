@@ -1,7 +1,7 @@
 import {mat2x3_t} from "./mat2x3.ts";
 import {vec2_t} from "./vec2.ts";
 
-export function mat2x3_translation(v: vec2_t, out: mat2x3_t): mat2x3_t {
+export function mat2x3_translation(out: mat2x3_t, v: vec2_t): mat2x3_t {
     out[0] = 1;
     out[1] = 0;
     out[2] = 0;
@@ -12,7 +12,7 @@ export function mat2x3_translation(v: vec2_t, out: mat2x3_t): mat2x3_t {
     return out;
 }
 
-export function mat2x3_rotation(r: number, out: mat2x3_t): mat2x3_t {
+export function mat2x3_rotation(out: mat2x3_t, r: number): mat2x3_t {
     const s = Math.sin(r), c = Math.cos(r);
 
     out[0] = c;
@@ -25,7 +25,7 @@ export function mat2x3_rotation(r: number, out: mat2x3_t): mat2x3_t {
     return out;
 }
 
-export function mat2x3_scaling(v: vec2_t, out: mat2x3_t): mat2x3_t {
+export function mat2x3_scaling(out: mat2x3_t, v: vec2_t): mat2x3_t {
     out[0] = v[0];
     out[1] = 0;
     out[2] = 0;
@@ -36,7 +36,7 @@ export function mat2x3_scaling(v: vec2_t, out: mat2x3_t): mat2x3_t {
     return out;
 }
 
-export function mat2x3_translate(m: mat2x3_t, v: vec2_t, out: mat2x3_t): mat2x3_t {
+export function mat2x3_translate(out: mat2x3_t, m: mat2x3_t, v: vec2_t): mat2x3_t {
     const m0 = m[0], m1 = m[1],
           m2 = m[2], m3 = m[3],
           m4 = m[4], m5 = m[5];
@@ -52,7 +52,7 @@ export function mat2x3_translate(m: mat2x3_t, v: vec2_t, out: mat2x3_t): mat2x3_
     return out;
 }
 
-export function mat2x3_rotate(m: mat2x3_t, r: number, out: mat2x3_t): mat2x3_t {
+export function mat2x3_rotate(out: mat2x3_t, m: mat2x3_t, r: number): mat2x3_t {
     const m0 = m[0], m1 = m[1],
           m2 = m[2], m3 = m[3],
           m4 = m[4], m5 = m[5];
@@ -68,7 +68,7 @@ export function mat2x3_rotate(m: mat2x3_t, r: number, out: mat2x3_t): mat2x3_t {
     return out;
 }
 
-export function mat2x3_scale(m :mat2x3_t, v: vec2_t, out: mat2x3_t): mat2x3_t {
+export function mat2x3_scale(out: mat2x3_t, m :mat2x3_t, v: vec2_t): mat2x3_t {
     const m0 = m[0], m1 = m[1],
           m2 = m[2], m3 = m[3],
           m4 = m[4], m5 = m[5];

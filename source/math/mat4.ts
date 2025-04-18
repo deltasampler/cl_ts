@@ -182,7 +182,7 @@ export function mat4_copy(a: mat4_t, b: mat4_t): mat4_t {
 }
 
 // arithmetic matrix x matrix
-export function mat4_add(a: mat4_t, b: mat4_t, out: mat4_t): mat4_t {
+export function mat4_add(out: mat4_t, a: mat4_t, b: mat4_t): mat4_t {
     out[0] = a[0] + b[0];
     out[1] = a[1] + b[1];
     out[2] = a[2] + b[2];
@@ -204,14 +204,14 @@ export function mat4_add(a: mat4_t, b: mat4_t, out: mat4_t): mat4_t {
 }
 
 export function mat4_add1(a: mat4_t, b: mat4_t): mat4_t {
-    return mat4_add(a, b, new TYPE(16));
+    return mat4_add(new TYPE(16), a, b);
 }
 
 export function mat4_add2(a: mat4_t, b: mat4_t): mat4_t {
-    return mat4_add(a, b, a);
+    return mat4_add(a, a, b);
 }
 
-export function mat4_sub(a: mat4_t, b: mat4_t, out: mat4_t): mat4_t {
+export function mat4_sub(out: mat4_t, a: mat4_t, b: mat4_t): mat4_t {
     out[0] = a[0] - b[0];
     out[1] = a[1] - b[1];
     out[2] = a[2] - b[2];
@@ -233,15 +233,15 @@ export function mat4_sub(a: mat4_t, b: mat4_t, out: mat4_t): mat4_t {
 }
 
 export function mat4_sub1(a: mat4_t, b: mat4_t): mat4_t {
-    return mat4_sub(a, b, new TYPE(16));
+    return mat4_sub(new TYPE(16), a, b);
 }
 
 export function mat4_sub2(a: mat4_t, b: mat4_t): mat4_t {
-    return mat4_sub(a, b, a);
+    return mat4_sub(a, a, b);
 }
 
 // arithmetic matrix x scalar
-export function mat4_muls(m: mat4_t, s: number, out: mat4_t): mat4_t {
+export function mat4_muls(out: mat4_t, m: mat4_t, s: number): mat4_t {
     out[0] = m[0] * s;
     out[1] = m[1] * s;
     out[2] = m[2] * s;
@@ -263,15 +263,15 @@ export function mat4_muls(m: mat4_t, s: number, out: mat4_t): mat4_t {
 }
 
 export function mat4_muls1(m: mat4_t, s: number): mat4_t {
-    return mat4_muls(m, s, new TYPE(16));
+    return mat4_muls(new TYPE(16), m, s);
 }
 
 export function mat4_muls2(m: mat4_t, s: number): mat4_t {
-    return mat4_muls(m, s, m);
+    return mat4_muls(m, m, s);
 }
 
 // arithmetic matrix x matrix x scalar
-export function mat4_addmuls(a: mat4_t, b: mat4_t, s: number, out: mat4_t): mat4_t {
+export function mat4_addmuls(out: mat4_t, a: mat4_t, b: mat4_t, s: number): mat4_t {
     out[0] = a[0] + b[0] * s;
     out[1] = a[1] + b[1] * s;
     out[2] = a[2] + b[2] * s;
@@ -293,15 +293,15 @@ export function mat4_addmuls(a: mat4_t, b: mat4_t, s: number, out: mat4_t): mat4
 }
 
 export function mat4_addmuls1(a: mat4_t, b: mat4_t, s: number): mat4_t {
-    return mat4_addmuls(a, b, s, new TYPE(4));
+    return mat4_addmuls(new TYPE(4), a, b, s);
 }
 
 export function mat4_addmuls2(a: mat4_t, b: mat4_t, s: number): mat4_t {
-    return mat4_addmuls(a, b, s, a);
+    return mat4_addmuls(a, a, b, s);
 }
 
 // product matrix x matrix
-export function mat4_mul(a: mat4_t, b: mat4_t, out: mat4_t): mat4_t {
+export function mat4_mul(out: mat4_t, a: mat4_t, b: mat4_t): mat4_t {
     const a00 = a[0],  a01 = a[1],  a02 = a[2],  a03 = a[3],
           a10 = a[4],  a11 = a[5],  a12 = a[6],  a13 = a[7],
           a20 = a[8],  a21 = a[9],  a22 = a[10], a23 = a[11],
@@ -332,15 +332,15 @@ export function mat4_mul(a: mat4_t, b: mat4_t, out: mat4_t): mat4_t {
 }
 
 export function mat4_mul1(a: mat4_t, b: mat4_t): mat4_t {
-    return mat4_mul(a, b, new TYPE(16));
+    return mat4_mul(new TYPE(16), a, b);
 }
 
 export function mat4_mul2(a: mat4_t, b: mat4_t): mat4_t {
-    return mat4_mul(a, b, a);
+    return mat4_mul(a, a, b);
 }
 
 // product matrix x vector
-export function mat4_mulmv(m: mat4_t, v: vec4_t, out: vec4_t): vec4_t {
+export function mat4_mulmv(out: vec4_t, m: mat4_t, v: vec4_t): vec4_t {
     const x = v[0], y = v[1], z = v[2], w = v[3];
 
     out[0] = x * m[0] + y * m[4] + z * m[8] + w * m[12];
@@ -352,14 +352,14 @@ export function mat4_mulmv(m: mat4_t, v: vec4_t, out: vec4_t): vec4_t {
 }
 
 export function mat4_mulmv1(m: mat4_t, v: vec4_t): vec4_t {
-    return mat4_mulmv(m, v, new TYPE(4));
+    return mat4_mulmv(new TYPE(4), m, v);
 }
 
 export function mat4_mulmv2(m: mat4_t, v: vec4_t): vec4_t {
-    return mat4_mulmv(m, v, v);
+    return mat4_mulmv(v, m, v);
 }
 
-export function mat4_mulvm(v: vec4_t, m: mat4_t, out: vec4_t): vec4_t {
+export function mat4_mulvm(out: vec4_t, v: vec4_t, m: mat4_t): vec4_t {
     const x = v[0], y = v[1], z = v[2], w = v[3];
 
     out[0] = x * m[0] + y * m[1] + z * m[2] + w * m[3];
@@ -371,11 +371,11 @@ export function mat4_mulvm(v: vec4_t, m: mat4_t, out: vec4_t): vec4_t {
 }
 
 export function mat4_mulvm1(m: mat4_t, v: vec4_t): vec4_t {
-    return mat4_mulvm(m, v, new TYPE(4));
+    return mat4_mulvm(new TYPE(4), m, v);
 }
 
 export function mat4_mulvm2(m: mat4_t, v: vec4_t): vec4_t {
-    return mat4_mulvm(m, v, v);
+    return mat4_mulvm(v, m, v);
 }
 
 // determinant
@@ -410,7 +410,7 @@ export function mat4_frob(m: mat4_t): number {
 }
 
 // special
-export function mat4_transpose(m: mat4_t, out: mat4_t): mat4_t {
+export function mat4_transpose(out: mat4_t, m: mat4_t): mat4_t {
     if (out === m) {
         const m01 = m[1], m02 = m[2], m03 = m[3],
               m12 = m[6], m13 = m[7],
@@ -450,7 +450,7 @@ export function mat4_transpose(m: mat4_t, out: mat4_t): mat4_t {
     return out;
 }
 
-export function mat4_adjoint(m: mat4_t, out: mat4_t): mat4_t {
+export function mat4_adjoint(out: mat4_t, m: mat4_t): mat4_t {
     const a00 = m[0],  a01 = m[1],  a02 = m[2],  a03 = m[3],
           a10 = m[4],  a11 = m[5],  a12 = m[6],  a13 = m[7],
           a20 = m[8],  a21 = m[9],  a22 = m[10], a23 = m[11],
@@ -489,7 +489,7 @@ export function mat4_adjoint(m: mat4_t, out: mat4_t): mat4_t {
     return out;
 }
 
-export function mat4_inv(m: mat4_t, out: mat4_t): mat4_t|null {
+export function mat4_inv(out: mat4_t, m: mat4_t): mat4_t|null {
     const a00 = m[0],  a01 = m[1],  a02 = m[2],  a03 = m[3],
           a10 = m[4],  a11 = m[5],  a12 = m[6],  a13 = m[7],
           a20 = m[8],  a21 = m[9],  a22 = m[10], a23 = m[11],

@@ -2,7 +2,7 @@ import {mat4_t, mat4_ident} from "./mat4.ts";
 import {EPSILON} from "./math.ts";
 import {vec3_t} from "./vec3.ts";
 
-export function mat4_look_at(eye: vec3_t, center: vec3_t, up: vec3_t, out: mat4_t): mat4_t {
+export function mat4_look_at(out: mat4_t, eye: vec3_t, center: vec3_t, up: vec3_t): mat4_t {
     let x0, x1, x2, y0, y1, y2, z0, z1, z2, len;
     const eyex = eye[0];
     const eyey = eye[1];
@@ -81,7 +81,7 @@ export function mat4_look_at(eye: vec3_t, center: vec3_t, up: vec3_t, out: mat4_
     return out;
 }
 
-export function mat4_target_to(eye: vec3_t, target: vec3_t, up: vec3_t, out: mat4_t): mat4_t{
+export function mat4_target_to(out: mat4_t, eye: vec3_t, target: vec3_t, up: vec3_t): mat4_t{
     const eyex = eye[0],
           eyey = eye[1],
           eyez = eye[2],

@@ -1,7 +1,7 @@
 import {mat2_t} from "./mat2.ts";
 import {vec2_t} from "./vec2.ts";
 
-export function mat2_rotation(r: number, out: mat2_t): mat2_t {
+export function mat2_rotation(out: mat2_t, r: number): mat2_t {
     const s = Math.sin(r), c = Math.cos(r);
 
     out[0] = c;
@@ -12,7 +12,7 @@ export function mat2_rotation(r: number, out: mat2_t): mat2_t {
     return out;
 }
 
-export function mat2_scaling(v: vec2_t, out: mat2_t): mat2_t {
+export function mat2_scaling(out: mat2_t, v: vec2_t): mat2_t {
     out[0] = v[0];
     out[1] = 0;
     out[2] = 0;
@@ -21,7 +21,7 @@ export function mat2_scaling(v: vec2_t, out: mat2_t): mat2_t {
     return out;
 }
 
-export function mat2_rotate(m: mat2_t, r: number, out: mat2_t): mat2_t {
+export function mat2_rotate(out: mat2_t, m: mat2_t, r: number): mat2_t {
     const m0 = m[0], m1 = m[1],
           m2 = m[2], m3 = m[3];
     const s = Math.sin(r), c = Math.cos(r);
@@ -34,7 +34,7 @@ export function mat2_rotate(m: mat2_t, r: number, out: mat2_t): mat2_t {
     return out;
 }
 
-export function mat2_scale(m: mat2_t, v: vec2_t, out: mat2_t): mat2_t {
+export function mat2_scale(out: mat2_t, m: mat2_t, v: vec2_t): mat2_t {
     const x = v[0], y = v[1];
 
     out[0] = m[0] * x;

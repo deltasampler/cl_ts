@@ -103,7 +103,7 @@ export function mat2x3_copy(a: mat2x3_t, b: mat2x3_t): mat2x3_t {
 
 
 // arithmetic matrix x matrix
-export function mat2x3_add(a: mat2x3_t, b: mat2x3_t, out: mat2x3_t): mat2x3_t {
+export function mat2x3_add(out: mat2x3_t, a: mat2x3_t, b: mat2x3_t): mat2x3_t {
     out[0] = a[0] + b[0];
     out[1] = a[1] + b[1];
     out[2] = a[2] + b[2];
@@ -115,14 +115,14 @@ export function mat2x3_add(a: mat2x3_t, b: mat2x3_t, out: mat2x3_t): mat2x3_t {
 }
 
 export function mat2x3_add1(a: mat2x3_t, b: mat2x3_t): mat2x3_t {
-    return mat2x3_add(a, b, new TYPE(6));
+    return mat2x3_add(new TYPE(6), a, b);
 }
 
 export function mat2x3_add2(a: mat2x3_t, b: mat2x3_t): mat2x3_t {
-    return mat2x3_add(a, b, a);
+    return mat2x3_add(a, a, b);
 }
 
-export function mat2x3_sub(a: mat2x3_t, b: mat2x3_t, out: mat2x3_t): mat2x3_t {
+export function mat2x3_sub(out: mat2x3_t, a: mat2x3_t, b: mat2x3_t): mat2x3_t {
     out[0] = a[0] - b[0];
     out[1] = a[1] - b[1];
     out[2] = a[2] - b[2];
@@ -134,15 +134,15 @@ export function mat2x3_sub(a: mat2x3_t, b: mat2x3_t, out: mat2x3_t): mat2x3_t {
 }
 
 export function mat2x3_sub1(a: mat2x3_t, b: mat2x3_t): mat2x3_t {
-    return mat2x3_sub(a, b, new TYPE(6));
+    return mat2x3_sub(new TYPE(6), a, b);
 }
 
 export function mat2x3_sub2(a: mat2x3_t, b: mat2x3_t): mat2x3_t {
-    return mat2x3_sub(a, b, a);
+    return mat2x3_sub(a, a, b);
 }
 
 // arithmetic matrix x scalar
-export function mat2x3_muls(m: mat2x3_t, s: number, out: mat2x3_t): mat2x3_t {
+export function mat2x3_muls(out: mat2x3_t, m: mat2x3_t, s: number): mat2x3_t {
     out[0] = m[0] * s;
     out[1] = m[1] * s;
     out[2] = m[2] * s;
@@ -154,15 +154,15 @@ export function mat2x3_muls(m: mat2x3_t, s: number, out: mat2x3_t): mat2x3_t {
 }
 
 export function mat2x3_muls1(m: mat2x3_t, s: number): mat2x3_t {
-    return mat2x3_muls(m, s, new TYPE(6));
+    return mat2x3_muls(new TYPE(6), m, s);
 }
 
 export function mat2x3_muls2(m: mat2x3_t, s: number): mat2x3_t {
-    return mat2x3_muls(m, s, m);
+    return mat2x3_muls(m, m, s);
 }
 
 // arithmetic matrix x matrix x scalar
-export function mat2x3_addmuls(a: mat2x3_t, b: mat2x3_t, s: number, out: mat2x3_t): mat2x3_t {
+export function mat2x3_addmuls(out: mat2x3_t, a: mat2x3_t, b: mat2x3_t, s: number): mat2x3_t {
     out[0] = a[0] + b[0] * s;
     out[1] = a[1] + b[1] * s;
     out[2] = a[2] + b[2] * s;
@@ -174,15 +174,15 @@ export function mat2x3_addmuls(a: mat2x3_t, b: mat2x3_t, s: number, out: mat2x3_
 }
 
 export function mat2x3_addmuls1(a: mat2x3_t, b: mat2x3_t, s: number): mat2x3_t {
-    return mat2x3_addmuls(a, b, s, new TYPE(6));
+    return mat2x3_addmuls(new TYPE(6), a, b, s);
 }
 
 export function mat2x3_addmuls2(a: mat2x3_t, b: mat2x3_t, s: number): mat2x3_t {
-    return mat2x3_addmuls(a, b, s, a);
+    return mat2x3_addmuls(a, a, b, s);
 }
 
 // product matrix x matrix
-export function mat2x3_mul(a: mat2x3_t, b: mat2x3_t, out: mat2x3_t): mat2x3_t {
+export function mat2x3_mul(out: mat2x3_t, a: mat2x3_t, b: mat2x3_t): mat2x3_t {
     let a0 = a[0], a1 = a[1],
         a2 = a[2], a3 = a[3],
         a4 = a[4], a5 = a[5];
@@ -201,11 +201,11 @@ export function mat2x3_mul(a: mat2x3_t, b: mat2x3_t, out: mat2x3_t): mat2x3_t {
 }
 
 export function mat2x3_mul1(a: mat2x3_t, b: mat2x3_t): mat2x3_t {
-    return mat2x3_mul(a, b, new TYPE(6));
+    return mat2x3_mul(new TYPE(6), a, b);
 }
 
 export function mat2x3_mul2(a: mat2x3_t, b: mat2x3_t): mat2x3_t {
-    return mat2x3_mul(a, b, a);
+    return mat2x3_mul(a, a, b);
 }
 
 // determinant
@@ -223,7 +223,7 @@ export function mat2x3_frob(m: mat2x3_t): number {
 }
 
 // special
-export function mat2x3_inv(m: mat2x3_t, out: mat2x3_t): mat2x3_t|null {
+export function mat2x3_inv(out: mat2x3_t, m: mat2x3_t): mat2x3_t|null {
     const m0 = m[0], m1 = m[1],
           m2 = m[2], m3 = m[3],
           m4 = m[4], m5 = m[5];
