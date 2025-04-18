@@ -1,6 +1,5 @@
-import {vec2_t, vec4_t} from "@cl/type.ts";
-import {vec2, vec2_abs, vec2_add1, vec2_addmuls1, vec2_divs2, vec2_lerp1, vec2_perp_ab1, vec2_rotate2, vec2_sub1, vec2_unit2} from "@cl/vec2";
-import {vec4_bitpack256v} from "@cl/vec4.ts";
+import {vec2, vec2_abs, vec2_add1, vec2_addmuls1, vec2_divs2, vec2_lerp1, vec2_perp_ab1, vec2_rotate2, vec2_sub1, vec2_t, vec2_unit2} from "@cl/math/vec2.ts";
+import {vec4_bitpack256v, vec4_t} from "@cl/math/vec4.ts";
 
 export class poly_data_t {
     stride: number;

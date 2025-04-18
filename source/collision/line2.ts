@@ -1,5 +1,7 @@
+import {vec2_t} from "@cl/math/vec2.ts";
 
-import {line2_t, TYPE, vec2_t} from "./type.ts";
+const TYPE = Float32Array;
+export type line2_t = Float32Array;
 
 export function line2(x0: number, y0: number, x1: number, y1: number): line2_t {
     const out = new TYPE(4);

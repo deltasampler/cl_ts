@@ -1,5 +1,6 @@
 import {EPSILON} from "./math.ts";
-import {mat4_t, vec3_t} from "./type.ts";
+import {mat4_t} from "./mat4.ts";
+import {vec3_t} from "./vec3.ts";
 
 export function mat4_translation(v: vec3_t, out: mat4_t): mat4_t {
     out[0] = 1.0;

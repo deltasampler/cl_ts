@@ -1,8 +1,7 @@
-import {vec2_t} from "@cl/type.ts";
-import {vec2, vec2_addmuls2, vec2_copy, vec2_dist, vec2_dist_sq, vec2_len_sq, vec2_sub1} from "@cl/vec2";
+import {vec2_t, vec2, vec2_addmuls2, vec2_copy, vec2_dist, vec2_dist_sq, vec2_len_sq, vec2_sub1} from "@cl/math/vec2.ts";
 
 export class circle_t {
-    position: vec2_t;
+    position: vec2_t
     radius: number;
 };
 

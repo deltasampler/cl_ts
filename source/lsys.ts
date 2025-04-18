@@ -1,6 +1,5 @@
-import {rad} from "./math.ts";
-import {vec2_t} from "@cl/type.ts";
-import {vec2, vec2_addmuls1, vec2_clone, vec2_copy} from "@cl/vec2.ts";
+import {rad} from "@cl/math/math.ts";
+import {vec2, vec2_addmuls1, vec2_clone, vec2_copy, vec2_t} from "@cl/math/vec2.ts";
 
 export enum CHANGER_TYPE {
     NONE,

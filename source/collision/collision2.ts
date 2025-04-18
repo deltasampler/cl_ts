@@ -1,6 +1,5 @@
-import {vec2_t} from "./type.ts";
-import {vec2, vec2_add2, vec2_addmuls1, vec2_clone, vec2_copy, vec2_dir1, vec2_dist, vec2_dist_sq, vec2_divs1, vec2_dot, vec2_perp_ab1, vec2_rotate_origin1, vec2_rotate_origin2, vec2_sub1, vec2_swap, vec2_unit2} from "./vec2.ts";
-import {abs, clamp} from "./math.ts";
+import {vec2, vec2_add2, vec2_addmuls1, vec2_clone, vec2_copy, vec2_dir1, vec2_dist, vec2_dist_sq, vec2_divs1, vec2_dot, vec2_perp_ab1, vec2_rotate_origin1, vec2_rotate_origin2, vec2_sub1, vec2_swap, vec2_t, vec2_unit2} from "@cl/math/vec2.ts";
+import {abs, clamp} from "@cl/math/math.ts";
 
 // point inside
 export function point_inside_circle(cp: vec2_t, cr: number, p: vec2_t): boolean {

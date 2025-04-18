@@ -1,4 +1,7 @@
-import {TYPE, vec4_t, mat4_t} from "./type.ts";
+import {vec4_t} from "./vec4.ts";
+
+const TYPE = Float32Array;
+export type mat4_t = Float32Array;
 
 // creation
 export function mat4(e00: number = 1.0, e01: number = 0.0, e02: number = 0.0, e03: number = 0.0, e10: number = 0.0, e11?: number, e12: number = 0.0, e13: number = 0.0, e20: number = 0.0, e21: number = 0.0, e22?: number, e23: number = 0.0, e30: number = 0.0, e31: number = 0.0, e32: number = 0.0, e33?: number): mat4_t {

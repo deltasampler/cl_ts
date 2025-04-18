@@ -1,4 +1,5 @@
-import {TYPE, mat3_t, vec2_t} from "./type.ts";
+import {mat3_t} from "./mat3.ts";
+import {vec2_t} from "./vec2.ts";
 
 export function mat3_translation(v: vec2_t, out: mat3_t): mat3_t {
     out[0] = 1;

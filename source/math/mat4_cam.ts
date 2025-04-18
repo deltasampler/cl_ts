@@ -1,6 +1,6 @@
-import {mat4_ident} from "./mat4.ts";
+import {mat4_t, mat4_ident} from "./mat4.ts";
 import {EPSILON} from "./math.ts";
-import {mat4_t, vec3_t} from "./type.ts";
+import {vec3_t} from "./vec3.ts";
 
 export function mat4_look_at(eye: vec3_t, center: vec3_t, up: vec3_t, out: mat4_t): mat4_t {
     let x0, x1, x2, y0, y1, y2, z0, z1, z2, len;

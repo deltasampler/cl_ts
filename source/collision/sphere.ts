@@ -1,4 +1,4 @@
-import {vec3_t} from "./type.ts";
+import {vec3_t} from "@cl/math/vec3.ts";
 
 export class sphere_t {
     position: vec3_t;

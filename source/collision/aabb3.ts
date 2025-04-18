@@ -1,5 +1,4 @@
-import {vec3_t} from "./type.ts";
-import {vec3_abs, vec3_add, vec3_div_s, vec3_sub} from "./vec3.ts";
+import {vec3_t, vec3_abs, vec3_add, vec3_div_s, vec3_sub} from "@cl/math/vec3.ts";
 
 export class aabb3_t {
     position: vec3_t;

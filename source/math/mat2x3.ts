@@ -1,4 +1,5 @@
-import {TYPE, mat2x3_t, vec3_t} from "./type.ts";
+const TYPE = Float32Array;
+export type mat2x3_t = Float32Array;
 
 // creation
 export function mat2x3(e00: number = 1.0, e01: number = 0.0, e10: number = 0.0, e11?: number, e20: number = 0.0, e21: number = 0.0): mat2x3_t {

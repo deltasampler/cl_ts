@@ -1,4 +1,7 @@
-import {TYPE, mat2_t, vec2_t} from "./type.ts";
+import {vec2_t} from "./vec2.ts";
+
+const TYPE = Float32Array;
+export type mat2_t = Float32Array;
 
 // construction
 export function mat2(e00 = 1.0, e01 = 0.0, e10 = 0.0, e11?: number): mat2_t {

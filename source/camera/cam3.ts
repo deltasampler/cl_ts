@@ -1,9 +1,8 @@
-import {vec3_t, mat4_t} from "./type.ts";
-import {clamp, cos, rad, sin} from "./math.ts";
-import {vec3, vec3_add1, vec3_addmuls2, vec3_cross1, vec3_unit2} from "./vec3.ts";
-import {mat4} from "./mat4.ts";
-import {mat4_perspective} from "./mat4_proj.ts";
-import {mat4_look_at} from "./mat4_cam.ts";
+import {mat4, mat4_t} from "@cl/math/mat4.ts";
+import {mat4_look_at} from "@cl/math/mat4_cam.ts";
+import {clamp, cos, rad, sin} from "@cl/math/math.ts";
+import {vec3, vec3_add1, vec3_addmuls2, vec3_cross1, vec3_t, vec3_unit2} from "@cl/math/vec3.ts";
+import {mat4_perspective} from "@cl/math/mat4_proj.ts";
 
 export class cam3_t {
     position: vec3_t;

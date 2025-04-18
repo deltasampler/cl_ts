@@ -1,4 +1,5 @@
-import {mat2_t, vec2_t} from "./type.ts";
+import {mat2_t} from "./mat2.ts";
+import {vec2_t} from "./vec2.ts";
 
 export function mat2_rotation(r: number, out: mat2_t): mat2_t {
     const s = Math.sin(r), c = Math.cos(r);

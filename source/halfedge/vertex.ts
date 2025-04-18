@@ -1,8 +1,7 @@
 import {face_has_vertex} from "./face.ts";
 import {halfedge_is_boundary, halfedge_is_free} from "./halfedge.ts";
 import {face_t, halfedge_t, vertex_t} from "./type.ts";
-import {vec3_t} from "../type.ts";
-import {vec3_dist} from "../vec3.ts";
+import {vec3_dist, vec3_t} from "@cl/math/vec3.ts";
 
 export function *free_halfedges_out_loop(vertex: vertex_t, start?: halfedge_t) {
     start = start ?? vertex.halfedge!;

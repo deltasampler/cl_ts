@@ -1,6 +1,7 @@
+import {vec3_t} from "@cl/math/vec3.ts";
 
-
-import {line3_t, TYPE, vec3_t} from "./type.ts";
+const TYPE = Float32Array;
+export type line3_t = Float32Array;
 
 export function line3(x0: number, y0: number, z0: number, x1: number, y1: number, z1: number): line3_t {
     const out = new TYPE(6);

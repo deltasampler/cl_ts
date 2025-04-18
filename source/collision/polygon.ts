@@ -1,5 +1,4 @@
-import { vec2_t } from "@cl/type";
-import {vec2, } from "@cl/vec2.ts";
+import {vec2, vec2_t} from "@cl/math/vec2.ts";
 
 export function polygon_from_aabb(min: vec2_t, max: vec2_t): vec2_t[] {
     return [

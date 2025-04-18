@@ -1,9 +1,9 @@
-import {vec2, vec2_print} from "./vec2.ts";
-import {vec3, vec3_print} from "./vec3.ts";
-import {vec4, vec4_print} from "./vec4.ts";
-import {mat2, mat2_mul, mat2_mul_mv, mat2_mul_vm, mat2_print} from "./mat2.ts";
-import {mat3, mat3_mul, mat3_mul_mv, mat3_mul_vm, mat3_print} from "./mat3.ts";
-import {mat4, mat4_mul, mat4_mul_mv, mat4_mul_vm, mat4_print} from "./mat4.ts";
+import {vec2, vec2_print} from "@cl/math/vec2.ts";
+import {vec3, vec3_print} from "@cl/math/vec3.ts";
+import {vec4, vec4_print} from "@cl/math/vec4.ts";
+import {mat2, mat2_mul, mat2_mul_mv, mat2_mul_vm, mat2_print} from "@cl/math/mat2.ts";
+import {mat3, mat3_mul, mat3_mul_mv, mat3_mul_vm, mat3_print} from "@cl/math/mat3.ts";
+import {mat4, mat4_mul, mat4_mul_mv, mat4_mul_vm, mat4_print} from "@cl/math/mat4.ts";
 
 export function test_mat2_mul() {
     const a = mat2(1, 2, 3, 4);

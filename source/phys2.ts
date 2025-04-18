@@ -1,8 +1,7 @@
-import {vec2_t} from "./type.ts";
-import {vec2, vec2_add1, vec2_add2, vec2_addmuls2, vec2_copy, vec2_dir1, vec2_dist, vec2_dist_sq, vec2_divs1, vec2_divs2, vec2_muls1} from "./vec2.ts";
-import {vec2_len_sq} from "@cl/vec2.ts";
-import {hypot, sqrt} from "@cl/math.ts";
-import {closest_point_convex2, closest_point_obb, point_inside_convex2, point_inside_obb, mtv_sat, compute_axes} from "./collision2.ts";
+import {vec2, vec2_add1, vec2_add2, vec2_addmuls2, vec2_copy, vec2_dir1, vec2_dist, vec2_dist_sq, vec2_divs1, vec2_divs2, vec2_muls1, vec2_t} from "@cl/math/vec2.ts";
+import {vec2_len_sq} from "@cl/math/vec2.ts";
+import {hypot, sqrt} from "@cl/math/math.ts";
+import {closest_point_convex2, closest_point_obb, point_inside_convex2, point_inside_obb, mtv_sat, compute_axes} from "@cl/collision/collision2.ts";
 
 export function center_vertices(vertices: vec2_t[]): vec2_t[] {
     let cx = 0.0, cy = 0.0, area = 0.0;

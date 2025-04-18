@@ -1,5 +1,4 @@
-import {vec2_t} from "./type.ts";
-import {vec2_abs, vec2_add1, vec2_divs1, vec2_sub1} from "./vec2.ts";
+import {vec2_t, vec2_abs, vec2_add1, vec2_divs1, vec2_sub1} from "@cl/math/vec2.ts";
 
 export class aabb2_t {
     position: vec2_t;

@@ -1,5 +1,7 @@
+import {vec2_t} from "@cl/math/vec2.ts";
 
-import {trian2_t, TYPE, vec2_t} from "./type.ts";
+const TYPE = Float32Array;
+export type trian2_t = Float32Array;
 
 export function trian2(ax: number, ay: number, bx: number, by: number, cx: number, cy: number): trian2_t {
     const out = new TYPE(6);

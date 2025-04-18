@@ -1,4 +1,4 @@
-import {mat4_t} from "./type.ts";
+import {mat4_t} from "./mat4.ts";
 
 export function mat4_perspective(fov: number, aspect: number, near: number, far: number, out: mat4_t): mat4_t {
     const f = 1.0 / Math.tan(fov / 2.0);

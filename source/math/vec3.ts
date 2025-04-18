@@ -1,5 +1,10 @@
 import {EPSILON} from "./math.ts";
-import {TYPE, mat3_t, mat4_t, vec2_t, vec3_t} from "./type.ts";
+import {mat3_t} from "./mat3.ts";
+import {mat4_t} from "./mat4.ts";
+import {vec2_t} from "./vec2.ts";
+
+const TYPE = Float32Array;
+export type vec3_t = Float32Array;
 
 // creation
 export function vec3(x: number = 0.0, y?: number, z?: number): vec3_t {

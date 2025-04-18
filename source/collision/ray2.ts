@@ -1,4 +1,4 @@
-import {vec2_t} from "./type.ts";
+import {vec2_t} from "@cl/math/vec2.ts";
 
 export class ray2_t {
     position: vec2_t;
