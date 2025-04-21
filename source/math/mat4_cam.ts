@@ -82,12 +82,8 @@ export function mat4_look_at(out: mat4_t, eye: vec3_t, center: vec3_t, up: vec3_
 }
 
 export function mat4_target_to(out: mat4_t, eye: vec3_t, target: vec3_t, up: vec3_t): mat4_t{
-    const eyex = eye[0],
-          eyey = eye[1],
-          eyez = eye[2],
-          upx = up[0],
-          upy = up[1],
-          upz = up[2];
+    const eyex = eye[0], eyey = eye[1], eyez = eye[2];
+    const upx = up[0], upy = up[1], upz = up[2];
 
     let z0 = eyex - target[0],
         z1 = eyey - target[1],
@@ -95,7 +91,7 @@ export function mat4_target_to(out: mat4_t, eye: vec3_t, target: vec3_t, up: vec
 
     let len = z0 * z0 + z1 * z1 + z2 * z2;
 
-    if (len > 0) {
+    if (len > 0.0) {
         len = 1 / Math.sqrt(len);
         z0 *= len;
         z1 *= len;
@@ -108,7 +104,7 @@ export function mat4_target_to(out: mat4_t, eye: vec3_t, target: vec3_t, up: vec
 
     len = x0 * x0 + x1 * x1 + x2 * x2;
 
-    if (len > 0) {
+    if (len > 0.0) {
         len = 1 / Math.sqrt(len);
         x0 *= len;
         x1 *= len;

@@ -115,7 +115,11 @@ export function mat2x3_add(out: mat2x3_t, a: mat2x3_t, b: mat2x3_t): mat2x3_t {
 }
 
 export function mat2x3_add1(a: mat2x3_t, b: mat2x3_t): mat2x3_t {
-    return mat2x3_add(new TYPE(6), a, b);
+    const out = new TYPE(6);
+
+    mat2x3_add(out, a, b);
+
+    return out;
 }
 
 export function mat2x3_add2(a: mat2x3_t, b: mat2x3_t): mat2x3_t {
@@ -134,7 +138,11 @@ export function mat2x3_sub(out: mat2x3_t, a: mat2x3_t, b: mat2x3_t): mat2x3_t {
 }
 
 export function mat2x3_sub1(a: mat2x3_t, b: mat2x3_t): mat2x3_t {
-    return mat2x3_sub(new TYPE(6), a, b);
+    const out = new TYPE(6);
+
+    mat2x3_sub(out, a, b);
+
+    return out;
 }
 
 export function mat2x3_sub2(a: mat2x3_t, b: mat2x3_t): mat2x3_t {
@@ -154,7 +162,11 @@ export function mat2x3_muls(out: mat2x3_t, m: mat2x3_t, s: number): mat2x3_t {
 }
 
 export function mat2x3_muls1(m: mat2x3_t, s: number): mat2x3_t {
-    return mat2x3_muls(new TYPE(6), m, s);
+    const out = new TYPE(6);
+
+    mat2x3_muls(out, m, s);
+
+    return out;
 }
 
 export function mat2x3_muls2(m: mat2x3_t, s: number): mat2x3_t {
@@ -174,7 +186,11 @@ export function mat2x3_addmuls(out: mat2x3_t, a: mat2x3_t, b: mat2x3_t, s: numbe
 }
 
 export function mat2x3_addmuls1(a: mat2x3_t, b: mat2x3_t, s: number): mat2x3_t {
-    return mat2x3_addmuls(new TYPE(6), a, b, s);
+    const out = new TYPE(6);
+
+    mat2x3_addmuls(out, a, b, s);
+
+    return out;
 }
 
 export function mat2x3_addmuls2(a: mat2x3_t, b: mat2x3_t, s: number): mat2x3_t {
@@ -201,7 +217,11 @@ export function mat2x3_mul(out: mat2x3_t, a: mat2x3_t, b: mat2x3_t): mat2x3_t {
 }
 
 export function mat2x3_mul1(a: mat2x3_t, b: mat2x3_t): mat2x3_t {
-    return mat2x3_mul(new TYPE(6), a, b);
+    const out = new TYPE(6);
+
+    mat2x3_mul(out, a, b);
+
+    return out;
 }
 
 export function mat2x3_mul2(a: mat2x3_t, b: mat2x3_t): mat2x3_t {
@@ -227,7 +247,6 @@ export function mat2x3_inv(out: mat2x3_t, m: mat2x3_t): mat2x3_t|null {
     const m0 = m[0], m1 = m[1],
           m2 = m[2], m3 = m[3],
           m4 = m[4], m5 = m[5];
-
     let det = m0 * m3 - m1 * m2;
 
     if (!det) {

@@ -24,8 +24,7 @@ export function mat4_translation(out: mat4_t, v: vec3_t): mat4_t {
 }
 
 export function mat4_rotation_x(out: mat4_t, rad: number): mat4_t {
-    const s = Math.sin(rad);
-    const c = Math.cos(rad);
+    const s = Math.sin(rad), c = Math.cos(rad);
 
     out[0] = 1.0;
     out[1] = 0.0;
@@ -48,8 +47,7 @@ export function mat4_rotation_x(out: mat4_t, rad: number): mat4_t {
 }
 
 export function mat4_rotation_y(out: mat4_t, rad: number): mat4_t {
-    const s = Math.sin(rad);
-    const c = Math.cos(rad);
+    const s = Math.sin(rad), c = Math.cos(rad);
 
     out[0] = c;
     out[1] = 0.0;
@@ -72,8 +70,7 @@ export function mat4_rotation_y(out: mat4_t, rad: number): mat4_t {
 }
 
 export function mat4_rotation_z(out: mat4_t, rad: number): mat4_t {
-    const s = Math.sin(rad);
-    const c = Math.cos(rad);
+    const s = Math.sin(rad), c = Math.cos(rad);
 
     out[0] = c;
     out[1] = s;
@@ -191,16 +188,9 @@ export function mat4_rotate(out: mat4_t, m: mat4_t, rad: number, axis: vec3_t): 
 }
 
 export function mat4_rotate_x(out: mat4_t, m: mat4_t, rad: number): mat4_t {
-    let s = Math.sin(rad);
-    let c = Math.cos(rad);
-    let a10 = m[4];
-    let a11 = m[5];
-    let a12 = m[6];
-    let a13 = m[7];
-    let a20 = m[8];
-    let a21 = m[9];
-    let a22 = m[10];
-    let a23 = m[11];
+    const a10 = m[4], a11 = m[5], a12 = m[6],  a13 = m[7],
+          a20 = m[8], a21 = m[9], a22 = m[10], a23 = m[11];
+    const s = Math.sin(rad), c = Math.cos(rad);
 
     out[4] = a10 * c + a20 * s;
     out[5] = a11 * c + a21 * s;
@@ -215,16 +205,9 @@ export function mat4_rotate_x(out: mat4_t, m: mat4_t, rad: number): mat4_t {
 }
 
 export function mat4_rotate_y(out: mat4_t, m: mat4_t, rad: number): mat4_t {
-    let s = Math.sin(rad);
-    let c = Math.cos(rad);
-    let a00 = m[0];
-    let a01 = m[1];
-    let a02 = m[2];
-    let a03 = m[3];
-    let a20 = m[8];
-    let a21 = m[9];
-    let a22 = m[10];
-    let a23 = m[11];
+    const a00 = m[0], a01 = m[1], a02 = m[2],  a03 = m[3],
+          a20 = m[8], a21 = m[9], a22 = m[10], a23 = m[11];
+    const s = Math.sin(rad), c = Math.cos(rad);
 
     out[0] = a00 * c - a20 * s;
     out[1] = a01 * c - a21 * s;
@@ -239,16 +222,9 @@ export function mat4_rotate_y(out: mat4_t, m: mat4_t, rad: number): mat4_t {
 }
 
 export function mat4_rotate_z(out: mat4_t, m: mat4_t, rad: number): mat4_t {
-    let s = Math.sin(rad);
-    let c = Math.cos(rad);
-    let a00 = m[0];
-    let a01 = m[1];
-    let a02 = m[2];
-    let a03 = m[3];
-    let a10 = m[4];
-    let a11 = m[5];
-    let a12 = m[6];
-    let a13 = m[7];
+    const a00 = m[0], a01 = m[1], a02 = m[2], a03 = m[3],
+          a10 = m[4], a11 = m[5], a12 = m[6], a13 = m[7];
+    const s = Math.sin(rad), c = Math.cos(rad);
 
     out[0] = a00 * c + a10 * s;
     out[1] = a01 * c + a11 * s;

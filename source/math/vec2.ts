@@ -1,4 +1,4 @@
-import {EPSILON, round2} from "./math.ts";
+import {EPSILON} from "./math.ts";
 import {mat2_t} from "./mat2.ts";
 import {mat2x3_t} from "./mat2x3.ts";
 import {mat3_t} from "./mat3.ts";
@@ -99,6 +99,7 @@ export function vec2_inv(v: vec2_t): vec2_t {
 
 export function vec2_swap(v: vec2_t): vec2_t {
     const temp = v[0];
+
     v[0] = v[1];
     v[1] = temp;
 
@@ -114,7 +115,11 @@ export function vec2_add(out: vec2_t, a: vec2_t, b: vec2_t): vec2_t {
 }
 
 export function vec2_add1(a: vec2_t, b: vec2_t): vec2_t {
-    return vec2_add(new TYPE(2), a, b);
+    const out = new TYPE(2);
+
+    vec2_add(out, a, b);
+
+    return out;
 }
 
 export function vec2_add2(a: vec2_t, b: vec2_t): vec2_t {
@@ -129,7 +134,11 @@ export function vec2_sub(out: vec2_t, a: vec2_t, b: vec2_t): vec2_t {
 }
 
 export function vec2_sub1(a: vec2_t, b: vec2_t): vec2_t {
-    return vec2_sub(new TYPE(2), a, b);
+    const out = new TYPE(2);
+
+    vec2_sub(out, a, b);
+
+    return out;
 }
 
 export function vec2_sub2(a: vec2_t, b: vec2_t): vec2_t {
@@ -144,7 +153,11 @@ export function vec2_mul(out: vec2_t, a: vec2_t, b: vec2_t): vec2_t {
 }
 
 export function vec2_mul1(a: vec2_t, b: vec2_t): vec2_t {
-    return vec2_mul(new TYPE(2), a, b);
+    const out = new TYPE(2);
+
+    vec2_mul(out, a, b);
+
+    return out;
 }
 
 export function vec2_mul2(a: vec2_t, b: vec2_t): vec2_t {
@@ -159,7 +172,11 @@ export function vec2_div(out: vec2_t, a: vec2_t, b: vec2_t): vec2_t {
 }
 
 export function vec2_div1(a: vec2_t, b: vec2_t): vec2_t {
-    return vec2_div(new TYPE(2), a, b);
+    const out = new TYPE(2);
+
+    vec2_div(out, a, b);
+
+    return out;
 }
 
 export function vec2_div2(a: vec2_t, b: vec2_t): vec2_t {
@@ -175,7 +192,11 @@ export function vec2_adds(out: vec2_t, v: vec2_t, s: number): vec2_t {
 }
 
 export function vec2_adds1(v: vec2_t, s: number): vec2_t {
-    return vec2_adds(new TYPE(2), v, s);
+    const out = new TYPE(2);
+
+    vec2_adds(out, v, s);
+
+    return out;
 }
 
 export function vec2_adds2(v: vec2_t, s: number): vec2_t {
@@ -190,7 +211,11 @@ export function vec2_subs(out: vec2_t, v: vec2_t, s: number): vec2_t {
 }
 
 export function vec2_subs1(v: vec2_t, s: number): vec2_t {
-    return vec2_subs(new TYPE(2), v, s);
+    const out = new TYPE(2);
+
+    vec2_subs(out, v, s);
+
+    return out;
 }
 
 export function vec2_subs2(v: vec2_t, s: number): vec2_t {
@@ -205,7 +230,11 @@ export function vec2_muls(out: vec2_t, v: vec2_t, s: number): vec2_t {
 }
 
 export function vec2_muls1(v: vec2_t, s: number): vec2_t {
-    return vec2_muls(new TYPE(2), v, s);
+    const out = new TYPE(2);
+
+    vec2_muls(out, v, s);
+
+    return out;
 }
 
 export function vec2_muls2(v: vec2_t, s: number): vec2_t {
@@ -220,7 +249,11 @@ export function vec2_divs(out: vec2_t, v: vec2_t, s: number): vec2_t {
 }
 
 export function vec2_divs1(v: vec2_t, s: number): vec2_t {
-    return vec2_divs(new TYPE(2), v, s);
+    const out = new TYPE(2);
+
+    vec2_divs(out, v, s);
+
+    return out;
 }
 
 export function vec2_divs2(v: vec2_t, s: number): vec2_t {
@@ -236,7 +269,11 @@ export function vec2_addmuls(out: vec2_t, a: vec2_t, b: vec2_t, s: number): vec2
 }
 
 export function vec2_addmuls1(a: vec2_t, b: vec2_t, s: number): vec2_t {
-    return vec2_addmuls(new TYPE(2), a, b, s);
+    const out = new TYPE(2);
+
+    vec2_addmuls(out, a, b, s);
+
+    return out;
 }
 
 export function vec2_addmuls2(a: vec2_t, b: vec2_t, s: number): vec2_t {
@@ -277,7 +314,7 @@ export function vec2_unit(out: vec2_t, v: vec2_t): vec2_t {
     const x = v[0], y = v[1];
     let l = x * x + y * y;
 
-    if (l > 0) {
+    if (l > 0.0) {
         l = 1.0 / Math.sqrt(l);
     }
 
@@ -288,7 +325,11 @@ export function vec2_unit(out: vec2_t, v: vec2_t): vec2_t {
 }
 
 export function vec2_unit1(v: vec2_t): vec2_t {
-    return vec2_unit(new TYPE(2), v);
+    const out = new TYPE(2);
+
+    vec2_unit(out, v);
+
+    return out;
 }
 
 export function vec2_unit2(v: vec2_t): vec2_t {
@@ -299,7 +340,7 @@ export function vec2_dir(out: vec2_t, a: vec2_t, b: vec2_t): vec2_t {
     const x = a[0] - b[0], y = a[1] - b[1];
     let l = x * x + y * y;
 
-    if (l > 0) {
+    if (l > 0.0) {
         l = 1.0 / Math.sqrt(l);
     }
 
@@ -310,7 +351,11 @@ export function vec2_dir(out: vec2_t, a: vec2_t, b: vec2_t): vec2_t {
 }
 
 export function vec2_dir1(a: vec2_t, b: vec2_t): vec2_t {
-    return vec2_dir(new TYPE(2), a, b);
+    const out = new TYPE(2);
+
+    vec2_dir(out, a, b);
+
+    return out;
 }
 
 // transform
@@ -324,7 +369,11 @@ export function vec2_transf_mat2(out: vec2_t, v: vec2_t, m: mat2_t): vec2_t {
 }
 
 export function vec2_transf_mat2_1(v: vec2_t, m: mat2_t): vec2_t {
-    return vec2_transf_mat2(new TYPE(2), v, m);
+    const out = new TYPE(2);
+
+    vec2_transf_mat2(out, v, m);
+
+    return out;
 }
 
 export function vec2_transf_mat2_2(v: vec2_t, m: mat2_t): vec2_t {
@@ -341,7 +390,11 @@ export function vec2_transf_2x3(out : vec2_t, v: vec2_t, m: mat2x3_t): vec2_t {
 }
 
 export function vec2_transf_2x3_1(v: vec2_t, m: mat2x3_t): vec2_t {
-    return vec2_transf_2x3(new TYPE(2), v, m);
+    const out = new TYPE(2);
+
+    vec2_transf_2x3(out, v, m);
+
+    return out;
 }
 
 export function vec2_transf_2x3_2(v: vec2_t, m: mat2x3_t): vec2_t {
@@ -358,7 +411,11 @@ export function vec2_transf_mat3(out: vec2_t, v: vec2_t, m: mat3_t): vec2_t {
 }
 
 export function vec2_transf_mat3_1(v: vec2_t, m: mat3_t): vec2_t {
-    return vec2_transf_mat3(new TYPE(2), v, m);
+    const out = new TYPE(2);
+
+    vec2_transf_mat3(out, v, m);
+
+    return out;
 }
 
 export function vec2_transf_mat3_2(v: vec2_t, m: mat3_t): vec2_t {
@@ -375,7 +432,11 @@ export function vec2_transf_mat4(out: vec2_t, v: vec2_t, m: mat4_t): vec2_t {
 }
 
 export function vec2_transf_mat4_1(v: vec2_t, m: mat4_t): vec2_t {
-    return vec2_transf_mat4(new TYPE(2), v, m);
+    const out = new TYPE(2);
+
+    vec2_transf_mat4(out, v, m);
+
+    return out;
 }
 
 export function vec2_transf_mat4_2(v: vec2_t, m: mat4_t): vec2_t {
@@ -393,7 +454,11 @@ export function vec2_rotate_origin(out: vec2_t, v: vec2_t, a: number): vec2_t {
 }
 
 export function vec2_rotate_origin1(v: vec2_t, a: number): vec2_t {
-    return vec2_rotate_origin(new TYPE(2), v, a);
+    const out = new TYPE(2);
+
+    vec2_rotate_origin(out, v, a);
+
+    return out;
 }
 
 export function vec2_rotate_origin2(v: vec2_t, a: number): vec2_t {
@@ -412,7 +477,11 @@ export function vec2_rotate(out: vec2_t, v: vec2_t, c: vec2_t, a: number): vec2_
 }
 
 export function vec2_rotate1(v: vec2_t, c: vec2_t, a: number): vec2_t {
-    return vec2_rotate(new TYPE(2), v, c, a);
+    const out = new TYPE(2);
+
+    vec2_rotate(out, v, c, a);
+
+    return out;
 }
 
 export function vec2_rotate2(v: vec2_t, c: vec2_t, a: number): vec2_t {
@@ -428,7 +497,11 @@ export function vec2_perp(out: vec2_t, v: vec2_t): vec2_t {
 }
 
 export function vec2_perp1(v: vec2_t): vec2_t {
-    return vec2_perp(new TYPE(2), v);
+    const out = new TYPE(2);
+
+    vec2_perp(out, v);
+
+    return out;
 }
 
 export function vec2_perp_ab(out: vec2_t, a: vec2_t, b: vec2_t): vec2_t {
@@ -439,7 +512,11 @@ export function vec2_perp_ab(out: vec2_t, a: vec2_t, b: vec2_t): vec2_t {
 }
 
 export function vec2_perp_ab1(a: vec2_t, b: vec2_t): vec2_t {
-    return vec2_perp_ab(new TYPE(2), a, b);
+    const out = new TYPE(2);
+
+    vec2_perp_ab(out, a, b);
+
+    return out;
 }
 
 export function vec2_refl(out: vec2_t, v: vec2_t, n: vec2_t): vec2_t {
@@ -452,7 +529,11 @@ export function vec2_refl(out: vec2_t, v: vec2_t, n: vec2_t): vec2_t {
 }
 
 export function vec2_refl1(v: vec2_t, n: vec2_t): vec2_t {
-    return vec2_refl(new TYPE(2), v, n);
+    const out = new TYPE(2);
+
+    vec2_refl(out, v, n);
+
+    return out;
 }
 
 // angular
@@ -468,7 +549,6 @@ export function vec2_angle_ab(a: vec2_t, b: vec2_t): number {
     return Math.acos(Math.min(Math.max(cos, -1.0), 1.0));
 }
 
-
 // interpolation
 export function vec2_lerp(out: vec2_t, a: vec2_t, b: vec2_t, t: number): vec2_t {
     const x = a[0], y = a[1];
@@ -480,7 +560,11 @@ export function vec2_lerp(out: vec2_t, a: vec2_t, b: vec2_t, t: number): vec2_t 
 }
 
 export function vec2_lerp1(a: vec2_t, b: vec2_t, t: number): vec2_t {
-    return vec2_lerp(new TYPE(2), a, b, t);
+    const out = new TYPE(2);
+
+    vec2_lerp(out, a, b, t);
+
+    return out;
 }
 
 export function vec2_lerp2(a: vec2_t, b: vec2_t, t: number): vec2_t {
@@ -496,7 +580,11 @@ export function vec2_rand(out: vec2_t): vec2_t {
 }
 
 export function vec2_rand1(): vec2_t {
-    return vec2_rand(new TYPE(2));
+    const out = new TYPE(2);
+
+    vec2_rand(out);
+
+    return out;
 }
 
 export function vec2_rand_unit(out: vec2_t, scale: number): vec2_t {
@@ -509,7 +597,11 @@ export function vec2_rand_unit(out: vec2_t, scale: number): vec2_t {
 }
 
 export function vec2_rand_unit1(scale: number): vec2_t {
-    return vec2_rand_unit(new TYPE(2), scale);
+    const out = new TYPE(2);
+
+    vec2_rand_unit(out, scale);
+
+    return out;
 }
 
 // rounding
@@ -521,7 +613,11 @@ export function vec2_floor(out: vec2_t, v: vec2_t): vec2_t {
 }
 
 export function vec2_floor1(v: vec2_t): vec2_t {
-    return vec2_floor(new TYPE(2), v);
+    const out = new TYPE(2);
+
+    vec2_floor(out, v);
+
+    return out;
 }
 
 export function vec2_ceil(out: vec2_t, v: vec2_t): vec2_t {
@@ -532,7 +628,11 @@ export function vec2_ceil(out: vec2_t, v: vec2_t): vec2_t {
 }
 
 export function vec2_ceil1(v: vec2_t): vec2_t {
-    return vec2_ceil(new TYPE(2), v);
+    const out = new TYPE(2);
+
+    vec2_ceil(out, v);
+
+    return out;
 }
 
 export function vec2_round(out: vec2_t, v: vec2_t): vec2_t {
@@ -543,7 +643,11 @@ export function vec2_round(out: vec2_t, v: vec2_t): vec2_t {
 }
 
 export function vec2_round1(v: vec2_t): vec2_t {
-    return vec2_round(new TYPE(2), v);
+    const out = new TYPE(2);
+
+    vec2_round(out, v);
+
+    return out;
 }
 
 export function vec2_trunc(out: vec2_t, v: vec2_t): vec2_t {
@@ -554,7 +658,11 @@ export function vec2_trunc(out: vec2_t, v: vec2_t): vec2_t {
 }
 
 export function vec2_trunc1(v: vec2_t): vec2_t {
-    return vec2_trunc(new TYPE(2), v);
+    const out = new TYPE(2);
+
+    vec2_trunc(out, v);
+
+    return out;
 }
 
 export function vec2_snap(out: vec2_t, v: vec2_t, g: vec2_t): vec2_t {
@@ -565,7 +673,11 @@ export function vec2_snap(out: vec2_t, v: vec2_t, g: vec2_t): vec2_t {
 }
 
 export function vec2_snap1(v: vec2_t, g: vec2_t): vec2_t {
-    return vec2_snap(new TYPE(2), v, g);
+    const out = new TYPE(2);
+
+    vec2_snap(out, v, g);
+
+    return out;
 }
 
 // bounding
@@ -577,7 +689,11 @@ export function vec2_min(out: vec2_t, a: vec2_t, b: vec2_t): vec2_t {
 }
 
 export function vec2_min1(a: vec2_t, b: vec2_t): vec2_t {
-    return vec2_min(new TYPE(2), a, b);
+    const out = new TYPE(2);
+
+    vec2_min(out, a, b);
+
+    return out;
 }
 
 export function vec2_max(out: vec2_t, a: vec2_t, b: vec2_t): vec2_t {
@@ -588,7 +704,11 @@ export function vec2_max(out: vec2_t, a: vec2_t, b: vec2_t): vec2_t {
 }
 
 export function vec2_max1(a: vec2_t, b: vec2_t): vec2_t {
-    return vec2_max(new TYPE(2), a, b);
+    const out = new TYPE(2);
+
+    vec2_max(out, a, b);
+
+    return out;
 }
 
 export function vec2_clamp(out: vec2_t, v: vec2_t, min: vec2_t, max: vec2_t): vec2_t {
@@ -599,7 +719,11 @@ export function vec2_clamp(out: vec2_t, v: vec2_t, min: vec2_t, max: vec2_t): ve
 }
 
 export function vec2_clamp1(v: vec2_t, min: vec2_t, max: vec2_t): vec2_t {
-    return vec2_clamp(new TYPE(2), v, min, max);
+    const out = new TYPE(2);
+
+    vec2_clamp(out, v, min, max);
+
+    return out;
 }
 
 export function vec2_clamp2(v: vec2_t, min: vec2_t, max: vec2_t): vec2_t {
@@ -617,7 +741,11 @@ export function vec2_wrap(out: vec2_t, v: vec2_t, min: vec2_t, max: vec2_t): vec
 }
 
 export function vec2_wrap1(v: vec2_t, min: vec2_t, max: vec2_t): vec2_t {
-    return vec2_wrap(new TYPE(2), v, min, max);
+    const out = new TYPE(2);
+
+    vec2_wrap(out, v, min, max);
+
+    return out;
 }
 
 export function vec2_wrap2(v: vec2_t, min: vec2_t, max: vec2_t): vec2_t {
@@ -641,7 +769,7 @@ export function vec2_equals(a: vec2_t, b: vec2_t, e: number = EPSILON): boolean 
 
 // string
 export function vec2_str(v: vec2_t): string {
-    return `vec2(${round2(v[0], 6)}, ${round2(v[1], 6)})`;
+    return `vec2(${v[0]}, ${v[1]})`;
 }
 
 export function vec2_print(v: vec2_t): void {

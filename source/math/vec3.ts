@@ -164,7 +164,11 @@ export function vec3_add(out: vec3_t, a: vec3_t, b: vec3_t): vec3_t {
 }
 
 export function vec3_add1(a: vec3_t, b: vec3_t): vec3_t {
-    return vec3_add(new TYPE(3), a, b);
+    const out = new TYPE(3);
+
+    vec3_add(out, a, b);
+
+    return out;
 }
 
 export function vec3_add2(a: vec3_t, b: vec3_t): vec3_t {
@@ -180,7 +184,11 @@ export function vec3_sub(out: vec3_t, a: vec3_t, b: vec3_t): vec3_t {
 }
 
 export function vec3_sub1(a: vec3_t, b: vec3_t): vec3_t {
-    return vec3_sub(new TYPE(3), a, b);
+    const out = new TYPE(3);
+
+    vec3_sub(out, a, b);
+
+    return out;
 
 }
 
@@ -197,7 +205,11 @@ export function vec3_mul(out: vec3_t, a: vec3_t, b: vec3_t): vec3_t {
 }
 
 export function vec3_mul1(a: vec3_t, b: vec3_t): vec3_t {
-    return vec3_mul(new TYPE(3), a, b);
+    const out = new TYPE(3);
+
+    vec3_mul(out, a, b);
+
+    return out;
 }
 
 export function vec3_mul2(a: vec3_t, b: vec3_t): vec3_t {
@@ -213,7 +225,11 @@ export function vec3_div(out: vec3_t, a: vec3_t, b: vec3_t): vec3_t {
 }
 
 export function vec3_div1(a: vec3_t, b: vec3_t): vec3_t {
-    return vec3_div(new TYPE(3), a, b);
+    const out = new TYPE(3);
+
+    vec3_div(out, a, b);
+
+    return out;
 }
 
 export function vec3_div2(a: vec3_t, b: vec3_t): vec3_t {
@@ -230,7 +246,11 @@ export function vec3_adds(out: vec3_t, v: vec3_t, s: number): vec3_t {
 }
 
 export function vec3_adds1(v: vec3_t, s: number): vec3_t {
-    return vec3_adds(new TYPE(3), v, s);
+    const out = new TYPE(3);
+
+    vec3_adds(out, v, s);
+
+    return out;
 }
 
 export function vec3_adds2(v: vec3_t, s: number): vec3_t {
@@ -246,7 +266,11 @@ export function vec3_subs(out: vec3_t, v: vec3_t, s: number): vec3_t {
 }
 
 export function vec3_subs1(v: vec3_t, s: number): vec3_t {
-    return vec3_subs(new TYPE(3), v, s);
+    const out = new TYPE(3);
+
+    vec3_subs(out, v, s);
+
+    return out;
 }
 
 export function vec3_subs2(v: vec3_t, s: number): vec3_t {
@@ -262,7 +286,11 @@ export function vec3_muls(out: vec3_t, v: vec3_t, s: number): vec3_t {
 }
 
 export function vec3_muls1(v: vec3_t, s: number): vec3_t {
-    return vec3_muls(new TYPE(3), v, s);
+    const out = new TYPE(3);
+
+    vec3_muls(out, v, s);
+
+    return out;
 }
 
 export function vec3_muls2(v: vec3_t, s: number): vec3_t {
@@ -278,7 +306,11 @@ export function vec3_divs(out: vec3_t, v: vec3_t, s: number): vec3_t {
 }
 
 export function vec3_divs1(v: vec3_t, s: number): vec3_t {
-    return vec3_divs(new TYPE(3), v, s);
+    const out = new TYPE(3);
+
+    vec3_divs(out, v, s);
+
+    return out;
 }
 
 export function vec3_divs2(v: vec3_t, s: number): vec3_t {
@@ -295,7 +327,11 @@ export function vec3_addmuls(out: vec3_t, a: vec3_t, b: vec3_t, s: number): vec3
 }
 
 export function vec3_addmuls1(a: vec3_t, b: vec3_t, s: number): vec3_t {
-    return vec3_addmuls(new TYPE(3), a, b, s);
+    const out = new TYPE(3);
+
+    vec3_addmuls(out, a, b, s);
+
+    return out;
 }
 
 export function vec3_addmuls2(a: vec3_t, b: vec3_t, s: number): vec3_t {
@@ -319,7 +355,11 @@ export function vec3_cross(out: vec3_t, a: vec3_t, b: vec3_t): vec3_t {
 }
 
 export function vec3_cross1(a: vec3_t, b: vec3_t): vec3_t {
-    return vec3_cross(new TYPE(3), a, b);
+    const out = new TYPE(3);
+
+    vec3_cross(out, a, b);
+
+    return out;
 }
 
 // norm
@@ -349,7 +389,7 @@ export function vec3_unit(out: vec3_t, v: vec3_t): vec3_t {
     const x = v[0], y = v[1], z = v[2];
     let l = x * x + y * y + z * z;
 
-    if (l > 0) {
+    if (l > 0.0) {
         l = 1.0 / Math.sqrt(l);
     }
 
@@ -361,7 +401,11 @@ export function vec3_unit(out: vec3_t, v: vec3_t): vec3_t {
 }
 
 export function vec3_unit1(v: vec3_t): vec3_t {
-    return vec3_unit(new TYPE(3), v);
+    const out = new TYPE(3);
+
+    vec3_unit(out, v);
+
+    return out;
 }
 
 export function vec3_unit2(v: vec3_t): vec3_t {
@@ -372,7 +416,7 @@ export function vec3_dir(out: vec3_t, a: vec3_t, b: vec3_t): vec3_t {
     const x = a[0] - b[0], y = a[1] - b[1], z = a[2] - b[2];
     let l = x * x + y * y + z * z;
 
-    if (l > 0) {
+    if (l > 0.0) {
         l = 1.0 / Math.sqrt(l);
     }
 
@@ -384,7 +428,11 @@ export function vec3_dir(out: vec3_t, a: vec3_t, b: vec3_t): vec3_t {
 }
 
 export function vec3_dir1(a: vec3_t, b: vec3_t): vec3_t {
-    return vec3_dir(new TYPE(3), a, b);
+    const out = new TYPE(3);
+
+    vec3_dir(out, a, b);
+
+    return out;
 }
 
 // transform
@@ -399,7 +447,11 @@ export function vec3_transf_mat3(out: vec3_t, v: vec3_t, m: mat3_t): vec3_t {
 }
 
 export function vec3_transf_mat3_1(v: vec3_t, m: mat3_t): vec3_t {
-    return vec3_transf_mat3(new TYPE(3), v, m);
+    const out = new TYPE(3);
+
+    vec3_transf_mat3(out, v, m);
+
+    return out;
 }
 
 export function vec3_transf_mat3_2(v: vec3_t, m: mat3_t): vec3_t {
@@ -418,7 +470,11 @@ export function vec3_transf_mat4(out: vec3_t, v: vec3_t, m: mat4_t): vec3_t {
 }
 
 export function vec3_transf_mat4_1(v: vec3_t, m: mat3_t): vec3_t {
-    return vec3_transf_mat4(new TYPE(3), v, m);
+    const out = new TYPE(3);
+
+    vec3_transf_mat4(out, v, m);
+
+    return out;
 }
 
 export function vec3_transf_mat4_2(v: vec3_t, m: mat3_t): vec3_t {
@@ -439,7 +495,11 @@ export function vec3_rotate_x(out: vec3_t, v: vec3_t, c: vec3_t, r: number): vec
 }
 
 export function vec3_rotate_x1(v: vec3_t, c: vec3_t, r: number): vec3_t {
-    return vec3_rotate_x(new TYPE(3), v, c, r);
+    const out = new TYPE(3);
+
+    vec3_rotate_x(out, v, c, r);
+
+    return out;
 }
 
 export function vec3_rotate_x2(v: vec3_t, c: vec3_t, r: number): vec3_t {
@@ -460,7 +520,11 @@ export function vec3_rotate_y(out: vec3_t, v: vec3_t, c: vec3_t, r: number): vec
 }
 
 export function vec3_rotate_y1(v: vec3_t, c: vec3_t, r: number): vec3_t {
-    return vec3_rotate_y(new TYPE(3), v, c, r);
+    const out = new TYPE(3);
+
+    vec3_rotate_y(out, v, c, r);
+
+    return out;
 }
 
 export function vec3_rotate_y2(v: vec3_t, c: vec3_t, r: number): vec3_t {
@@ -481,7 +545,11 @@ export function vec3_rotate_z(out: vec3_t, v: vec3_t, c: vec3_t, r: number): vec
 }
 
 export function vec3_rotate_z1(v: vec3_t, c: vec3_t, r: number): vec3_t {
-    return vec3_rotate_z(new TYPE(3), v, c, r);
+    const out = new TYPE(3);
+
+    vec3_rotate_z(out, v, c, r);
+
+    return out;
 }
 
 export function vec3_rotate_z2(v: vec3_t, c: vec3_t, r: number): vec3_t {
@@ -500,7 +568,11 @@ export function vec3_refl(out: vec3_t, v: vec3_t, n: vec3_t): vec3_t {
 }
 
 export function vec3_refl1(v: vec3_t, n: vec3_t): vec3_t {
-    return vec3_refl(new TYPE(3), v, n);
+    const out = new TYPE(3);
+
+    vec3_refl(out, v, n);
+
+    return out;
 }
 
 // angular
@@ -535,7 +607,11 @@ export function vec3_lerp(out: vec3_t, a: vec3_t, b: vec3_t, t: number): vec3_t 
 }
 
 export function vec3_lerp1(a: vec3_t, b: vec3_t, t: number): vec3_t {
-    return vec3_lerp(new TYPE(3), a, b, t);
+    const out = new TYPE(3);
+
+    vec3_lerp(out, a, b, t);
+
+    return out;
 }
 
 export function vec3_lerp2(a: vec3_t, b: vec3_t, t: number): vec3_t {
@@ -595,7 +671,11 @@ export function vec3_rand(out: vec3_t): vec3_t {
 }
 
 export function vec3_rand1(): vec3_t {
-    return vec3_rand(new TYPE(3));
+    const out = new TYPE(3);
+
+    vec3_rand(out);
+
+    return out;
 }
 
 export function vec3_rand_unit(out: vec3_t, scale: number): vec3_t {
@@ -611,7 +691,11 @@ export function vec3_rand_unit(out: vec3_t, scale: number): vec3_t {
 }
 
 export function vec3_rand_unit1(scale: number): vec3_t {
-    return vec3_rand_unit(new TYPE(3), scale);
+    const out = new TYPE(3);
+
+    vec3_rand_unit(out, scale);
+
+    return out;
 }
 
 // rounding
@@ -624,7 +708,11 @@ export function vec3_floor(out: vec3_t, v: vec3_t): vec3_t {
 }
 
 export function vec3_floor1(v: vec3_t): vec3_t {
-    return vec3_floor(new TYPE(3), v);
+    const out = new TYPE(3);
+
+    vec3_floor(out, v);
+
+    return out;
 }
 
 export function vec3_ceil(out: vec3_t, v: vec3_t): vec3_t {
@@ -636,7 +724,11 @@ export function vec3_ceil(out: vec3_t, v: vec3_t): vec3_t {
 }
 
 export function vec3_ceil1(v: vec3_t): vec3_t {
-    return vec3_ceil(new TYPE(3), v);
+    const out = new TYPE(3);
+
+    vec3_ceil(out, v);
+
+    return out;
 }
 
 export function vec3_round(out: vec3_t, v: vec3_t): vec3_t {
@@ -648,7 +740,11 @@ export function vec3_round(out: vec3_t, v: vec3_t): vec3_t {
 }
 
 export function vec3_round1(v: vec3_t): vec3_t {
-    return vec3_round(new TYPE(3), v);
+    const out = new TYPE(3);
+
+    vec3_round(out, v);
+
+    return out;
 }
 
 export function vec3_trunc(out: vec3_t, v: vec3_t): vec3_t {
@@ -660,7 +756,11 @@ export function vec3_trunc(out: vec3_t, v: vec3_t): vec3_t {
 }
 
 export function vec3_trunc1(v: vec3_t): vec3_t {
-    return vec3_trunc(new TYPE(3), v);
+    const out = new TYPE(3);
+
+    vec3_trunc(out, v);
+
+    return out;
 }
 
 export function vec3_snap(out: vec3_t, v: vec3_t, g: vec3_t): vec3_t {
@@ -672,7 +772,11 @@ export function vec3_snap(out: vec3_t, v: vec3_t, g: vec3_t): vec3_t {
 }
 
 export function vec3_snap1(v: vec3_t, g: vec3_t): vec3_t {
-    return vec3_snap(new TYPE(3), v, g);
+    const out = new TYPE(3);
+
+    vec3_snap(out, v, g);
+
+    return out;
 }
 
 // bounding
@@ -685,7 +789,11 @@ export function vec3_min(out: vec3_t, a: vec3_t, b: vec3_t): vec3_t {
 }
 
 export function vec3_min1(a: vec3_t, b: vec3_t): vec3_t {
-    return vec3_min(new TYPE(3), a, b);
+    const out = new TYPE(3);
+
+    vec3_min(out, a, b);
+
+    return out;
 }
 
 export function vec3_max(out: vec3_t, a: vec3_t, b: vec3_t): vec3_t {
@@ -697,7 +805,11 @@ export function vec3_max(out: vec3_t, a: vec3_t, b: vec3_t): vec3_t {
 }
 
 export function vec3_max1(a: vec3_t, b: vec3_t): vec3_t {
-    return vec3_max(new TYPE(3), a, b);
+    const out = new TYPE(3);
+
+    vec3_max(out, a, b);
+
+    return out;
 }
 
 export function vec3_clamp(out: vec3_t, v: vec3_t, min: vec3_t, max: vec3_t): vec3_t {
@@ -709,7 +821,11 @@ export function vec3_clamp(out: vec3_t, v: vec3_t, min: vec3_t, max: vec3_t): ve
 }
 
 export function vec3_clamp1(v: vec3_t, min: vec3_t, max: vec3_t): vec3_t {
-    return vec3_clamp(new TYPE(3), v, min, max);
+    const out = new TYPE(3);
+
+    vec3_clamp(out, v, min, max);
+
+    return out;
 }
 
 export function vec3_clamp2(v: vec3_t, min: vec3_t, max: vec3_t): vec3_t {
@@ -728,7 +844,11 @@ export function vec3_wrap(out: vec3_t, v: vec3_t, min: vec3_t, max: vec3_t): vec
 }
 
 export function vec3_wrap1(v: vec3_t, min: vec3_t, max: vec3_t): vec3_t {
-    return vec3_wrap(new TYPE(3), v, min, max);
+    const out = new TYPE(3);
+
+    vec3_wrap(out, v, min, max);
+
+    return out;
 }
 
 export function vec3_wrap2(v: vec3_t, min: vec3_t, max: vec3_t): vec3_t {

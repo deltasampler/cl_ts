@@ -143,7 +143,11 @@ export function mat3_add(out: mat3_t, a: mat3_t, b: mat3_t): mat3_t {
 }
 
 export function mat3_add1(a: mat3_t, b: mat3_t): mat3_t {
-    return mat3_add(new TYPE(9), a, b);
+    const out = new TYPE(9);
+
+    mat3_add(out, a, b);
+
+    return out;
 }
 
 export function mat3_add2(a: mat3_t, b: mat3_t): mat3_t {
@@ -165,7 +169,11 @@ export function mat3_sub(out: mat3_t, a: mat3_t, b: mat3_t): mat3_t {
 }
 
 export function mat3_sub1(a: mat3_t, b: mat3_t): mat3_t {
-    return mat3_sub(new TYPE(9), a, b);
+    const out = new TYPE(9);
+
+    mat3_sub(out, a, b);
+
+    return out;
 }
 
 export function mat3_sub2(a: mat3_t, b: mat3_t): mat3_t {
@@ -188,7 +196,11 @@ export function mat3_muls(out: mat3_t, m: mat3_t, s: number): mat3_t {
 }
 
 export function mat3_muls1(m: mat3_t, s: number): mat3_t {
-    return mat3_muls(new TYPE(9), m, s);
+    const out = new TYPE(9);
+
+    mat3_muls(out, m, s);
+
+    return out;
 }
 
 export function mat3_muls2(m: mat3_t, s: number): mat3_t {
@@ -211,7 +223,11 @@ export function mat3_addmuls(out: mat3_t, a: mat3_t, b: mat3_t, s: number): mat3
 }
 
 export function mat3_addmuls1(a: mat3_t, b: mat3_t, s: number): mat3_t {
-    return mat3_addmuls(new TYPE(9), a, b, s);
+    const out = new TYPE(9);
+
+    mat3_addmuls(out, a, b, s);
+
+    return out;
 }
 
 export function mat3_addmuls2(a: mat3_t, b: mat3_t, s: number): mat3_t {
@@ -241,7 +257,11 @@ export function mat3_mul(out: mat3_t, a: mat3_t, b: mat3_t): mat3_t {
 }
 
 export function mat3_mul1(a: mat3_t, b: mat3_t): mat3_t {
-    return mat3_mul(new TYPE(9), a, b);
+    const out = new TYPE(9);
+
+    mat3_mul(out, a, b);
+
+    return out;
 }
 
 export function mat3_mul2(a: mat3_t, b: mat3_t): mat3_t {
@@ -260,7 +280,11 @@ export function mat3_mulmv(out: mat3_t, m: mat3_t, v: vec3_t): vec3_t {
 }
 
 export function mat3_mulmv1(m: mat3_t, v: vec3_t): vec3_t {
-    return mat3_mulmv(new TYPE(3), m, v);
+    const out = new TYPE(3);
+
+    mat3_mulmv(out, m, v);
+
+    return out;
 }
 
 export function mat3_mulmv2(m: mat3_t, v: vec3_t): vec3_t {
@@ -278,7 +302,11 @@ export function mat3_mulvm(out: mat3_t, v: vec3_t, m: mat3_t): vec3_t {
 }
 
 export function mat3_mulvm1(m: mat3_t, v: vec3_t): vec3_t {
-    return mat3_mulvm(new TYPE(3), m, v);
+    const out = new TYPE(3);
+
+    mat3_mulvm(out, m, v);
+
+    return out;
 }
 
 export function mat3_mulvm2(m: mat3_t, v: vec3_t): vec3_t {
@@ -354,11 +382,9 @@ export function mat3_inv(out: mat3_t, m: mat3_t): mat3_t|null {
     const a00 = m[0], a01 = m[1], a02 = m[2],
           a10 = m[3], a11 = m[4], a12 = m[5],
           a20 = m[6], a21 = m[7], a22 = m[8];
-
     const b01 = a22 * a11 - a12 * a21;
     const b11 = -a22 * a10 + a12 * a20;
     const b21 = a21 * a10 - a11 * a20;
-
     let det = a00 * b01 + a01 * b11 + a02 * b21;
 
     if (!det) {

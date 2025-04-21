@@ -189,7 +189,11 @@ export function vec4_add(out: vec4_t, a: vec4_t, b: vec4_t): vec4_t {
 }
 
 export function vec4_add1(a: vec4_t, b: vec4_t): vec4_t {
-    return vec4_add(new TYPE(4), a, b);
+    const out = new TYPE(4);
+
+    vec4_add(out, a, b);
+
+    return out;
 }
 
 export function vec4_add2(a: vec4_t, b: vec4_t): vec4_t {
@@ -206,7 +210,11 @@ export function vec4_sub(out: vec4_t, a: vec4_t, b: vec4_t): vec4_t {
 }
 
 export function vec4_sub1(a: vec4_t, b: vec4_t): vec4_t {
-    return vec4_sub(new TYPE(4), a, b);
+    const out = new TYPE(4);
+
+    vec4_sub(out, a, b);
+
+    return out;
 }
 
 export function vec4_sub2(a: vec4_t, b: vec4_t): vec4_t {
@@ -223,7 +231,11 @@ export function vec4_mul(out: vec4_t, a: vec4_t, b: vec4_t): vec4_t {
 }
 
 export function vec4_mul1(a: vec4_t, b: vec4_t): vec4_t {
-    return vec4_mul(new TYPE(4), a, b);
+    const out = new TYPE(4);
+
+    vec4_mul(out, a, b);
+
+    return out;
 }
 
 export function vec4_mul2(a: vec4_t, b: vec4_t): vec4_t {
@@ -240,7 +252,11 @@ export function vec4_div(out: vec4_t, a: vec4_t, b: vec4_t): vec4_t {
 }
 
 export function vec4_div1(a: vec4_t, b: vec4_t): vec4_t {
-    return vec4_div(new TYPE(4), a, b);
+    const out = new TYPE(4);
+
+    vec4_div(out, a, b);
+
+    return out;
 }
 
 export function vec4_div2(a: vec4_t, b: vec4_t): vec4_t {
@@ -258,7 +274,11 @@ export function vec4_adds(out: vec4_t, v: vec4_t, s: number): vec4_t {
 }
 
 export function vec4_adds1(v: vec4_t, s: number): vec4_t {
-    return vec4_adds(new TYPE(4), v, s);
+    const out = new TYPE(4);
+
+    vec4_adds(out, v, s);
+
+    return out;
 }
 
 export function vec4_adds2(v: vec4_t, s: number): vec4_t {
@@ -275,7 +295,11 @@ export function vec4_subs(out: vec4_t, v: vec4_t, s: number): vec4_t {
 }
 
 export function vec4_subs1(v: vec4_t, s: number): vec4_t {
-    return vec4_subs(new TYPE(4), v, s);
+    const out = new TYPE(4);
+
+    vec4_subs(out, v, s);
+
+    return out;
 }
 
 export function vec4_subs2(v: vec4_t, s: number): vec4_t {
@@ -292,7 +316,11 @@ export function vec4_muls(out: vec4_t, v: vec4_t, s: number): vec4_t {
 }
 
 export function vec4_muls1(v: vec4_t, s: number): vec4_t {
-    return vec4_muls(new TYPE(4), v, s);
+    const out = new TYPE(4);
+
+    vec4_muls(out, v, s);
+
+    return out;
 }
 
 export function vec4_muls2(v: vec4_t, s: number): vec4_t {
@@ -309,7 +337,11 @@ export function vec4_divs(out: vec4_t, v: vec4_t, s: number): vec4_t {
 }
 
 export function vec4_divs1(v: vec4_t, s: number): vec4_t {
-    return vec4_divs(new TYPE(4), v, s);
+    const out = new TYPE(4);
+
+    vec4_divs(out, v, s);
+
+    return out;
 }
 
 export function vec4_divs2(v: vec4_t, s: number): vec4_t {
@@ -327,7 +359,11 @@ export function vec4_addmuls(out: vec4_t, a: vec4_t, b: vec4_t, s: number): vec4
 }
 
 export function vec4_addmuls1(a: vec4_t, b: vec4_t, s: number): vec4_t {
-    return vec4_addmuls(new TYPE(4), a, b, s);
+    const out = new TYPE(4);
+
+    vec4_addmuls(out, a, b, s);
+
+    return out;
 }
 
 export function vec4_addmuls2(a: vec4_t, b: vec4_t, s: number): vec4_t {
@@ -360,7 +396,11 @@ export function vec4_cross(out: vec4_t, a: vec4_t, b: vec4_t, c: vec4_t): vec4_t
 }
 
 export function vec4_cross1(a: vec4_t, b: vec4_t, c: vec4_t): vec4_t {
-    return vec4_cross(new TYPE(4), a, b, c);
+    const out = new TYPE(4);
+
+    vec4_cross(out, a, b, c);
+
+    return out;
 }
 
 // norm
@@ -391,7 +431,7 @@ export function vec4_unit(out: vec4_t, v: vec4_t): vec4_t {
     const x = v[0], y = v[1], z = v[2], w = v[3];
     let l = x * x + y * y + z * z + w * w;
 
-    if (l > 0) {
+    if (l > 0.0) {
         l = 1.0 / Math.sqrt(l);
     }
 
@@ -404,7 +444,11 @@ export function vec4_unit(out: vec4_t, v: vec4_t): vec4_t {
 }
 
 export function vec4_unit1(v: vec4_t): vec4_t {
-    return vec4_unit(new TYPE(4), v);
+    const out = new TYPE(4);
+
+    vec4_unit(out, v);
+
+    return out;
 }
 
 export function vec4_unit2(v: vec4_t): vec4_t {
@@ -415,7 +459,7 @@ export function vec4_dir(out: vec4_t, a: vec3_t, b: vec4_t): vec4_t {
     const x = a[0] - b[0], y = a[1] - b[1], z = a[2] - b[2], w = a[3] - b[3];
     let l = x * x + y * y + z * z + w * w;
 
-    if (l > 0) {
+    if (l > 0.0) {
         l = 1.0 / Math.sqrt(l);
     }
 
@@ -428,7 +472,11 @@ export function vec4_dir(out: vec4_t, a: vec3_t, b: vec4_t): vec4_t {
 }
 
 export function vec4_dir1(a: vec3_t, b: vec4_t): vec4_t {
-    return vec4_dir(new TYPE(4), a, b);
+    const out = new TYPE(4);
+
+    vec4_dir(out, a, b);
+
+    return out;
 }
 
 // transform
@@ -444,7 +492,11 @@ export function vec4_transf_mat4(out: vec4_t, v: vec4_t, m: mat4_t): vec4_t {
 }
 
 export function vec4_transf_mat4_1(v: vec4_t, m: mat4_t): vec4_t {
-    return vec4_transf_mat4(new TYPE(4), v, m);
+    const out = new TYPE(4);
+
+    vec4_transf_mat4(out, v, m);
+
+    return out;
 }
 
 export function vec4_transf_mat4_2(v: vec4_t, m: mat4_t): vec4_t {
@@ -464,7 +516,11 @@ export function vec4_lerp(out: vec4_t, a: vec4_t, b: vec4_t, t: number): vec4_t 
 }
 
 export function vec4_lerp1(a: vec4_t, b: vec4_t, t: number): vec4_t {
-    return vec4_lerp(new TYPE(4), a, b, t);
+    const out = new TYPE(4);
+
+    vec4_lerp(out, a, b, t);
+
+    return out;
 }
 
 export function vec4_lerp2(a: vec4_t, b: vec4_t, t: number): vec4_t {
@@ -482,7 +538,11 @@ export function vec4_rand(out: vec4_t): vec4_t {
 }
 
 export function vec4_rand1(): vec4_t {
-    return vec4_rand(new TYPE(4));
+    const out = new TYPE(4);
+
+    vec4_rand(out);
+
+    return out;
 }
 
 export function vec4_rand_unit(out: vec4_t, scale: number): vec4_t {
@@ -511,7 +571,11 @@ export function vec4_rand_unit(out: vec4_t, scale: number): vec4_t {
 }
 
 export function vec4_rand_unit1(scale: number): vec4_t {
-    return vec4_rand_unit(new TYPE(4), scale);
+    const out = new TYPE(4);
+
+    vec4_rand_unit(out, scale);
+
+    return out;
 }
 
 // rounding
@@ -525,7 +589,11 @@ export function vec4_floor(out: vec4_t, v: vec4_t): vec4_t {
 }
 
 export function vec4_floor1(v: vec4_t): vec4_t {
-    return vec4_floor(new TYPE(4), v);
+    const out = new TYPE(4);
+
+    vec4_floor(out, v);
+
+    return out;
 }
 
 export function vec4_ceil(out: vec4_t, v: vec4_t): vec4_t {
@@ -538,7 +606,11 @@ export function vec4_ceil(out: vec4_t, v: vec4_t): vec4_t {
 }
 
 export function vec4_ceil1(v: vec4_t): vec4_t {
-    return vec4_ceil(new TYPE(4), v);
+    const out = new TYPE(4);
+
+    vec4_ceil(out, v);
+
+    return out;
 }
 
 export function vec4_round(out: vec4_t, v: vec4_t): vec4_t {
@@ -551,7 +623,11 @@ export function vec4_round(out: vec4_t, v: vec4_t): vec4_t {
 }
 
 export function vec4_round1(v: vec4_t): vec4_t {
-    return vec4_round(new TYPE(4), v);
+    const out = new TYPE(4);
+
+    vec4_round(out, v);
+
+    return out;
 }
 
 export function vec4_trunc(out: vec4_t, v: vec4_t): vec4_t {
@@ -564,7 +640,11 @@ export function vec4_trunc(out: vec4_t, v: vec4_t): vec4_t {
 }
 
 export function vec4_trunc1(v: vec4_t): vec4_t {
-    return vec4_trunc(new TYPE(4), v);
+    const out = new TYPE(4);
+
+    vec4_trunc(out, v);
+
+    return out;
 }
 
 export function vec4_snap(out: vec4_t, v: vec4_t, g: vec4_t): vec4_t {
@@ -577,7 +657,11 @@ export function vec4_snap(out: vec4_t, v: vec4_t, g: vec4_t): vec4_t {
 }
 
 export function vec4_snap1(v: vec4_t, g: vec4_t): vec4_t {
-    return vec4_snap(new TYPE(4), v, g);
+    const out = new TYPE(4);
+
+    vec4_snap(out, v, g);
+
+    return out;
 }
 
 // bounding
@@ -591,7 +675,11 @@ export function vec4_min(out: vec4_t, a: vec4_t, b: vec4_t): vec4_t {
 }
 
 export function vec4_min1(a: vec4_t, b: vec4_t): vec4_t {
-    return vec4_min(new TYPE(4), a, b);
+    const out = new TYPE(4);
+
+    vec4_min(out, a, b);
+
+    return out;
 }
 
 export function vec4_max(out: vec4_t, a: vec4_t, b: vec4_t): vec4_t {
@@ -604,7 +692,11 @@ export function vec4_max(out: vec4_t, a: vec4_t, b: vec4_t): vec4_t {
 }
 
 export function vec4_max1(a: vec4_t, b: vec4_t): vec4_t {
-    return vec4_max(new TYPE(4), a, b);
+    const out = new TYPE(4);
+
+    vec4_max(out, a, b);
+
+    return out;
 }
 
 export function vec4_clamp(out: vec4_t, v: vec4_t, min: vec4_t, max: vec4_t): vec4_t {
@@ -617,7 +709,11 @@ export function vec4_clamp(out: vec4_t, v: vec4_t, min: vec4_t, max: vec4_t): ve
 }
 
 export function vec4_clamp1(v: vec4_t, min: vec4_t, max: vec4_t): vec4_t {
-    return vec4_clamp(new TYPE(4), v, min, max);
+    const out = new TYPE(4);
+
+    vec4_clamp(out, v, min, max);
+
+    return out;
 }
 
 export function vec4_clamp2(v: vec4_t, min: vec4_t, max: vec4_t): vec4_t {
@@ -636,7 +732,11 @@ export function vec4_wrap(out: vec4_t, v: vec4_t, min: vec4_t, max: vec4_t): vec
     return out;
 }
 export function vec4_wrap1(v: vec4_t, min: vec4_t, max: vec4_t): vec4_t {
-    return vec4_wrap(new TYPE(4), v, min, max);
+    const out = new TYPE(4);
+
+    vec4_wrap(out, v, min, max);
+
+    return out;
 }
 
 export function vec4_wrap2(v: vec4_t, min: vec4_t, max: vec4_t): vec4_t {

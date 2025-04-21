@@ -16,8 +16,7 @@ export function mat3_translation(out: mat3_t, v: vec2_t): mat3_t {
 }
 
 export function mat3_rotation(out: mat3_t, r: number) {
-    const s = Math.sin(r),
-          c = Math.cos(r);
+    const s = Math.sin(r), c = Math.cos(r);
 
     out[0] = c;
     out[1] = s;
@@ -47,17 +46,10 @@ export function mat3_scaling(out: mat3_t, v: vec2_t): mat3_t {
 }
 
 export function mat3_translate(out: mat3_t, m: mat3_t, v: vec2_t): mat3_t {
-    const a00 = m[0],
-          a01 = m[1],
-          a02 = m[2],
-          a10 = m[3],
-          a11 = m[4],
-          a12 = m[5],
-          a20 = m[6],
-          a21 = m[7],
-          a22 = m[8],
-          x = v[0],
-          y = v[1];
+    const a00 = m[0], a01 = m[1], a02 = m[2],
+          a10 = m[3], a11 = m[4], a12 = m[5],
+          a20 = m[6], a21 = m[7], a22 = m[8];
+    const x = v[0], y = v[1];
 
     out[0] = a00;
     out[1] = a01;
@@ -73,17 +65,10 @@ export function mat3_translate(out: mat3_t, m: mat3_t, v: vec2_t): mat3_t {
 }
 
 export function mat3_rotate(out: mat3_t, m: mat3_t, r: number): mat3_t {
-    const a00 = m[0],
-          a01 = m[1],
-          a02 = m[2],
-          a10 = m[3],
-          a11 = m[4],
-          a12 = m[5],
-          a20 = m[6],
-          a21 = m[7],
-          a22 = m[8],
-          s = Math.sin(r),
-          c = Math.cos(r);
+    const a00 = m[0], a01 = m[1], a02 = m[2],
+          a10 = m[3], a11 = m[4], a12 = m[5],
+          a20 = m[6], a21 = m[7], a22 = m[8];
+    const s = Math.sin(r), c = Math.cos(r);
 
     out[0] = c * a00 + s * a10;
     out[1] = c * a01 + s * a11;

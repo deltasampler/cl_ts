@@ -204,7 +204,11 @@ export function mat4_add(out: mat4_t, a: mat4_t, b: mat4_t): mat4_t {
 }
 
 export function mat4_add1(a: mat4_t, b: mat4_t): mat4_t {
-    return mat4_add(new TYPE(16), a, b);
+    const out = new TYPE(16);
+
+    mat4_add(out, a, b);
+
+    return out;
 }
 
 export function mat4_add2(a: mat4_t, b: mat4_t): mat4_t {
@@ -233,7 +237,11 @@ export function mat4_sub(out: mat4_t, a: mat4_t, b: mat4_t): mat4_t {
 }
 
 export function mat4_sub1(a: mat4_t, b: mat4_t): mat4_t {
-    return mat4_sub(new TYPE(16), a, b);
+    const out = new TYPE(16);
+
+    mat4_sub(out, a, b);
+
+    return out;
 }
 
 export function mat4_sub2(a: mat4_t, b: mat4_t): mat4_t {
@@ -263,7 +271,11 @@ export function mat4_muls(out: mat4_t, m: mat4_t, s: number): mat4_t {
 }
 
 export function mat4_muls1(m: mat4_t, s: number): mat4_t {
-    return mat4_muls(new TYPE(16), m, s);
+    const out = new TYPE(16);
+
+    mat4_muls(out, m, s);
+
+    return out;
 }
 
 export function mat4_muls2(m: mat4_t, s: number): mat4_t {
@@ -293,7 +305,11 @@ export function mat4_addmuls(out: mat4_t, a: mat4_t, b: mat4_t, s: number): mat4
 }
 
 export function mat4_addmuls1(a: mat4_t, b: mat4_t, s: number): mat4_t {
-    return mat4_addmuls(new TYPE(4), a, b, s);
+    const out = new TYPE(4);
+
+    mat4_addmuls(out, a, b, s);
+
+    return out;
 }
 
 export function mat4_addmuls2(a: mat4_t, b: mat4_t, s: number): mat4_t {
@@ -332,7 +348,11 @@ export function mat4_mul(out: mat4_t, a: mat4_t, b: mat4_t): mat4_t {
 }
 
 export function mat4_mul1(a: mat4_t, b: mat4_t): mat4_t {
-    return mat4_mul(new TYPE(16), a, b);
+    const out = new TYPE(16);
+
+    mat4_mul(out, a, b);
+
+    return out;
 }
 
 export function mat4_mul2(a: mat4_t, b: mat4_t): mat4_t {
@@ -352,7 +372,11 @@ export function mat4_mulmv(out: vec4_t, m: mat4_t, v: vec4_t): vec4_t {
 }
 
 export function mat4_mulmv1(m: mat4_t, v: vec4_t): vec4_t {
-    return mat4_mulmv(new TYPE(4), m, v);
+    const out = new TYPE(4);
+
+    mat4_mulmv(out, m, v);
+
+    return out;
 }
 
 export function mat4_mulmv2(m: mat4_t, v: vec4_t): vec4_t {
@@ -371,7 +395,11 @@ export function mat4_mulvm(out: vec4_t, v: vec4_t, m: mat4_t): vec4_t {
 }
 
 export function mat4_mulvm1(m: mat4_t, v: vec4_t): vec4_t {
-    return mat4_mulvm(new TYPE(4), m, v);
+    const out = new TYPE(4);
+
+    mat4_mulvm(out, m, v);
+
+    return out;
 }
 
 export function mat4_mulvm2(m: mat4_t, v: vec4_t): vec4_t {
