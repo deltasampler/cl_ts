@@ -1,5 +1,6 @@
-import {vec2, vec2_abs, vec2_add1, vec2_addmuls1, vec2_divs2, vec2_lerp1, vec2_perp_ab1, vec2_rotate2, vec2_sub1, vec2_t, vec2_unit2} from "@cl/math/vec2.ts";
-import {vec4_bitpack256v, vec4_t} from "@cl/math/vec4.ts";
+import {vec2, vec2n_add, vec2n_addmuls, vec2n_sub, vec2_t, vec2n_abs, vec2m_rotate2, vec2n_divs, vec2n_unit, vec2n_perp2, vec2n_lerp} from "@cl/math/vec2.ts";
+import {vec4_t} from "@cl/math/vec4.ts";
+import {vec4_bitpack256v} from "@cl/math/vec4_color.ts";
 
 export class poly_data_t {
     stride: number;
@@ -26,11 +27,10 @@ export function gen_obb(pos: vec2_t, size: vec2_t, rot: number, z: number, col: 
     const p3 = vec2(px + sx, py + sy);
 
     if (rot !== 0.0) {
-
-        vec2_rotate2(p0, pos, rot);
-        vec2_rotate2(p1, pos, rot);
-        vec2_rotate2(p2, pos, rot);
-        vec2_rotate2(p3, pos, rot);
+        vec2m_rotate2(p0, pos, rot);
+        vec2m_rotate2(p1, pos, rot);
+        vec2m_rotate2(p2, pos, rot);
+        vec2m_rotate2(p3, pos, rot);
     }
 
     const c = vec4_bitpack256v(col);
@@ -50,8 +50,8 @@ export function gen_aabb(pos: vec2_t, size: vec2_t, z: number, col: vec4_t, data
 }
 
 export function gen_aabb2(min: vec2_t, max: vec2_t, z: number, col: vec4_t, data: poly_data_t): void {
-    const pos = vec2_divs2(vec2_add1(min, max), 2.0);
-    const size = vec2_abs(vec2_sub1(max, min));
+    const pos = vec2n_divs(vec2n_add(min, max), 2.0);
+    const size = vec2n_abs(vec2n_sub(max, min));
 
     gen_obb(pos, size, 0.0, z, col, data);
 }
@@ -63,7 +63,7 @@ export function gen_circle(pos: vec2_t, radius: number, lod: number, z: number, 
     const c = vec4_bitpack256v(col);
 
     for (let i = 0; i < lod; i += 1) {
-        const p = vec2_add1(pos, vec2(Math.cos(angle * i + offset) * radius, Math.sin(angle * i + offset) * radius));
+        const p = vec2n_add(pos, vec2(Math.cos(angle * i + offset) * radius, Math.sin(angle * i + offset) * radius));
 
         data.vertices.push(
             ...p, z, c
@@ -77,12 +77,12 @@ export function gen_circle(pos: vec2_t, radius: number, lod: number, z: number, 
 
 export function gen_line(pt0: vec2_t, width0: number, pt1: vec2_t, width1: number, z: number, col: vec4_t, data: poly_data_t): void {
     const vc = poly_data_vertex_count(data);
-    const perp = vec2_unit2(vec2_perp_ab1(pt1, pt0));
+    const perp = vec2n_unit(vec2n_perp2(pt1, pt0));
     const radius0 = width0 / 2.0, radius1 = width1 / 2.0;
-    const p0 = vec2_addmuls1(pt0, perp, -radius0);
-    const p1 = vec2_addmuls1(pt0, perp, radius0);
-    const p2 = vec2_addmuls1(pt1, perp, radius1);
-    const p3 = vec2_addmuls1(pt1, perp, -radius1);
+    const p0 = vec2n_addmuls(pt0, perp, -radius0);
+    const p1 = vec2n_addmuls(pt0, perp, radius0);
+    const p2 = vec2n_addmuls(pt1, perp, radius1);
+    const p3 = vec2n_addmuls(pt1, perp, -radius1);
     const c = vec4_bitpack256v(col);
 
     data.vertices.push(
@@ -97,10 +97,10 @@ export function gen_line(pt0: vec2_t, width0: number, pt1: vec2_t, width1: numbe
 
 export function gen_line_triangle(pt0: vec2_t, pt1: vec2_t, width: number, z: number, col: vec4_t, data: poly_data_t): void {
     const vc = poly_data_vertex_count(data);
-    const perp = vec2_unit2(vec2_perp_ab1(pt1, pt0));
+    const perp = vec2n_unit(vec2n_perp2(pt1, pt0));
     const radius = width / 2.0;
-    const pl = vec2_addmuls1(pt0, perp, -radius);
-    const pr = vec2_addmuls1(pt0, perp, radius);
+    const pl = vec2n_addmuls(pt0, perp, -radius);
+    const pr = vec2n_addmuls(pt0, perp, radius);
     const c = vec4_bitpack256v(col);
 
     data.vertices.push(
@@ -114,18 +114,18 @@ export function gen_line_triangle(pt0: vec2_t, pt1: vec2_t, width: number, z: nu
 
 export function gen_line_kite(pt0: vec2_t, pt1: vec2_t, width: number, ratio: number, z: number, col: vec4_t, data: poly_data_t): void {
     const vc = poly_data_vertex_count(data);
-    const perp = vec2_unit2(vec2_perp_ab1(pt1, pt0));
+    const perp = vec2n_unit(vec2n_perp2(pt1, pt0));
     const radius = width / 2.0;
-    const mp = vec2_lerp1(pt0, pt1, ratio);
-    const pl = vec2_addmuls1(mp, perp, -radius);
-    const pr = vec2_addmuls1(mp, perp, radius);
+    const mp = vec2n_lerp(pt0, pt1, ratio);
+    const pl = vec2n_addmuls(mp, perp, -radius);
+    const pr = vec2n_addmuls(mp, perp, radius);
     const c = vec4_bitpack256v(col);
 
     data.vertices.push(
-        ...pt0, -0.5, c,
-        ...pr, -0.5, c,
-        ...pt1, -0.5, c,
-        ...pl, -0.5, c
+        ...pt0, z, c,
+        ...pr, z, c,
+        ...pt1, z, c,
+        ...pl, z, c
     );
 
     data.indices.push(vc, vc + 1, vc + 2, vc, vc + 2, vc + 3);
@@ -153,8 +153,8 @@ export function gen_star(pos: vec2_t, radius: number, inner_radius: number, lod:
     const c = vec4_bitpack256v(col);
 
     for (let i = 0; i < lod; i += 1) {
-        const p0 = vec2_add1(pos, vec2(Math.cos(angle * i + offset) * inner_radius, Math.sin(angle * i + offset) * inner_radius));
-        const p1 = vec2_add1(pos, vec2(Math.cos(angle / 2.0 + angle * i + offset) * radius, Math.sin(angle / 2.0 + angle * i + offset) * radius));
+        const p0 = vec2n_add(pos, vec2(Math.cos(angle * i + offset) * inner_radius, Math.sin(angle * i + offset) * inner_radius));
+        const p1 = vec2n_add(pos, vec2(Math.cos(angle / 2.0 + angle * i + offset) * radius, Math.sin(angle / 2.0 + angle * i + offset) * radius));
 
         data.vertices.push(
             ...p0, z, c,

@@ -1,8 +1,8 @@
-import {EPSILON} from "./math.ts";
-import {mat4_t} from "./mat4.ts";
+import {mat4_t, TYPE} from "./mat4.ts";
 import {vec3_t} from "./vec3.ts";
+import {EPSILON} from "./math.ts";
 
-export function mat4_translation(out: mat4_t, v: vec3_t): mat4_t {
+export function mat4_translation(out: mat4_t, v: vec3_t): void {
     out[0] = 1.0;
     out[1] = 0.0;
     out[2] = 0.0;
@@ -19,12 +19,30 @@ export function mat4_translation(out: mat4_t, v: vec3_t): mat4_t {
     out[13] = v[1];
     out[14] = v[2];
     out[15] = 1.0;
+}
+
+export function mat4n_translation(v: vec3_t): mat4_t {
+    const out = new TYPE(16);
+
+    mat4_translation(out, v);
 
     return out;
 }
 
-export function mat4_rotation_x(out: mat4_t, rad: number): mat4_t {
-    const s = Math.sin(rad), c = Math.cos(rad);
+export function mat4_rotation(out: mat4_t, r: number, ax: vec3_t): void {
+
+}
+
+export function mat4n_rotation(r: number, ax: vec3_t): mat4_t {
+    const out = new TYPE(16);
+
+    mat4_rotation(out, r, ax);
+
+    return out;
+}
+
+export function mat4_rotation_x(out: mat4_t, r: number): void {
+    const s = Math.sin(r), c = Math.cos(r);
 
     out[0] = 1.0;
     out[1] = 0.0;
@@ -42,12 +60,18 @@ export function mat4_rotation_x(out: mat4_t, rad: number): mat4_t {
     out[13] = 0.0;
     out[14] = 0.0;
     out[15] = 1.0;
+}
+
+export function mat4n_rotation_x(r: number): mat4_t {
+    const out = new TYPE(16);
+
+    mat4_rotation_x(out, r);
 
     return out;
 }
 
-export function mat4_rotation_y(out: mat4_t, rad: number): mat4_t {
-    const s = Math.sin(rad), c = Math.cos(rad);
+export function mat4_rotation_y(out: mat4_t, r: number): void {
+    const s = Math.sin(r), c = Math.cos(r);
 
     out[0] = c;
     out[1] = 0.0;
@@ -65,12 +89,18 @@ export function mat4_rotation_y(out: mat4_t, rad: number): mat4_t {
     out[13] = 0.0;
     out[14] = 0.0;
     out[15] = 1.0;
+}
+
+export function mat4n_rotation_y(r: number): mat4_t {
+    const out = new TYPE(16);
+
+    mat4_rotation_y(out, r);
 
     return out;
 }
 
-export function mat4_rotation_z(out: mat4_t, rad: number): mat4_t {
-    const s = Math.sin(rad), c = Math.cos(rad);
+export function mat4_rotation_z(out: mat4_t, r: number): void {
+    const s = Math.sin(r), c = Math.cos(r);
 
     out[0] = c;
     out[1] = s;
@@ -88,11 +118,17 @@ export function mat4_rotation_z(out: mat4_t, rad: number): mat4_t {
     out[13] = 0.0;
     out[14] = 0.0;
     out[15] = 1.0;
+}
+
+export function mat4n_rotation_z(r: number): mat4_t {
+    const out = new TYPE(16);
+
+    mat4_rotation_z(out, r);
 
     return out;
 }
 
-export function mat4_scaling(out: mat4_t, v: vec3_t): mat4_t {
+export function mat4_scaling(out: mat4_t, v: vec3_t): void {
     out[0] = v[0];
     out[1] = 0.0;
     out[2] = 0.0;
@@ -109,23 +145,39 @@ export function mat4_scaling(out: mat4_t, v: vec3_t): mat4_t {
     out[13] = 0.0;
     out[14] = 0.0;
     out[15] = 1.0;
+}
+
+export function mat4n_scaling(v: vec3_t): mat4_t {
+    const out = new TYPE(16);
+
+    mat4_scaling(out, v);
 
     return out;
 }
 
-export function mat4_translate(out: mat4_t, m: mat4_t, v: vec3_t): mat4_t {
+export function mat4_translate(out: mat4_t, m: mat4_t, v: vec3_t): void {
     const x = v[0], y = v[1], z = v[2];
 
     out[12] = m[0] * x + m[4] * y + m[8] * z + m[12];
     out[13] = m[1] * x + m[5] * y + m[9] * z + m[13];
     out[14] = m[2] * x + m[6] * y + m[10] * z + m[14];
     out[15] = m[3] * x + m[7] * y + m[11] * z + m[15];
+}
+
+export function mat4n_translate(m: mat4_t, v: vec3_t): mat4_t {
+    const out = new TYPE(16);
+
+    mat4_translate(out, m, v);
 
     return out;
 }
 
-export function mat4_rotate(out: mat4_t, m: mat4_t, rad: number, axis: vec3_t): mat4_t|null {
-    let x = axis[0], y = axis[1], z = axis[2];
+export function mat4m_translate(out: mat4_t, v: vec3_t): void {
+    mat4_translate(out, out, v);
+}
+
+export function mat4_rotate(out: mat4_t, m: mat4_t, r: number, ax: vec3_t): void {
+    let x = ax[0], y = ax[1], z = ax[2];
     let len = Math.sqrt(x * x + y * y + z * z);
     let s, c, t;
     let a00, a01, a02, a03;
@@ -136,17 +188,17 @@ export function mat4_rotate(out: mat4_t, m: mat4_t, rad: number, axis: vec3_t): 
     let b20, b21, b22;
 
     if (len < EPSILON) {
-        return null;
+        return;
     }
 
-    len = 1 / len;
+    len = 1.0 / len;
     x *= len;
     y *= len;
     z *= len;
 
-    s = Math.sin(rad);
-    c = Math.cos(rad);
-    t = 1 - c;
+    s = Math.sin(r);
+    c = Math.cos(r);
+    t = 1.0 - c;
 
     a00 = m[0];
     a01 = m[1];
@@ -183,62 +235,102 @@ export function mat4_rotate(out: mat4_t, m: mat4_t, rad: number, axis: vec3_t): 
     out[9] = a01 * b20 + a11 * b21 + a21 * b22;
     out[10] = a02 * b20 + a12 * b21 + a22 * b22;
     out[11] = a03 * b20 + a13 * b21 + a23 * b22;
-
-    return m;
 }
 
-export function mat4_rotate_x(out: mat4_t, m: mat4_t, rad: number): mat4_t {
-    const a10 = m[4], a11 = m[5], a12 = m[6],  a13 = m[7],
-          a20 = m[8], a21 = m[9], a22 = m[10], a23 = m[11];
-    const s = Math.sin(rad), c = Math.cos(rad);
+export function mat4n_rotate(m: mat4_t, r: number, ax: vec3_t): mat4_t {
+    const out = new TYPE(16);
 
-    out[4] = a10 * c + a20 * s;
-    out[5] = a11 * c + a21 * s;
-    out[6] = a12 * c + a22 * s;
-    out[7] = a13 * c + a23 * s;
-    out[8] = a20 * c - a10 * s;
-    out[9] = a21 * c - a11 * s;
-    out[10] = a22 * c - a12 * s;
-    out[11] = a23 * c - a13 * s;
-
-    return m;
-}
-
-export function mat4_rotate_y(out: mat4_t, m: mat4_t, rad: number): mat4_t {
-    const a00 = m[0], a01 = m[1], a02 = m[2],  a03 = m[3],
-          a20 = m[8], a21 = m[9], a22 = m[10], a23 = m[11];
-    const s = Math.sin(rad), c = Math.cos(rad);
-
-    out[0] = a00 * c - a20 * s;
-    out[1] = a01 * c - a21 * s;
-    out[2] = a02 * c - a22 * s;
-    out[3] = a03 * c - a23 * s;
-    out[8] = a00 * s + a20 * c;
-    out[9] = a01 * s + a21 * c;
-    out[10] = a02 * s + a22 * c;
-    out[11] = a03 * s + a23 * c;
+    mat4_rotate(out, m, r, ax);
 
     return out;
 }
 
-export function mat4_rotate_z(out: mat4_t, m: mat4_t, rad: number): mat4_t {
-    const a00 = m[0], a01 = m[1], a02 = m[2], a03 = m[3],
-          a10 = m[4], a11 = m[5], a12 = m[6], a13 = m[7];
-    const s = Math.sin(rad), c = Math.cos(rad);
+export function mat4m_rotate(out: mat4_t, r: number, ax: vec3_t): void {
+    mat4_rotate(out, out, r, ax);
+}
 
-    out[0] = a00 * c + a10 * s;
-    out[1] = a01 * c + a11 * s;
-    out[2] = a02 * c + a12 * s;
-    out[3] = a03 * c + a13 * s;
-    out[4] = a10 * c - a00 * s;
-    out[5] = a11 * c - a01 * s;
-    out[6] = a12 * c - a02 * s;
-    out[7] = a13 * c - a03 * s;
+export function mat4_rotate_x(out: mat4_t, m: mat4_t, r: number): void {
+    const e10 = m[4], e11 = m[5], e12 = m[6],  e13 = m[7],
+          e20 = m[8], e21 = m[9], e22 = m[10], e23 = m[11];
+    const s = Math.sin(r), c = Math.cos(r);
+
+    out[4] = e10 * c + e20 * s;
+    out[5] = e11 * c + e21 * s;
+    out[6] = e12 * c + e22 * s;
+    out[7] = e13 * c + e23 * s;
+    out[8] = e20 * c - e10 * s;
+    out[9] = e21 * c - e11 * s;
+    out[10] = e22 * c - e12 * s;
+    out[11] = e23 * c - e13 * s;
+}
+
+export function mat4n_rotate_x(m: mat4_t, r: number): mat4_t {
+    const out = new TYPE(16);
+
+    mat4_rotate_x(out, m, r);
 
     return out;
 }
 
-export function mat4_scale(out: mat4_t, m: mat4_t, v: vec3_t): mat4_t {
+export function mat4m_rotate_x(out: mat4_t, r: number): void {
+    mat4_rotate_x(out, out, r);
+}
+
+export function mat4_rotate_y(out: mat4_t, m: mat4_t, r: number): void {
+    const e00 = m[0], e01 = m[1], e02 = m[2],  e03 = m[3],
+          e20 = m[8], e21 = m[9], e22 = m[10], e23 = m[11];
+    const s = Math.sin(r), c = Math.cos(r);
+
+    out[0] = e00 * c - e20 * s;
+    out[1] = e01 * c - e21 * s;
+    out[2] = e02 * c - e22 * s;
+    out[3] = e03 * c - e23 * s;
+    out[8] = e00 * s + e20 * c;
+    out[9] = e01 * s + e21 * c;
+    out[10] = e02 * s + e22 * c;
+    out[11] = e03 * s + e23 * c;
+}
+
+export function mat4n_rotate_y(m: mat4_t, r: number): mat4_t {
+    const out = new TYPE(16);
+
+    mat4_rotate_y(out, m, r);
+
+    return out;
+}
+
+export function mat4m_rotate_y(out: mat4_t, r: number): void {
+    mat4_rotate_y(out, out, r);
+}
+
+export function mat4_rotate_z(out: mat4_t, m: mat4_t, r: number): void {
+    const e00 = m[0], e01 = m[1], e02 = m[2], e03 = m[3],
+          e10 = m[4], e11 = m[5], e12 = m[6], e13 = m[7];
+    const s = Math.sin(r), c = Math.cos(r);
+
+    out[0] = e00 * c + e10 * s;
+    out[1] = e01 * c + e11 * s;
+    out[2] = e02 * c + e12 * s;
+    out[3] = e03 * c + e13 * s;
+    out[4] = e10 * c - e00 * s;
+    out[5] = e11 * c - e01 * s;
+    out[6] = e12 * c - e02 * s;
+    out[7] = e13 * c - e03 * s;
+}
+
+export function mat4n_rotate_z(m: mat4_t, r: number): mat4_t {
+    const out = new TYPE(16);
+
+    mat4_rotate_z(out, m, r);
+
+    return out;
+}
+
+export function mat4m_rotate_z(out: mat4_t, r: number): void {
+    mat4_rotate_z(out, out, r);
+}
+
+export function mat4_scale(out: mat4_t, m: mat4_t, v: vec3_t): void {
     const x = v[0], y = v[1], z = v[2];
 
     out[0] = m[0] * x;
@@ -257,6 +349,16 @@ export function mat4_scale(out: mat4_t, m: mat4_t, v: vec3_t): mat4_t {
     out[13] = m[13];
     out[14] = m[14];
     out[15] = m[15];
+}
+
+export function mat4n_scale(m: mat4_t, v: vec3_t): mat4_t {
+    const out = new TYPE(16);
+
+    mat4_scale(out, m, v);
 
     return out;
+}
+
+export function mat4m_scale(out: mat4_t, v: vec3_t): void {
+    mat4_scale(out, out, v);
 }

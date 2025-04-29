@@ -1,9 +1,9 @@
 import {vec2, vec2_print} from "@cl/math/vec2.ts";
 import {vec3, vec3_print} from "@cl/math/vec3.ts";
 import {vec4, vec4_print} from "@cl/math/vec4.ts";
-import {mat2, mat2_mul, mat2_mul_mv, mat2_mul_vm, mat2_print} from "@cl/math/mat2.ts";
-import {mat3, mat3_mul, mat3_mul_mv, mat3_mul_vm, mat3_print} from "@cl/math/mat3.ts";
-import {mat4, mat4_mul, mat4_mul_mv, mat4_mul_vm, mat4_print} from "@cl/math/mat4.ts";
+import {mat2, mat2_print, mat2n_mul, mat2n_mulmv, mat2n_mulvm} from "@cl/math/mat2.ts";
+import {mat3, mat3_print, mat3n_mul, mat3n_mulmv, mat3n_mulvm} from "@cl/math/mat3.ts";
+import {mat4, mat4_print, mat4n_mul, mat4n_mulmv, mat4n_mulvm} from "@cl/math/mat4.ts";
 
 export function test_mat2_mul() {
     const a = mat2(1, 2, 3, 4);
@@ -14,9 +14,9 @@ export function test_mat2_mul() {
     console.log("b:");
     mat2_print(b);
     console.log("a * b:");
-    mat2_print(mat2_mul(a, b));
+    mat2_print(mat2n_mul(a, b));
     console.log("b * a:");
-    mat2_print(mat2_mul(b, a));
+    mat2_print(mat2n_mul(b, a));
 }
 
 export function test_mat2_mul_mv() {
@@ -28,9 +28,9 @@ export function test_mat2_mul_mv() {
     console.log("v:");
     vec2_print(v);
     console.log("m * v:");
-    vec2_print(mat2_mul_mv(m, v));
+    vec2_print(mat2n_mulmv(m, v));
     console.log("v * m:");
-    vec2_print(mat2_mul_vm(v, m));
+    vec2_print(mat2n_mulvm(v, m));
 }
 
 export function test_mat3_mul() {
@@ -42,9 +42,9 @@ export function test_mat3_mul() {
     console.log("b:");
     mat3_print(b);
     console.log("a * b:");
-    mat3_print(mat3_mul(a, b));
+    mat3_print(mat3n_mul(a, b));
     console.log("b * a:");
-    mat3_print(mat3_mul(b, a));
+    mat3_print(mat3n_mul(b, a));
 }
 
 export function test_mat3_mul_mv() {
@@ -56,9 +56,9 @@ export function test_mat3_mul_mv() {
     console.log("v:");
     vec3_print(v);
     console.log("m * v:");
-    vec3_print(mat3_mul_mv(m, v));
+    vec3_print(mat3n_mulmv(m, v));
     console.log("v * m:");
-    vec3_print(mat3_mul_vm(v, m));
+    vec3_print(mat3n_mulvm(v, m));
 }
 
 export function test_mat4_mul() {
@@ -70,9 +70,9 @@ export function test_mat4_mul() {
     console.log("b:");
     mat4_print(b);
     console.log("a * b:");
-    mat4_print(mat4_mul(a, b));
+    mat4_print(mat4n_mul(a, b));
     console.log("b * a:");
-    mat4_print(mat4_mul(b, a));
+    mat4_print(mat4n_mul(b, a));
 }
 
 export function test_mat4_mul_mv() {
@@ -84,7 +84,7 @@ export function test_mat4_mul_mv() {
     console.log("v:");
     vec4_print(v);
     console.log("m * v:");
-    vec4_print(mat4_mul_mv(m, v));
+    vec4_print(mat4n_mulmv(m, v));
     console.log("v * m:");
-    vec4_print(mat4_mul_vm(v, m));
+    vec4_print(mat4n_mulvm(v, m));
 }

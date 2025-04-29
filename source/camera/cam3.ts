@@ -1,7 +1,7 @@
 import {mat4, mat4_t} from "@cl/math/mat4.ts";
 import {mat4_look_at} from "@cl/math/mat4_cam.ts";
 import {clamp, cos, rad, sin} from "@cl/math/math.ts";
-import {vec3, vec3_add1, vec3_addmuls2, vec3_cross1, vec3_t, vec3_unit2} from "@cl/math/vec3.ts";
+import {vec3, vec3_t, vec3m_addmuls, vec3n_add, vec3n_cross, vec3n_unit} from "@cl/math/vec3.ts";
 import {mat4_perspective} from "@cl/math/mat4_proj.ts";
 
 export class cam3_t {
@@ -51,15 +51,15 @@ export function cam3_new() {
 }
 
 export function cam3_move_forward(cam: cam3_t, dir: number) {
-    vec3_addmuls2(cam.position, cam.forward, cam.movement_speed * dir);
+    vec3m_addmuls(cam.position, cam.forward, cam.movement_speed * dir);
 }
 
 export function cam3_move_right(cam: cam3_t, dir: number) {
-    vec3_addmuls2(cam.position, cam.right, cam.movement_speed * dir);
+    vec3m_addmuls(cam.position, cam.right, cam.movement_speed * dir);
 }
 
 export function cam3_move_up(cam: cam3_t, dir: number) {
-    vec3_addmuls2(cam.position, cam.up, cam.movement_speed * dir);
+    vec3m_addmuls(cam.position, cam.up, cam.movement_speed * dir);
 }
 
 export function cam3_pan(cam: cam3_t, dir: number) {
@@ -79,15 +79,15 @@ export function cam3_zoom(cam: cam3_t, dir: number) {
 }
 
 export function cam3_fru(cam: cam3_t) {
-    cam.forward = vec3_unit2(vec3(
+    cam.forward = vec3n_unit(vec3(
         sin(rad(cam.yaw)) * cos(rad(cam.pitch)),
         sin(rad(cam.pitch)),
         -cos(rad(cam.yaw)) * cos(rad(cam.pitch))
     ));
 
-    cam.right = vec3_unit2(vec3_cross1(cam.forward, cam.world_up));
+    cam.right = vec3n_unit(vec3n_cross(cam.forward, cam.world_up));
 
-    cam.up = vec3_unit2(vec3_cross1(cam.right, cam.forward));
+    cam.up = vec3n_unit(vec3n_cross(cam.right, cam.forward));
 }
 
 export function cam3_compute_proj(cam: cam3_t, viewport_x: number, viewport_y: number) {
@@ -95,5 +95,5 @@ export function cam3_compute_proj(cam: cam3_t, viewport_x: number, viewport_y: n
 }
 
 export function cam3_compute_view(cam: cam3_t) {
-    mat4_look_at(cam.view, cam.position, vec3_add1(cam.position, cam.forward), cam.up);
+    mat4_look_at(cam.view, cam.position, vec3n_add(cam.position, cam.forward), cam.up);
 }

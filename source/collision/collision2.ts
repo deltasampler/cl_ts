@@ -1,5 +1,6 @@
-import {vec2, vec2_add2, vec2_addmuls1, vec2_clone, vec2_copy, vec2_dir1, vec2_dist, vec2_dist_sq, vec2_divs1, vec2_dot, vec2_perp_ab1, vec2_rotate_origin1, vec2_rotate_origin2, vec2_sub1, vec2_swap, vec2_t, vec2_unit2} from "@cl/math/vec2.ts";
+import {vec2, vec2_copy, vec2_dist, vec2_dist_sq, vec2_dot, vec2_t, vec2n_add, vec2n_addmuls, vec2n_copy, vec2n_dir, vec2n_divs, vec2n_perp2, vec2n_rotate, vec2n_sub, vec2n_unit} from "@cl/math/vec2.ts";
 import {abs, clamp} from "@cl/math/math.ts";
+import {vec2n_swap} from "@cl/math/vec2_other.ts";
 
 // point inside
 export function point_inside_circle(cp: vec2_t, cr: number, p: vec2_t): boolean {
@@ -29,7 +30,7 @@ export function point_inside_raabb(bp: vec2_t, bs: vec2_t, bf: boolean, p: vec2_
 
 export function point_inside_obb(bp: vec2_t, bs: vec2_t, ba: number, p: vec2_t): boolean {
     const sx = bs[0] / 2.0, sy = bs[1] / 2.0;
-    const lp = vec2_rotate_origin2(vec2_sub1(p, bp), -ba);
+    const lp = vec2n_rotate(vec2n_sub(p, bp), -ba);
 
     return Math.abs(lp[0]) <= sx && Math.abs(lp[1]) <= sy;
 }
@@ -76,7 +77,7 @@ export function point_inside_convex(points: vec2_t[], p: vec2_t): boolean {
 }
 
 export function point_inside_convex2(points: vec2_t[], pp: vec2_t, pa: number, p: vec2_t): boolean {
-    return point_inside_convex(points, vec2_rotate_origin2(vec2_sub1(p, pp), -pa));
+    return point_inside_convex(points, vec2n_rotate(vec2n_sub(p, pp), -pa));
 }
 
 export function point_inside_capsule(a: vec2_t, b: vec2_t, r: number, p: vec2_t) {
@@ -92,7 +93,7 @@ export function point_inside_capsule(a: vec2_t, b: vec2_t, r: number, p: vec2_t)
 
 // closest point
 export function closest_point_circle(cp: vec2_t, cr: number, p: vec2_t): vec2_t {
-    return vec2_addmuls1(cp, vec2_dir1(p, cp), cr);
+    return vec2n_addmuls(cp, vec2n_dir(p, cp), cr);
 }
 
 export function closest_point_line(a: vec2_t, b: vec2_t, p: vec2_t): vec2_t {
@@ -124,10 +125,10 @@ export function closest_point_aabb(bp: vec2_t, bs: vec2_t, p: vec2_t): vec2_t {
 }
 
 export function closest_point_obb(bp: vec2_t, bs: vec2_t, ba: number, p: vec2_t): vec2_t {
-    const lp = vec2_rotate_origin2(vec2_sub1(p, bp), -ba);
+    const lp = vec2n_rotate(vec2n_sub(p, bp), -ba);
     const cp = closest_point_aabb(vec2(), bs, lp);
 
-    return vec2_add2(vec2_rotate_origin1(cp, ba), bp);
+    return vec2n_add(vec2n_rotate(cp, ba), bp);
 }
 
 export function closest_point_convex(points: vec2_t[], p: vec2_t): vec2_t {
@@ -148,10 +149,10 @@ export function closest_point_convex(points: vec2_t[], p: vec2_t): vec2_t {
 }
 
 export function closest_point_convex2(points: vec2_t[], pp: vec2_t, pa: number, p: vec2_t): vec2_t {
-    const lp = vec2_rotate_origin2(vec2_sub1(p, pp), -pa);
+    const lp = vec2n_rotate(vec2n_sub(p, pp), -pa);
     const cp = closest_point_convex(points, lp);
 
-    return vec2_add2(vec2_rotate_origin1(cp, pa), pp);
+    return vec2n_add(vec2n_rotate(cp, pa), pp);
 }
 
 export function closest_point_capsule(a: vec2_t, b: vec2_t, cr: number, p: vec2_t): vec2_t {
@@ -161,9 +162,9 @@ export function closest_point_capsule(a: vec2_t, b: vec2_t, cr: number, p: vec2_
     const t = (bax * pax + bay * pay) / (bax * bax + bay * bay);
     const tc = clamp(t, 0.0, 1.0);
     const tp = vec2(ax + bax * tc, ay + bay * tc);
-    const dir = vec2_dir1(p, tp);
+    const dir = vec2n_dir(p, tp);
 
-    return vec2_addmuls1(tp, dir, cr);
+    return vec2n_addmuls(tp, dir, cr);
 }
 
 // overlap
@@ -176,8 +177,8 @@ export function overlap_aabb_aabb_min_max2(min0: vec2_t, max0: vec2_t, min1: vec
 }
 
 export function overlap_aabb_aabb2(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): boolean {
-    const hs1 = vec2_divs1(as, 2.0);
-    const hs2 = vec2_divs1(bs, 2.0);
+    const hs1 = vec2n_divs(as, 2.0);
+    const hs2 = vec2n_divs(bs, 2.0);
     const l1 = ap[0] - hs1[0];
     const r1 = ap[0] + hs1[0];
     const b1 = ap[1] - hs1[1];
@@ -191,8 +192,8 @@ export function overlap_aabb_aabb2(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_
 }
 
 export function overlap_aabb_aabb2_x(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): boolean {
-    const hs1 = vec2_divs1(as, 2.0);
-    const hs2 = vec2_divs1(bs, 2.0);
+    const hs1 = vec2n_divs(as, 2.0);
+    const hs2 = vec2n_divs(bs, 2.0);
     const l1 = ap[0] - hs1[0];
     const r1 = ap[0] + hs1[0];
     const l2 = bp[0] - hs2[0];
@@ -202,8 +203,8 @@ export function overlap_aabb_aabb2_x(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec
 }
 
 export function overlap_aabb_aabb2_y(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): boolean {
-    const hs1 = vec2_divs1(as, 2.0);
-    const hs2 = vec2_divs1(bs, 2.0);
+    const hs1 = vec2n_divs(as, 2.0);
+    const hs2 = vec2n_divs(bs, 2.0);
     const b1 = ap[1] - hs1[1];
     const t1 = ap[1] + hs1[1];
     const b2 = bp[1] - hs2[1];
@@ -213,22 +214,22 @@ export function overlap_aabb_aabb2_y(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec
 }
 
 export function overlap_raabb_raabb2(ap: vec2_t, as: vec2_t, af: boolean, bp: vec2_t, bs: vec2_t, bf: boolean): boolean {
-    const hs1 = af ? vec2_swap(vec2_clone(as)) : as;
-    const hs2 = bf ? vec2_swap(vec2_clone(bs)) : bs;
+    const hs1 = af ? vec2n_swap(vec2n_copy(as)) : as;
+    const hs2 = bf ? vec2n_swap(vec2n_copy(bs)) : bs;
 
     return overlap_aabb_aabb2(ap, hs1, bp, hs2);
 }
 
 export function overlap_raabb_raabb2_x(ap: vec2_t, as: vec2_t, af: boolean, bp: vec2_t, bs: vec2_t, bf: boolean): boolean {
-    const hs1 = af ? vec2_swap(vec2_clone(as)) : as;
-    const hs2 = bf ? vec2_swap(vec2_clone(bs)) : bs;
+    const hs1 = af ? vec2n_swap(vec2n_copy(as)) : as;
+    const hs2 = bf ? vec2n_swap(vec2n_copy(bs)) : bs;
 
     return overlap_aabb_aabb2_x(ap, hs1, bp, hs2);
 }
 
 export function overlap_raabb_raabb2_y(ap: vec2_t, as: vec2_t, af: boolean, bp: vec2_t, bs: vec2_t, bf: boolean): boolean {
-    const hs1 = af ? vec2_swap(vec2_clone(as)) : as;
-    const hs2 = bf ? vec2_swap(vec2_clone(bs)) : bs;
+    const hs1 = af ? vec2n_swap(vec2n_copy(as)) : as;
+    const hs2 = bf ? vec2n_swap(vec2n_copy(bs)) : bs;
 
     return overlap_aabb_aabb2_y(ap, hs1, bp, hs2);
 }
@@ -333,14 +334,14 @@ export function line_intersect_aabb(bp: vec2_t, bs: vec2_t, a: vec2_t, b: vec2_t
 }
 
 export function line_intersect_obb(bp: vec2_t, bs: vec2_t, br: number, a: vec2_t, b: vec2_t) {
-    const local_a = vec2_rotate_origin1(vec2_sub1(a, bp), -br);
-    const local_b = vec2_rotate_origin1(vec2_sub1(b, bp), -br);
+    const local_a = vec2n_rotate(vec2n_sub(a, bp), -br);
+    const local_b = vec2n_rotate(vec2n_sub(b, bp), -br);
     const local_bp: vec2_t = vec2(0, 0);
     const local_bs = vec2(bs[0], bs[1]);
     const intersections = line_intersect_aabb(local_bp, local_bs, local_a, local_b);
 
     for (const inter of intersections) {
-        vec2_copy(inter, vec2_add2(vec2_rotate_origin1(inter, br), bp));
+        vec2_copy(inter, vec2n_add(vec2n_rotate(inter, br), bp));
     }
 
     return intersections;
@@ -361,24 +362,24 @@ export function line_intersect_convex(points: vec2_t[], a: vec2_t, b: vec2_t): v
 }
 
 export function line_intersect_convex2(points: vec2_t[], bp: vec2_t, br: number, a: vec2_t, b: vec2_t): vec2_t[] {
-    const local_a = vec2_rotate_origin1(vec2_sub1(a, bp), -br);
-    const local_b = vec2_rotate_origin1(vec2_sub1(b, bp), -br);
+    const local_a = vec2n_rotate(vec2n_sub(a, bp), -br);
+    const local_b = vec2n_rotate(vec2n_sub(b, bp), -br);
     const intersections = line_intersect_convex(points, local_a, local_b);
 
     for (const inter of intersections) {
-        vec2_copy(inter, vec2_add2(vec2_rotate_origin1(inter, br), bp));
+        vec2_copy(inter, vec2n_add(vec2n_rotate(inter, br), bp));
     }
 
     return intersections;
 }
 
 export function line_intersect_capsule(a0: vec2_t, b0: vec2_t, cr: number, a1: vec2_t, b1: vec2_t): vec2_t[] {
-    const d = vec2_dir1(a0, b0);
+    const d = vec2n_dir(a0, b0);
     const dp = vec2(-d[1], d[0]);
-    const start0 = vec2_addmuls1(a0, dp, -cr);
-    const start1 = vec2_addmuls1(a0, dp, cr);
-    const end0 = vec2_addmuls1(b0, dp, -cr);
-    const end1 = vec2_addmuls1(b0, dp, cr);
+    const start0 = vec2n_addmuls(a0, dp, -cr);
+    const start1 = vec2n_addmuls(a0, dp, cr);
+    const end0 = vec2n_addmuls(b0, dp, -cr);
+    const end1 = vec2n_addmuls(b0, dp, cr);
 
     const out: vec2_t[] = [];
 
@@ -407,8 +408,8 @@ export type mtv_t = {
 };
 
 export function mtv_aabb_aabb2(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): mtv_t|null {
-    const hs1 = vec2_divs1(as, 2.0);
-    const hs2 = vec2_divs1(bs, 2.0);
+    const hs1 = vec2n_divs(as, 2.0);
+    const hs2 = vec2n_divs(bs, 2.0);
 
     const l1 = ap[0] - hs1[0];
     const r1 = ap[0] + hs1[0];
@@ -441,8 +442,8 @@ export function mtv_aabb_aabb2(ap: vec2_t, as: vec2_t, bp: vec2_t, bs: vec2_t): 
 }
 
 export function mtv_raabb_raabb2(ap: vec2_t, as: vec2_t, af: boolean, bp: vec2_t, bs: vec2_t, bf: boolean): mtv_t|null {
-    const hs1 = af ? vec2_swap(vec2_clone(as)) : as;
-    const hs2 = bf ? vec2_swap(vec2_clone(bs)) : bs;
+    const hs1 = af ? vec2n_swap(vec2n_copy(as)) : as;
+    const hs2 = bf ? vec2n_swap(vec2n_copy(bs)) : bs;
 
     return mtv_aabb_aabb2(ap, hs1, bp, hs2);
 }
@@ -454,7 +455,7 @@ export function compute_axes(points: vec2_t[]): vec2_t[] {
     for (let i = 0; i < l; i++) {
         const curr = points[i];
         const next = points[(i + 1) % l];
-        const axis = vec2_unit2(vec2_perp_ab1(curr, next));
+        const axis = vec2n_unit(vec2n_perp2(curr, next));
 
         axes.push(axis);
     }
@@ -466,7 +467,7 @@ function project_points(points: vec2_t[], axis: vec2_t, pp: vec2_t, pa: number):
     let min = Infinity, max = -Infinity;
 
     for (const p of points) {
-        const transformed = vec2_add2(vec2_rotate_origin1(p, pa), pp);
+        const transformed = vec2n_add(vec2n_rotate(p, pa), pp);
         const proj = vec2_dot(transformed, axis);
 
         min = Math.min(min, proj);
@@ -484,7 +485,7 @@ export function mtv_sat(
     let min_axis: vec2_t | null = null;
 
     for (const axis of axes0) {
-        const raxis = vec2_rotate_origin1(axis, pa0);
+        const raxis = vec2n_rotate(axis, pa0);
         const proj0 = project_points(points0, raxis, pp0, pa0);
         const proj1 = project_points(points1, raxis, pp1, pa1);
 
@@ -505,7 +506,7 @@ export function mtv_sat(
     }
 
     for (const axis of axes1) {
-        const raxis = vec2_rotate_origin1(axis, pa1);
+        const raxis = vec2n_rotate(axis, pa1);
         const proj0 = project_points(points0, raxis, pp0, pa0);
         const proj1 = project_points(points1, raxis, pp1, pa1);
 
@@ -526,7 +527,7 @@ export function mtv_sat(
     }
 
     if (min_axis) {
-        const direction = vec2_sub1(pp1, pp0);
+        const direction = vec2n_sub(pp1, pp0);
 
         if (direction[0] * min_axis[0] + direction[1] * min_axis[1] < 0) {
             min_axis = vec2(-min_axis[0], -min_axis[1]);

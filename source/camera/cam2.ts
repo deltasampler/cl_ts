@@ -1,6 +1,6 @@
 import {mat4, mat4_ident, mat4_t} from "@cl/math/mat4.ts";
 import {mat4_scale, mat4_translate} from "@cl/math/mat4_affine.ts";
-import {vec2, vec2_addmuls2, vec2_t} from "@cl/math/vec2.ts";
+import {vec2, vec2m_addmuls, vec2_t} from "@cl/math/vec2.ts";
 import {vec3} from "@cl/math/vec3.ts";
 
 export class cam2_t {
@@ -40,11 +40,11 @@ export function cam2_new() {
 }
 
 export function cam2_move_right(cam: cam2_t, dir: number) {
-    vec2_addmuls2(cam.position, cam.right, cam.movement_speed * dir);
+    vec2m_addmuls(cam.position, cam.right, cam.movement_speed * dir);
 }
 
 export function cam2_move_up(cam: cam2_t, dir: number) {
-    vec2_addmuls2(cam.position, cam.up, cam.movement_speed * dir);
+    vec2m_addmuls(cam.position, cam.up, cam.movement_speed * dir);
 }
 
 export function cam2_roll(cam: cam2_t, dir: number) {

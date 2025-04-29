@@ -1,7 +1,7 @@
 import {vec3_t} from "@cl/math/vec3.ts";
 
 const TYPE = Float32Array;
-export type trian2_t = Float32Array;
+export type trian3_t = Float32Array;
 
 export function trian3(ax: number, ay: number, az: number, bx: number, by: number, bz: number, cx: number, cy: number, cz: number): trian3_t {
     const out = new TYPE(9);

@@ -1,5 +1,5 @@
 import {rad} from "@cl/math/math.ts";
-import {vec2, vec2_addmuls1, vec2_clone, vec2_copy, vec2_t} from "@cl/math/vec2.ts";
+import {vec2, vec2n_addmuls, vec2n_copy, vec2_copy, vec2_t} from "@cl/math/vec2.ts";
 
 export enum CHANGER_TYPE {
     NONE,
@@ -76,7 +76,7 @@ export class lsys_state_t {
 
 export function lsys_state_new(position: vec2_t, angle: number, width: number, length: number): lsys_state_t {
     const state = new lsys_state_t();
-    state.position = vec2_clone(position);
+    state.position = vec2n_copy(position);
     state.angle = angle;
     state.width = width;
     state.length = length;
@@ -167,7 +167,7 @@ export function lsys_gen(lsys: lsys_t, input: string, limit: number) {
     const stack: lsys_state_t[] = [];
     let state = lsys_state_new(lsys.position, lsys.angle, lsys.width, lsys.length);
     let curr: lsys_action_t|null = first;
-    let prev_pos = vec2_clone(state.position);
+    let prev_pos = vec2n_copy(state.position);
     let prev_width = state.width;
 
     while (curr) {
@@ -178,14 +178,14 @@ export function lsys_gen(lsys: lsys_t, input: string, limit: number) {
             case "F":
                 const direction = vec2(Math.cos(rad(state.angle)), Math.sin(rad(state.angle)));
 
-                const next_position = vec2_addmuls1(state.position, direction, state.length);
+                const next_position = vec2n_addmuls(state.position, direction, state.length);
                 const next_width = changer_calc(lsys.changer_width, state.width);
                 const next_length = changer_calc(lsys.changer_length, state.length);
 
                 const callback = lsys.callbacks[c];
 
                 if (callback) {
-                    callback(vec2_clone(state.position), state.width, vec2_clone(next_position), next_width);
+                    callback(vec2n_copy(state.position), state.width, vec2n_copy(next_position), next_width);
                 }
 
                 vec2_copy(prev_pos, state.position);
