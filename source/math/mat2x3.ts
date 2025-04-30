@@ -1,4 +1,5 @@
 import {abs, EPSILON} from "./math.ts";
+import {vec2_t} from "./vec2.ts";
 
 export type mat2x3_t = Float32Array;
 export const TYPE = Float32Array;
@@ -192,6 +193,26 @@ export function mat2x3n_mul(m0: mat2x3_t, m1: mat2x3_t): mat2x3_t {
 
 export function mat2x3m_mul(out: mat2x3_t, m: mat2x3_t): void {
     mat2x3_mul(out, out, m);
+}
+
+// product matrix x vector
+export function mat2x3_mulmv(out : vec2_t, v: vec2_t, m: mat2x3_t): void {
+    const x = v[0], y = v[1];
+
+    out[0] = m[0] * x + m[2] * y + m[4];
+    out[1] = m[1] * x + m[3] * y + m[5];
+}
+
+export function mat2x3n_mulmv(v: vec2_t, m: mat2x3_t): vec2_t {
+    const out = new TYPE(2);
+
+    mat2x3_mulmv(out, v, m);
+
+    return out;
+}
+
+export function mat2x3m_mulmv(out : vec2_t, m: mat2x3_t): void {
+    mat2x3_mulmv(out, out, m);
 }
 
 // special
