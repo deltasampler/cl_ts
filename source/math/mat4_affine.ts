@@ -21,26 +21,6 @@ export function mat4_translation(out: mat4_t, v: vec3_t): void {
     out[15] = 1.0;
 }
 
-export function mat4n_translation(v: vec3_t): mat4_t {
-    const out = new TYPE(16);
-
-    mat4_translation(out, v);
-
-    return out;
-}
-
-export function mat4_rotation(out: mat4_t, r: number, ax: vec3_t): void {
-
-}
-
-export function mat4n_rotation(r: number, ax: vec3_t): mat4_t {
-    const out = new TYPE(16);
-
-    mat4_rotation(out, r, ax);
-
-    return out;
-}
-
 export function mat4_rotation_x(out: mat4_t, r: number): void {
     const s = Math.sin(r), c = Math.cos(r);
 
